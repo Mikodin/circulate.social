@@ -1,0 +1,7 @@
+{
+  "name": "circulate.social",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ]
+}
