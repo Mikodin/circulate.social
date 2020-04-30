@@ -1,6 +1,6 @@
 {
-  "name": "circle",
-  "version": "0.1.0",
+  "name": "@packages/frontend",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
