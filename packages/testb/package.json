@@ -1,7 +1,0 @@
-{
-  "name": "@packages/testb",
-  "version": "1.0.0",
-  "dependencies": {
-    "@packages/testa": "1.0.0"
-  }
-}
