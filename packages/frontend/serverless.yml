@@ -1,4 +1,5 @@
-nextApp:
+circulate-frontend:
   component: 'serverless-next.js'
   inputs:
+    bucketName: circulate-frontend
     domain: ['beta', 'circulate.social'] # [ sub-domain, domain ]

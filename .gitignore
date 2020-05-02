@@ -10,6 +10,11 @@
 /out/
 .env
 .serverless_nextjs
+packages/frontend/.serverless_nextjs/
+packages/frontend/.env
+packages/frontend/.next
+packages/frontend/next
+
 
 
 # Logs

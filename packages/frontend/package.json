@@ -1,5 +1,5 @@
 {
-  "name": "@packages/frontend",
+  "name": "@circulate/frontend",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -38,8 +38,8 @@
     "node-sass": "^4.13.1",
     "prettier": "^2.0.2",
     "react-test-renderer": "^16.13.1",
-    "serverless": "^1.67.3",
-    "serverless-next.js": "^1.9.7",
+    "serverless": "^1.69.0",
+    "serverless-next.js": "^1.11.0",
     "tslint": "^6.1.0",
     "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.3.0",
