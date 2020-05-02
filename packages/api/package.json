@@ -1,0 +1,52 @@
+{
+  "name": "@circulate/api",
+  "version": "1.0.0",
+  "description": "Serverless webpack example using Typescript",
+  "main": "handler.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "build": "serverless webpack",
+    "lint": "tslint -p . -c tslint.json --fix",
+    "deploy:dev": "serverless deploy --stage dev",
+    "deploy:prod": "serverless deploy --stage prod",
+    "dev": "serverless offline --stage dev --is_local true",
+    "delete-stack:dev": "serverless remove --stage dev",
+    "delete-stack:prod": "serverless remove --stage prod"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
+  "dependencies": {
+    "@js-joda/core": "^2.0.0",
+    "@js-joda/timezone": "^2.2.0",
+    "lambda-log": "^2.3.1",
+    "source-map-support": "^0.5.16",
+    "uuid": "^7.0.3"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.47",
+    "@types/jest": "^25.2.1",
+    "@types/node": "^13.11.0",
+    "fork-ts-checker-webpack-plugin": "^4.1.2",
+    "husky": "^4.2.3",
+    "jest": "^25.2.7",
+    "prettier": "^2.0.4",
+    "serverless": "^1.67.3",
+    "serverless-offline": "^6.1.4",
+    "serverless-webpack": "^5.3.1",
+    "ts-jest": "^25.3.1",
+    "ts-loader": "^6.2.2",
+    "tslint": "^6.1.1",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.3.0",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "author": "Mike Alicea",
+  "license": "MIT"
+}
