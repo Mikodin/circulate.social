@@ -5,6 +5,12 @@
 !.yarn/plugins
 .pnp.*
 
+# Nextjs
+/.next/
+/out/
+.env
+.serverless_nextjs
+
 
 # Logs
 logs
