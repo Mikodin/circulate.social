@@ -4,10 +4,16 @@ service:
 #app: your-app-name
 #org: your-org-name
 
+package:
+  individually: true
 custom:
   webpack:
+    keepOutputDirectory: true
     webpackConfig: ./webpack.config.js
-    includeModules: true
+    includeModules:
+      forceExclude:
+        - aws-sdk
+    packager: 'yarn'
 
 # Add the serverless-webpack plugin
 plugins:
