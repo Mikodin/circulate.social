@@ -13,7 +13,7 @@
     "dev": "serverless offline --stage dev --is_local true",
     "delete-stack:dev": "serverless remove --stage dev",
     "delete-stack:prod": "serverless remove --stage prod",
-    "postinstall": "cp -a ../../node_modules/source-map-support ./node_modules/source-map-support & cp -a ../../node_modules/aws-sdk ./node_modules/aws-sdka & cp -a ../../node_modules/lambda-log ./node_modules/lambda-log"
+    "postinstall": "cp -a ../../node_modules/source-map-support ./node_modules/source-map-support & cp -a ../../node_modules/aws-sdk ./node_modules/aws-sdk & cp -a ../../node_modules/lambda-log ./node_modules/lambda-log & cp -a ../../node_modules/uuid ./node_modules/uuid"
   },
   "husky": {
     "hooks": {

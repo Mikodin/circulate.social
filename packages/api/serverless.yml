@@ -10,16 +10,13 @@ custom:
   webpack:
     keepOutputDirectory: true
     webpackConfig: ./webpack.config.js
-    includeModules:
-      forceExclude:
-        - aws-sdk
     packager: 'yarn'
 
 # Add the serverless-webpack plugin
 plugins:
   - serverless-webpack
   - serverless-offline
-  - serverless-plugin-monorepo
+  # - serverless-plugin-monorepo
 
 provider:
   name: aws
