@@ -2,8 +2,8 @@ import { useContext, Fragment } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '@components/layout/Layout';
 import Register from '@components/register/Register';
-import styles from './index.module.scss';
 import AuthContainer from '@components/authContainer/AuthContainer';
+import styles from './index.module.scss';
 import UserContext from '../state-management/UserContext';
 
 const Home = () => {

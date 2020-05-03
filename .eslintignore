@@ -1,0 +1,7 @@
+node_modules/
+lib/
+.next/
+.serverless/
+.webpack/
+.vscode
+.serverless_nextjs

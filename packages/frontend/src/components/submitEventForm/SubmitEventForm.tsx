@@ -1,7 +1,7 @@
 import { useState, useContext, Fragment, useReducer } from 'react';
 import { useRouter } from 'next/router';
-import UserContext from '../../state-management/UserContext';
 import axios from 'axios';
+import UserContext from '../../state-management/UserContext';
 import css from './submitEventForm.module.scss';
 
 const SUBMIT_EVENT_ENDPOINT =

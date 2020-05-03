@@ -3,9 +3,9 @@ import { useRouter } from 'next/router';
 import { Form, Input, Button, Alert } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
+import { AUTH_FORMS } from '@components/authContainer/AuthContainer';
 import UserContext from '../../state-management/UserContext';
 import css from './confirmEmail.module.scss';
-import { AUTH_FORMS } from '@components/authContainer/AuthContainer';
 
 interface Props {
   seedEmailAddress?: string;

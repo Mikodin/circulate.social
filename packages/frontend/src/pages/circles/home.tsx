@@ -38,7 +38,7 @@ class CircleHome extends PureComponent<Props, State> {
       const createResponse = await axios.get(`${GET_MY_CIRCLES_ENDPOINT}/me`, {
         headers: { Authorization: jwtToken },
       });
-      const circles = createResponse.data.circles;
+      const { circles } = createResponse.data;
       this.setState({ isFetchingCircles: false });
       return circles;
     } catch (error) {

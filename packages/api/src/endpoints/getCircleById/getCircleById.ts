@@ -6,7 +6,7 @@ import { getUpcomingCircleEvents } from '../../interfaces/dynamo/eventsTable';
 import 'source-map-support/register';
 
 export const handler: APIGatewayProxyHandler = async (event, _context) => {
-  const isInLocal = process.env.IS_LOCAL === 'true' ? true : false;
+  const isInLocal = process.env.IS_LOCAL === 'true';
 
   const memberId = isInLocal
     ? 'dev-id'
@@ -15,7 +15,7 @@ export const handler: APIGatewayProxyHandler = async (event, _context) => {
     ? true
     : event.requestContext.authorizer.claims.email_verified;
 
-  const circleId = event.pathParameters.circleId;
+  const { circleId } = event.pathParameters;
   const getUpcomingEvents =
     event.queryStringParameters &&
     event.queryStringParameters.getUpcomingEvents;

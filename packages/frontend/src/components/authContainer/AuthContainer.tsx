@@ -2,8 +2,8 @@ import { Fragment, PureComponent } from 'react';
 import Register from '@components/register/Register';
 import ConfirmEmail from '@components/confirmEmail/ConfirmEmail';
 import Login from '@components/login/Login';
-import css from './authContainer.module.scss';
 import ForgotPassword from '@components/forgotPassword/ForgotPassword';
+import css from './authContainer.module.scss';
 
 export enum AUTH_FORMS {
   'login',
@@ -84,6 +84,7 @@ class AuthContainer extends PureComponent<Props, State> {
       }
     }
   };
+
   render() {
     const {
       userEmailAddress,

@@ -1,4 +1,5 @@
 import { Auth } from 'aws-amplify';
+
 function initAmplifyAuth() {
   const oauth = {
     domain: '.circulate-test2',

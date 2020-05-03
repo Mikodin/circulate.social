@@ -23,7 +23,7 @@ type PartialEvent = Omit<
   'eventId' | 'createdAt' | 'updatedAt' | 'members' | 'creatorId'
 >;
 
-const EVENTS_TABLE_NAME = process.env.EVENTS_TABLE_NAME;
+const { EVENTS_TABLE_NAME } = process.env;
 
 export async function insertEvent(
   eventInfo: PartialEvent,
@@ -53,7 +53,7 @@ export async function insertEvent(
     await dynamoClient.put(params).promise();
 
     if (eventInfo.circleId) {
-      const circleId = eventInfo.circleId;
+      const { circleId } = eventInfo;
       const eventId = params.Item.id;
       await addEventToCircle(circleId, eventId);
     }

@@ -1,7 +1,7 @@
 import { useState, useContext, Fragment, useReducer } from 'react';
 import { useRouter } from 'next/router';
-import UserContext from '../../state-management/UserContext';
 import axios from 'axios';
+import UserContext from '../../state-management/UserContext';
 import css from './startCircleForm.module.scss';
 
 const CREATE_CIRCLE_ENDPOINT =
@@ -27,7 +27,7 @@ const StartCircleForm = (props) => {
         { headers: { Authorization: jwtToken } }
       );
 
-      const circle = createResponse.data.circle;
+      const { circle } = createResponse.data;
       router.push(`/circles/${circle.id}`);
     } catch (e) {
       alert(e.response.data.message);

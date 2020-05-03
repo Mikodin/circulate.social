@@ -14,7 +14,6 @@ class SubmitEvent extends PureComponent<Props, {}> {
   componentDidMount() {
     if (!this.context.getIsUserLoggedIn) {
       this.props.router.push('/');
-      return;
     }
   }
 
