@@ -36,7 +36,6 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^25.2.4",
     "node-sass": "^4.13.1",
-    "prettier": "^2.0.2",
     "react-test-renderer": "^16.13.1",
     "serverless": "^1.69.0",
     "serverless-next.js": "^1.11.0",

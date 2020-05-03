@@ -35,7 +35,6 @@
     "fork-ts-checker-webpack-plugin": "^4.1.2",
     "husky": "^4.2.3",
     "jest": "^25.2.7",
-    "prettier": "^2.0.4",
     "serverless": "^1.67.3",
     "serverless-offline": "^6.1.4",
     "serverless-plugin-monorepo": "^0.8.0",
