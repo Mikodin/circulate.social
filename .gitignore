@@ -15,6 +15,7 @@ packages/frontend/.env
 packages/frontend/.next
 packages/frontend/next
 
+.DS_Store
 
 
 # Logs

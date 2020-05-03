@@ -1,0 +1,148 @@
+service:
+  name: circulate-be
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+package:
+  individually: true
+custom:
+  webpack:
+    keepOutputDirectory: true
+    webpackConfig: ./webpack.config.js
+    packager: 'yarn'
+
+# Add the serverless-webpack plugin
+plugins:
+  - serverless-webpack
+  - serverless-offline
+  # - serverless-plugin-monorepo
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'}
+  region: us-east-1
+  apiGateway:
+    minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    CIRCLES_TABLE_NAME: 'circles-${self:provider.stage}'
+    EVENTS_TABLE_NAME: 'events-${self:provider.stage}'
+    STAGE: ${opt:stage, 'dev'}
+    IS_LOCAL: ${opt:is_local, 'false'}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.CIRCLES_TABLE_NAME}'
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.EVENTS_TABLE_NAME}'
+
+functions:
+  createCircle:
+    name: 'createCircle-${self:provider.stage}'
+    handler: src/endpoints/createCircle/createCircle.handler
+    events:
+      - http:
+          method: post
+          path: circles/create
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_46TxJWTk9
+  joinCircle:
+    name: 'joinCircle-${self:provider.stage}'
+    handler: src/endpoints/joinCircle/joinCircle.handler
+    events:
+      - http:
+          method: post
+          path: circles/{circleId}/join
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_46TxJWTk9
+  createEvent:
+    name: 'createEvent-${self:provider.stage}'
+    handler: src/endpoints/createEvent/createEvent.handler
+    events:
+      - http:
+          method: post
+          path: events/create
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_46TxJWTk9
+  getMyCircles:
+    name: 'getMyCircles-${self:provider.stage}'
+    handler: src/endpoints/getMyCircles/getMyCircles.handler
+    events:
+      - http:
+          method: get
+          path: circles/me
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_46TxJWTk9
+  getMyEvents:
+    name: 'getMyEvents-${self:provider.stage}'
+    handler: src/endpoints/getMyEvents/getMyEvents.handler
+    events:
+      - http:
+          method: get
+          path: events/me
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_46TxJWTk9
+  getCircleById:
+    name: 'getCircleById-${self:provider.stage}'
+    handler: src/endpoints/getCircleById/getCircleById.handler
+    events:
+      - http:
+          method: get
+          path: circles/{circleId}/
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_46TxJWTk9
+  getEventById:
+    name: 'getEventById-${self:provider.stage}'
+    handler: src/endpoints/getEventById/getEventById.handler
+    events:
+      - http:
+          method: get
+          path: events/{eventId}/
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_46TxJWTk9
+resources:
+  Resources:
+    circlesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.CIRCLES_TABLE_NAME}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+    eventsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.EVENTS_TABLE_NAME}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
