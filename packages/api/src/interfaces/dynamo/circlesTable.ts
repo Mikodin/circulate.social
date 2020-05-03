@@ -21,7 +21,7 @@ type PartialCircle = Omit<
   'circleId' | 'createdAt' | 'updatedAt' | 'members' | 'creatorId' | 'events'
 >;
 
-const CIRCLES_TABLE_NAME = process.env.CIRCLES_TABLE_NAME;
+const { CIRCLES_TABLE_NAME } = process.env;
 
 export async function insertCircle(
   circleInfo: PartialCircle,
