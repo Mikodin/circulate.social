@@ -3,7 +3,7 @@ import log from 'lambda-log';
 import { v4 as uuidv4 } from 'uuid';
 import { ZonedDateTime, ZoneOffset } from '@js-joda/core';
 
-import { Circle, addEventToCircle } from './circlesTable';
+import { addEventToCircle } from './circlesTable';
 
 const defaultDynamoClient = new DynamoDB.DocumentClient();
 

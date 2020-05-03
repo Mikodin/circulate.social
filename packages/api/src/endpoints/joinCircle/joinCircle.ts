@@ -5,8 +5,6 @@ import { joinCircle } from '../../interfaces/dynamo/circlesTable';
 import 'source-map-support/register';
 
 export const handler: APIGatewayProxyHandler = async (event, _context) => {
-  const body = JSON.parse(event.body);
-
   const isInLocal = process.env.IS_LOCAL === 'true' ? true : false;
   const memberId = isInLocal
     ? 'dev-id'
