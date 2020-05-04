@@ -5,3 +5,4 @@ lib/
 .webpack/
 .vscode
 .serverless_nextjs
+webpack.config.js
