@@ -1,4 +1,5 @@
 module.exports = {
+  noInlineConfig: true,
   env: {
     browser: true,
     es6: true,
@@ -9,6 +10,8 @@ module.exports = {
     'plugin:react/recommended',
     'prettier',
     'prettier/@typescript-eslint',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
   ],
 

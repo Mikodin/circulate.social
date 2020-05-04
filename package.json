@@ -5,12 +5,12 @@
     "packages/*"
   ],
   "scripts": {
-    "lint": "eslint 'packages/**/*.{js,ts,tsx}' --quiet --fix"
+    "lint": "eslint 'packages/api/**/*.{js,ts,tsx}' --quiet --fix"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.30.0",
     "@typescript-eslint/parser": "^2.30.0",
-    "eslint": "^5.16.0",
+    "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "latest",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.20.2",
