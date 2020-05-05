@@ -2,7 +2,7 @@ import { useContext, Fragment } from 'react';
 import Link from 'next/link';
 import UserContext from '../../state-management/UserContext';
 
-import css from './header.module.scss';
+import css from './Header.module.scss';
 
 const Header = () => {
   const { signOut, getIsUserLoggedIn } = useContext(UserContext);

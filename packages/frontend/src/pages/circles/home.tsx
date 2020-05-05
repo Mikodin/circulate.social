@@ -24,14 +24,14 @@ class CircleHome extends PureComponent<Props, State> {
     isFetchingCircles: true,
   };
 
-  async componentDidMount() {
+  async componentDidMount(): Promise<void> {
     const myCircles = await this.getMyCircles();
     this.setState({
       circles: myCircles,
     });
   }
 
-  async getMyCircles() {
+  async getMyCircles(): Promise<any[]> {
     const { jwtToken } = this.context;
 
     try {
@@ -50,7 +50,9 @@ class CircleHome extends PureComponent<Props, State> {
     }
   }
 
-  renderCircle(circle: any) {
+  // @TODO: Move to own component
+  // eslint-disable-next-line
+  renderCircle(circle: any): React.ReactElement {
     return (
       <div key={circle.id} className={css.circleContainer}>
         <h2>

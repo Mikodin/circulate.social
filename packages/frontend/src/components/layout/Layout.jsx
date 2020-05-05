@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import Head from 'next/head';
 
-import css from './layout.module.scss';
+import css from './Layout.module.scss';
 import Header from '../header/Header';
 
 const Layout = (props) => {

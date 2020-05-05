@@ -5,7 +5,7 @@ import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
 import { AUTH_FORMS } from '../authContainer/AuthContainer';
 import UserContext from '../../state-management/UserContext';
-import css from './confirmEmail.module.scss';
+import css from './ConfirmEmail.module.scss';
 
 interface Props {
   seedEmailAddress?: string;
@@ -98,7 +98,7 @@ const ConfirmEmail = (props: Props) => {
             resendRegisterCode(form.getFieldValue('email'));
           }}
         >
-          Didn't receive the code? Resend it
+          {"Didn't receive the code? Resend it"}
         </a>
         <Form.Item shouldUpdate={true}>
           {() => {

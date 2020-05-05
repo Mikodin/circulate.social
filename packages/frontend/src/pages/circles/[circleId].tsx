@@ -116,6 +116,8 @@ class CirclePage extends PureComponent<Props, State> {
     }
   }
 
+  // @TODO: Move to own component
+  // eslint-disable-next-line
   renderEvent(event) {
     return (
       <Fragment key={event.id}>

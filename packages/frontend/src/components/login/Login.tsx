@@ -5,7 +5,7 @@ import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
 import { AUTH_FORMS } from '../authContainer/AuthContainer';
 import UserContext from '../../state-management/UserContext';
-import css from './login.module.scss';
+import css from './Login.module.scss';
 
 interface Props {
   seedEmailAddress?: string;

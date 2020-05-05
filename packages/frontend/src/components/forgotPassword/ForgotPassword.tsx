@@ -5,7 +5,7 @@ import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
 import { AUTH_FORMS } from '../authContainer/AuthContainer';
 import UserContext from '../../state-management/UserContext';
-import css from './forgotPassword.module.scss';
+import css from './ForgotPassword.module.scss';
 
 interface Props {
   seedEmailAddress?: string;
@@ -123,7 +123,7 @@ const ForgotPassword = (props: Props) => {
                 forgotPasswordInit(form.getFieldValue('email'));
               }}
             >
-              Didn't receive the code? Resend it
+              {"Didn't receive the code? Resend it"}
             </a>
           </Fragment>
         )}
