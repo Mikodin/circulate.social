@@ -1,4 +1,4 @@
-import { useState, useContext, Fragment, useReducer } from 'react';
+import { useState, useContext, Fragment } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import UserContext from '../../state-management/UserContext';

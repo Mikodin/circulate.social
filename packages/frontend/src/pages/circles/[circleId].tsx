@@ -4,10 +4,9 @@ import Link from 'next/link';
 import { withRouter, NextRouter } from 'next/router';
 import axios from 'axios';
 
-import Register from '../../components/register/Register';
 import AuthContainer from '../../components/authContainer/AuthContainer';
 import Layout from '../../components/layout/Layout';
-import css from './[circleId].module.scss';
+// import css from './[circleId].module.scss';
 
 import UserContext from '../../state-management/UserContext';
 
@@ -191,7 +190,7 @@ class CirclePage extends PureComponent<Props, State> {
     );
   }
 }
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {}, // will be passed to the page component as props
   };

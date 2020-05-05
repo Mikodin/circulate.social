@@ -35,6 +35,7 @@ module.exports = {
   rules: {
     'prettier/prettier': 'error',
     'import/prefer-default-export': 0,
+    '@typescript-eslint/no-unused-vars': ['error'],
     'import/extensions': [
       'error',
       'ignorePackages',

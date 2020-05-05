@@ -1,4 +1,4 @@
-import { useState, Fragment, useContext, useEffect } from 'react';
+import { useState, Fragment, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { Form, Input, Button, Alert } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';

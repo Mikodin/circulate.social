@@ -1,4 +1,4 @@
-import { useState, Fragment, useContext, useEffect } from 'react';
+import { useState, Fragment, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { Form, Input, Button, Alert } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
@@ -18,7 +18,7 @@ const ConfirmEmail = (props: Props) => {
   const { confirmEmail, resendRegisterCode } = useContext(UserContext);
   const [form] = Form.useForm();
 
-  const { redirectTo, onSuccess, seedEmailAddress, showForm } = props;
+  const { redirectTo, onSuccess, seedEmailAddress } = props;
   const [isInvalidCredentials, setIsInvalidCredentials] = useState(false);
   const [isLoginInFlight, setIsLoginInFlight] = useState(false);
 
