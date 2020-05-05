@@ -3,7 +3,7 @@ import Register from '../register/Register';
 import ConfirmEmail from '../confirmEmail/ConfirmEmail';
 import Login from '../login/Login';
 import ForgotPassword from '../forgotPassword/ForgotPassword';
-import css from './authContainer.module.scss';
+import css from './AuthContainer.module.scss';
 
 export enum AUTH_FORMS {
   'login',
