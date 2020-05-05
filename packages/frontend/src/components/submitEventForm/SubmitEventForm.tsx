@@ -11,7 +11,7 @@ interface Props {
   seedCircleId?: string;
 }
 
-const SubmitEventForm = (props) => {
+const SubmitEventForm = (props: Props) => {
   const router = useRouter();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
