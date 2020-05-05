@@ -3,7 +3,7 @@ import { withRouter, Router } from 'next/router';
 import Link from 'next/link';
 import axios from 'axios';
 
-import Layout from '@components/layout/Layout';
+import Layout from '../../components/layout/Layout';
 
 import UserContext from '../../state-management/UserContext';
 import css from './home.module.scss';

@@ -2876,17 +2876,28 @@ __metadata:
     "@testing-library/jest-dom": ^5.3.0
     "@types/jest": ^25.1.4
     "@types/react": ^16.9.30
+    "@typescript-eslint/eslint-plugin": ^2.30.0
+    "@typescript-eslint/parser": ^2.30.0
     "@zeit/next-sass": ^1.0.1
     antd: ^4.1.4
     aws-amplify: ^3.0.5
     axios: ^0.19.2
     babel-jest: ^25.2.4
     babel-plugin-module-resolver: ^4.0.0
+    eslint: ^6.8.0
+    eslint-config-airbnb-base: latest
+    eslint-config-prettier: ^6.11.0
+    eslint-import-resolver-alias: ^1.1.2
+    eslint-import-resolver-typescript: ^2.0.0
+    eslint-plugin-import: ^2.20.2
+    eslint-plugin-prettier: ^3.1.3
+    eslint-plugin-react: ^7.19.0
     husky: ^4.2.3
     identity-obj-proxy: ^3.0.0
     jest: ^25.2.4
     next: ^9.3.4
     node-sass: ^4.13.1
+    prettier: ^2.0.5
     react: 16.13.1
     react-dom: 16.13.1
     react-test-renderer: ^16.13.1
@@ -4133,6 +4144,13 @@ __metadata:
   version: 7.0.4
   resolution: "@types/json-schema@npm:7.0.4"
   checksum: 3/5094037431e4b29d5cc9d6938ea596d1145cc46d305d8d302a477a54d0a7a83ba4629abbf52fcabc3ffdb31cf94647bc366a7bcc544770cbb80212d903018e2b
+  languageName: node
+  linkType: hard
+
+"@types/json5@npm:^0.0.29":
+  version: 0.0.29
+  resolution: "@types/json5@npm:0.0.29"
+  checksum: 3/66e9ac0143ec521522c7bb670301e9836ee886207eeed1aab6d4854a1b19b404ab3a54cd8d449f9b1f13acc357f540be96f8ac2d1e86e301eab52ae0f9a4066f
   languageName: node
   linkType: hard
 
@@ -8551,6 +8569,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-import-resolver-alias@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "eslint-import-resolver-alias@npm:1.1.2"
+  peerDependencies:
+    eslint-plugin-import: ">=1.4.0"
+  checksum: 3/115d2b221e000a3be81bc1cf716714f2fce8f87679984a4f993735c955de4001356e6ca426f1edbb3013a8bc7ea5da590dfe53b0700700b3a3e6a20be30a2482
+  languageName: node
+  linkType: hard
+
 "eslint-import-resolver-node@npm:^0.3.2":
   version: 0.3.3
   resolution: "eslint-import-resolver-node@npm:0.3.3"
@@ -8558,6 +8585,22 @@ __metadata:
     debug: ^2.6.9
     resolve: ^1.13.1
   checksum: 3/05700934524b9ea1fea24b5de61fe7c3ae61070b67d5a42da5df3f11d8b0c3e21eff5be92a324d4ba813c16b0d0701bb99e7ca9385d5dd9788d3823c127b41bd
+  languageName: node
+  linkType: hard
+
+"eslint-import-resolver-typescript@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "eslint-import-resolver-typescript@npm:2.0.0"
+  dependencies:
+    debug: ^4.1.1
+    is-glob: ^4.0.1
+    resolve: ^1.12.0
+    tiny-glob: ^0.2.6
+    tsconfig-paths: ^3.9.0
+  peerDependencies:
+    eslint: "*"
+    eslint-plugin-import: "*"
+  checksum: 3/2600360cf6a019a49b44ffe3ab5b76b0e200933ca9401c0282dcbd71c029ec0be2c20de736adfdc77274e7032057e868a7095bb8dcbe144bf55c6345e5b071e5
   languageName: node
   linkType: hard
 
@@ -10062,6 +10105,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"globalyzer@npm:^0.1.0":
+  version: 0.1.4
+  resolution: "globalyzer@npm:0.1.4"
+  checksum: 3/31b1ffae741a3dbe3b1dc8dc7fd637b852583af4842839ba101d72f1beab9c0499c102643274fc202eac609711e64dfa32354fc976e239ff7a38a0dbc35e47f1
+  languageName: node
+  linkType: hard
+
 "globby@npm:^10.0.2":
   version: 10.0.2
   resolution: "globby@npm:10.0.2"
@@ -10104,6 +10154,13 @@ fsevents@^1.2.7:
     pify: ^4.0.1
     slash: ^2.0.0
   checksum: 3/af02094ec14d269e61b1100918f8d7ea12e04b4acad735babdb400d93d62810caa5fb90b5506b7251f99c1fe677f02985ddab20953ded841b0f553a8674456e3
+  languageName: node
+  linkType: hard
+
+"globrex@npm:^0.1.1":
+  version: 0.1.2
+  resolution: "globrex@npm:0.1.2"
+  checksum: 3/78825a08abba1994cc3f79a3812a627cf22ac676b08e3b812a7c284af47d39d4dcddff6ac811cb994e817949df1ea53a17c13aa561d9c265b4d3fc34b7362990
   languageName: node
   linkType: hard
 
@@ -18920,6 +18977,16 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
+"tiny-glob@npm:^0.2.6":
+  version: 0.2.6
+  resolution: "tiny-glob@npm:0.2.6"
+  dependencies:
+    globalyzer: ^0.1.0
+    globrex: ^0.1.1
+  checksum: 3/f31491e934e480f3177c22ab8f74b1df7c6064953e0d64beea3b4aa71602c810f87af5ca0650a32ba6cab28ab1e2060de5c69102bab358b022eda7514ad4202c
+  languageName: node
+  linkType: hard
+
 "tinycolor2@npm:^1.4.1":
   version: 1.4.1
   resolution: "tinycolor2@npm:1.4.1"
@@ -19170,6 +19237,18 @@ resolve@1.1.7:
     typescript:
       optional: true
   checksum: 3/78341a27939de565e2754ff65ebb689743c16e3295528089d143c08d91842cf9029c3d6b3c95a9a20854a114a7904329d02c710d63f7ce4dbf671b8a3e560ac1
+  languageName: node
+  linkType: hard
+
+"tsconfig-paths@npm:^3.9.0":
+  version: 3.9.0
+  resolution: "tsconfig-paths@npm:3.9.0"
+  dependencies:
+    "@types/json5": ^0.0.29
+    json5: ^1.0.1
+    minimist: ^1.2.0
+    strip-bom: ^3.0.0
+  checksum: 3/5383ba626b3ac70e08094b9dfd1e30ce82878407b6c8db8cd84279cc7c7340d5f53f67dbeb8174a233c082a068322a6b00ec8514b96d9a80a453e0476dc116d2
   languageName: node
   linkType: hard
 

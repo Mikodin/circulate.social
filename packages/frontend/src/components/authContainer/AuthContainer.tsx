@@ -1,8 +1,8 @@
 import { Fragment, PureComponent } from 'react';
-import Register from '@components/register/Register';
-import ConfirmEmail from '@components/confirmEmail/ConfirmEmail';
-import Login from '@components/login/Login';
-import ForgotPassword from '@components/forgotPassword/ForgotPassword';
+import Register from '../register/Register';
+import ConfirmEmail from '../confirmEmail/ConfirmEmail';
+import Login from '../login/Login';
+import ForgotPassword from '../forgotPassword/ForgotPassword';
 import css from './authContainer.module.scss';
 
 export enum AUTH_FORMS {

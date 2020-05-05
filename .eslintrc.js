@@ -1,5 +1,4 @@
 module.exports = {
-  noInlineConfig: true,
   env: {
     browser: true,
     es6: true,
@@ -8,8 +7,9 @@ module.exports = {
   settings: {
     'import/resolver': {
       node: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        extensions: ['.js', '.jsx', '.ts', '.tsx', '.scss'],
       },
+      typescript: {},
     },
   },
   extends: [

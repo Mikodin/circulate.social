@@ -4,9 +4,9 @@ import Link from 'next/link';
 import { withRouter, NextRouter } from 'next/router';
 import axios from 'axios';
 
-import Register from '@components/register/Register';
-import AuthContainer from '@components/authContainer/AuthContainer';
-import Layout from '@components/layout/Layout';
+import Register from '../../components/register/Register';
+import AuthContainer from '../../components/authContainer/AuthContainer';
+import Layout from '../../components/layout/Layout';
 import css from './[circleId].module.scss';
 
 import UserContext from '../../state-management/UserContext';
