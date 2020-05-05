@@ -6,7 +6,7 @@ import 'source-map-support/register';
 
 export const handler: APIGatewayProxyHandler = async (event) => {
   const body = JSON.parse(event.body);
-    const { name, description, circleId } = body;
+  const { name, description, circleId } = body;
 
   const isInLocal = process.env.IS_LOCAL === 'true';
 
