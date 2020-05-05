@@ -1,9 +1,9 @@
 import { Fragment, PureComponent } from 'react';
-import Register from '@components/register/Register';
-import ConfirmEmail from '@components/confirmEmail/ConfirmEmail';
-import Login from '@components/login/Login';
-import css from './authContainer.module.scss';
-import ForgotPassword from '@components/forgotPassword/ForgotPassword';
+import Register from '../register/Register';
+import ConfirmEmail from '../confirmEmail/ConfirmEmail';
+import Login from '../login/Login';
+import ForgotPassword from '../forgotPassword/ForgotPassword';
+import css from './AuthContainer.module.scss';
 
 export enum AUTH_FORMS {
   'login',
@@ -82,8 +82,12 @@ class AuthContainer extends PureComponent<Props, State> {
         });
         break;
       }
+      default: {
+        break;
+      }
     }
   };
+
   render() {
     const {
       userEmailAddress,
@@ -96,9 +100,7 @@ class AuthContainer extends PureComponent<Props, State> {
       onLoginRedirectTo,
       onLoginSuccess,
       onRegisterRedirectTo,
-      onRegisterSuccess,
       onConfirmEmailRedirectTo,
-      onConfirmEmailSuccess,
     } = this.props;
 
     return (
@@ -107,14 +109,14 @@ class AuthContainer extends PureComponent<Props, State> {
           <Fragment>
             <Register
               redirectTo={onRegisterRedirectTo}
-              onSuccess={(vals) => {
+              onSuccess={(vals): void => {
                 if (vals && vals.email) {
                   this.setState({ userEmailAddress: vals.email });
                 }
                 this.showForm(AUTH_FORMS.confirmEmail);
               }}
             />
-            <p onClick={() => this.showForm(AUTH_FORMS.login)}>
+            <p onClick={(): void => this.showForm(AUTH_FORMS.login)}>
               Already a member? Sign in!
             </p>
           </Fragment>
@@ -123,10 +125,10 @@ class AuthContainer extends PureComponent<Props, State> {
           <Fragment>
             <ConfirmEmail
               redirectTo={onConfirmEmailRedirectTo}
-              onSuccess={() => this.showForm(AUTH_FORMS.login)}
+              onSuccess={(): void => this.showForm(AUTH_FORMS.login)}
               seedEmailAddress={userEmailAddress}
             />
-            <p onClick={() => this.showForm(AUTH_FORMS.login)}>
+            <p onClick={(): void => this.showForm(AUTH_FORMS.login)}>
               Already a member? Sign in
             </p>
           </Fragment>
@@ -139,10 +141,10 @@ class AuthContainer extends PureComponent<Props, State> {
               onSuccess={onLoginSuccess}
               showForm={this.showForm}
             />
-            <p onClick={() => this.showForm(AUTH_FORMS.forgotPassword)}>
+            <p onClick={(): void => this.showForm(AUTH_FORMS.forgotPassword)}>
               Forgot password?
             </p>
-            <p onClick={() => this.showForm(AUTH_FORMS.register)}>
+            <p onClick={(): void => this.showForm(AUTH_FORMS.register)}>
               Not a member? Sign up!
             </p>
           </Fragment>
@@ -151,9 +153,9 @@ class AuthContainer extends PureComponent<Props, State> {
           <Fragment>
             <ForgotPassword
               seedEmailAddress={userEmailAddress}
-              onSuccess={() => this.showForm(AUTH_FORMS.login)}
+              onSuccess={(): void => this.showForm(AUTH_FORMS.login)}
             />
-            <p onClick={() => this.showForm(AUTH_FORMS.register)}>
+            <p onClick={(): void => this.showForm(AUTH_FORMS.register)}>
               Not a member? Sign up!
             </p>
           </Fragment>

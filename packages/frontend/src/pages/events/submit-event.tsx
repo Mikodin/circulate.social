@@ -1,9 +1,9 @@
-import { PureComponent, Fragment } from 'react';
+import { PureComponent } from 'react';
 import { GetServerSideProps } from 'next';
 import { withRouter, NextRouter } from 'next/router';
 
-import Layout from '@components/layout/Layout';
-import SubmitEventForm from '@components/submitEventForm/SubmitEventForm';
+import Layout from '../../components/layout/Layout';
+import SubmitEventForm from '../../components/submitEventForm/SubmitEventForm';
 
 import UserContext from '../../state-management/UserContext';
 
@@ -14,7 +14,6 @@ class SubmitEvent extends PureComponent<Props, {}> {
   componentDidMount() {
     if (!this.context.getIsUserLoggedIn) {
       this.props.router.push('/');
-      return;
     }
   }
 
@@ -26,7 +25,7 @@ class SubmitEvent extends PureComponent<Props, {}> {
       <Layout>
         <main>
           <h2>Submit an event</h2>
-          <SubmitEventForm seedCircleId={router.query.circleId} />
+          <SubmitEventForm seedCircleId={`${router.query.circleId}`} />
         </main>
       </Layout>
     ) : (
@@ -34,7 +33,7 @@ class SubmitEvent extends PureComponent<Props, {}> {
     );
   }
 }
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {}, // will be passed to the page component as props
   };

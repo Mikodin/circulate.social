@@ -1,11 +1,11 @@
-import { useState, Fragment, useContext, useEffect } from 'react';
+import { useState, Fragment, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { Form, Input, Button, Alert } from 'antd';
 import { UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
 
+import { AUTH_FORMS } from '../authContainer/AuthContainer';
 import UserContext from '../../state-management/UserContext';
-import css from './register.module.scss';
-import { AUTH_FORMS } from '@components/authContainer/AuthContainer';
+import css from './Register.module.scss';
 
 interface Props {
   seedEmailAddress?: string;
@@ -18,8 +18,8 @@ const Register = (props: Props) => {
   const { register } = useContext(UserContext);
   const [form] = Form.useForm();
 
-  const { redirectTo, onSuccess, seedEmailAddress, showForm } = props;
-  const [isInvalidCredentials, setIsInvalidCredentials] = useState(false);
+  const { redirectTo, onSuccess, seedEmailAddress } = props;
+  const [isInvalidCredentials] = useState(false);
   const [isRegisterInFlight, setIsRegisterInFlight] = useState(false);
 
   const onFinish = async (values) => {

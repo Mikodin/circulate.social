@@ -1,11 +1,11 @@
-import { useState, Fragment, useContext, useEffect } from 'react';
+import { useState, Fragment, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { Form, Input, Button, Alert } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
+import { AUTH_FORMS } from '../authContainer/AuthContainer';
 import UserContext from '../../state-management/UserContext';
-import css from './confirmEmail.module.scss';
-import { AUTH_FORMS } from '@components/authContainer/AuthContainer';
+import css from './ConfirmEmail.module.scss';
 
 interface Props {
   seedEmailAddress?: string;
@@ -18,7 +18,7 @@ const ConfirmEmail = (props: Props) => {
   const { confirmEmail, resendRegisterCode } = useContext(UserContext);
   const [form] = Form.useForm();
 
-  const { redirectTo, onSuccess, seedEmailAddress, showForm } = props;
+  const { redirectTo, onSuccess, seedEmailAddress } = props;
   const [isInvalidCredentials, setIsInvalidCredentials] = useState(false);
   const [isLoginInFlight, setIsLoginInFlight] = useState(false);
 
@@ -98,7 +98,7 @@ const ConfirmEmail = (props: Props) => {
             resendRegisterCode(form.getFieldValue('email'));
           }}
         >
-          Didn't receive the code? Resend it
+          {"Didn't receive the code? Resend it"}
         </a>
         <Form.Item shouldUpdate={true}>
           {() => {

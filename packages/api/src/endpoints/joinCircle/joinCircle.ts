@@ -4,8 +4,8 @@ import { joinCircle } from '../../interfaces/dynamo/circlesTable';
 
 import 'source-map-support/register';
 
-export const handler: APIGatewayProxyHandler = async (event, _context) => {
-  const isInLocal = process.env.IS_LOCAL === 'true' ? true : false;
+export const handler: APIGatewayProxyHandler = async (event) => {
+  const isInLocal = process.env.IS_LOCAL === 'true';
   const memberId = isInLocal
     ? 'dev-id'
     : event.requestContext.authorizer.claims['cognito:username'];
@@ -13,7 +13,7 @@ export const handler: APIGatewayProxyHandler = async (event, _context) => {
     ? true
     : event.requestContext.authorizer.claims.email_verified;
 
-  const circleId = event.pathParameters.circleId;
+  const { circleId } = event.pathParameters;
 
   if (!isEmailVerified) {
     return {

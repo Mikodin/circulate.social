@@ -1,8 +1,8 @@
-import { useState, useContext, Fragment, useReducer } from 'react';
+import { useState, useContext, Fragment } from 'react';
 import { useRouter } from 'next/router';
-import UserContext from '../../state-management/UserContext';
 import axios from 'axios';
-import css from './submitEventForm.module.scss';
+import UserContext from '../../state-management/UserContext';
+import css from './SubmitEventForm.module.scss';
 
 const SUBMIT_EVENT_ENDPOINT =
   'https://z3edrz53yg.execute-api.us-east-1.amazonaws.com/dev/events/create';
@@ -11,7 +11,7 @@ interface Props {
   seedCircleId?: string;
 }
 
-const SubmitEventForm = (props) => {
+const SubmitEventForm = (props: Props) => {
   const router = useRouter();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');

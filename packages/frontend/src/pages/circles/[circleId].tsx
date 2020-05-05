@@ -3,11 +3,10 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { withRouter, NextRouter } from 'next/router';
 import axios from 'axios';
-import css from './[circleId].module.scss';
 
-import Register from '@components/register/Register';
-import AuthContainer from '@components/authContainer/AuthContainer';
-import Layout from '@components/layout/Layout';
+import AuthContainer from '../../components/authContainer/AuthContainer';
+import Layout from '../../components/layout/Layout';
+// import css from './[circleId].module.scss';
 
 import UserContext from '../../state-management/UserContext';
 
@@ -92,7 +91,7 @@ class CirclePage extends PureComponent<Props, State> {
         `${GET_CIRCLE_BY_ID_ENDPOINT}/${circleId}?getUpcomingEvents=true`,
         { headers: { Authorization: idToken } }
       );
-      const circle = createResponse.data.circle;
+      const { circle } = createResponse.data;
 
       this.setState({
         circle,
@@ -116,6 +115,8 @@ class CirclePage extends PureComponent<Props, State> {
     }
   }
 
+  // @TODO: Move to own component
+  // eslint-disable-next-line
   renderEvent(event) {
     return (
       <Fragment key={event.id}>
@@ -189,7 +190,7 @@ class CirclePage extends PureComponent<Props, State> {
     );
   }
 }
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {}, // will be passed to the page component as props
   };

@@ -4,8 +4,8 @@ import { getMyEvents } from '../../interfaces/dynamo/eventsTable';
 
 import 'source-map-support/register';
 
-export const handler: APIGatewayProxyHandler = async (event, _context) => {
-  const isInLocal = process.env.IS_LOCAL === 'true' ? true : false;
+export const handler: APIGatewayProxyHandler = async (event) => {
+  const isInLocal = process.env.IS_LOCAL === 'true';
 
   const memberId = isInLocal
     ? 'dev-id'

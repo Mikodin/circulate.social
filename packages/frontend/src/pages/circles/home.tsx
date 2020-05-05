@@ -3,7 +3,7 @@ import { withRouter, Router } from 'next/router';
 import Link from 'next/link';
 import axios from 'axios';
 
-import Layout from '@components/layout/Layout';
+import Layout from '../../components/layout/Layout';
 
 import UserContext from '../../state-management/UserContext';
 import css from './home.module.scss';
@@ -24,21 +24,21 @@ class CircleHome extends PureComponent<Props, State> {
     isFetchingCircles: true,
   };
 
-  async componentDidMount() {
+  async componentDidMount(): Promise<void> {
     const myCircles = await this.getMyCircles();
     this.setState({
       circles: myCircles,
     });
   }
 
-  async getMyCircles() {
+  async getMyCircles(): Promise<any[]> {
     const { jwtToken } = this.context;
 
     try {
       const createResponse = await axios.get(`${GET_MY_CIRCLES_ENDPOINT}/me`, {
         headers: { Authorization: jwtToken },
       });
-      const circles = createResponse.data.circles;
+      const { circles } = createResponse.data;
       this.setState({ isFetchingCircles: false });
       return circles;
     } catch (error) {
@@ -50,7 +50,9 @@ class CircleHome extends PureComponent<Props, State> {
     }
   }
 
-  renderCircle(circle: any) {
+  // @TODO: Move to own component
+  // eslint-disable-next-line
+  renderCircle(circle: any): React.ReactElement {
     return (
       <div key={circle.id} className={css.circleContainer}>
         <h2>

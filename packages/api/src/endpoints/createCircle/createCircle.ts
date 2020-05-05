@@ -4,11 +4,11 @@ import { insertCircle } from '../../interfaces/dynamo/circlesTable';
 
 import 'source-map-support/register';
 
-export const handler: APIGatewayProxyHandler = async (event, _context) => {
+export const handler: APIGatewayProxyHandler = async (event) => {
   const body = JSON.parse(event.body);
   const { name, description } = body;
 
-  const isInLocal = process.env.IS_LOCAL === 'true' ? true : false;
+  const isInLocal = process.env.IS_LOCAL === 'true';
 
   const memberId = isInLocal
     ? 'dev-id'

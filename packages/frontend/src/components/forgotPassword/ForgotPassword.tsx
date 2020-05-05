@@ -1,11 +1,11 @@
-import { useState, Fragment, useContext, useEffect } from 'react';
+import { useState, Fragment, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { Form, Input, Button, Alert } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
+import { AUTH_FORMS } from '../authContainer/AuthContainer';
 import UserContext from '../../state-management/UserContext';
-import css from './forgotPassword.module.scss';
-import { AUTH_FORMS } from '@components/authContainer/AuthContainer';
+import css from './ForgotPassword.module.scss';
 
 interface Props {
   seedEmailAddress?: string;
@@ -18,11 +18,11 @@ const ForgotPassword = (props: Props) => {
   const { forgotPasswordInit, forgotPasswordSubmit } = useContext(UserContext);
   const [form] = Form.useForm();
 
-  const { redirectTo, onSuccess, seedEmailAddress, showForm } = props;
+  const { redirectTo, onSuccess, seedEmailAddress } = props;
   const [isInvalidCredentials, setIsInvalidCredentials] = useState(false);
   const [showConfirmationCode, setShowConfirmationCode] = useState(false);
   const [showLimitError, setShowLimitError] = useState(false);
-  const [isLoginInFlight, setIsLoginInFlight] = useState(false);
+  const [isLoginInFlight] = useState(false);
 
   const onFinish = async (values) => {
     const { email, newPassword, confirmationCode } = values;
@@ -123,7 +123,7 @@ const ForgotPassword = (props: Props) => {
                 forgotPasswordInit(form.getFieldValue('email'));
               }}
             >
-              Didn't receive the code? Resend it
+              {"Didn't receive the code? Resend it"}
             </a>
           </Fragment>
         )}
@@ -147,7 +147,7 @@ const ForgotPassword = (props: Props) => {
             const isEmailTouched =
               form.isFieldTouched('email') ||
               Boolean(form.getFieldValue('email'));
-            const isNewPasswordTouched = form.isFieldTouched('newPassword');
+            // const isNewPasswordTouched = form.isFieldTouched('newPassword');
             const isFormTouched = isEmailTouched;
             return (
               <Button

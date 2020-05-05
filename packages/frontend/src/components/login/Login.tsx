@@ -1,11 +1,11 @@
-import { useState, Fragment, useContext, useEffect } from 'react';
+import { useState, Fragment, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { Form, Input, Button, Alert } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
+import { AUTH_FORMS } from '../authContainer/AuthContainer';
 import UserContext from '../../state-management/UserContext';
-import css from './login.module.scss';
-import { AUTH_FORMS } from '@components/authContainer/AuthContainer';
+import css from './Login.module.scss';
 
 interface Props {
   seedEmailAddress?: string;

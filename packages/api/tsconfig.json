@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "alwaysStrict": true,
     "lib": ["es2017"],
     "esModuleInterop": true,
     "removeComments": true,
@@ -8,8 +9,10 @@
     "noUnusedParameters": true,
     "sourceMap": true,
     "target": "es2017",
-    "outDir": "lib"
+    "outDir": "lib",
+    "baseUrl": "./src/"
   },
+
   "include": ["./src/**/*.ts"],
   "exclude": [
     "node_modules/**/*",

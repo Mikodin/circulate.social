@@ -1,13 +1,13 @@
-import { useState, useContext, Fragment, useReducer } from 'react';
+import { useState, useContext, Fragment } from 'react';
 import { useRouter } from 'next/router';
-import UserContext from '../../state-management/UserContext';
 import axios from 'axios';
-import css from './startCircleForm.module.scss';
+import UserContext from '../../state-management/UserContext';
+import css from './StartCircleForm.module.scss';
 
 const CREATE_CIRCLE_ENDPOINT =
   'https://z3edrz53yg.execute-api.us-east-1.amazonaws.com/dev/circles/create';
 
-const StartCircleForm = (props) => {
+const StartCircleForm = () => {
   const router = useRouter();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -27,7 +27,7 @@ const StartCircleForm = (props) => {
         { headers: { Authorization: jwtToken } }
       );
 
-      const circle = createResponse.data.circle;
+      const { circle } = createResponse.data;
       router.push(`/circles/${circle.id}`);
     } catch (e) {
       alert(e.response.data.message);
