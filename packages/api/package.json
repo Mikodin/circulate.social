@@ -8,7 +8,7 @@
     "test:watch": "jest --watch",
     "goCirculateAws": "sh ~/.aws/goAwsStreaming.sh",
     "build": "serverless webpack",
-    "lint": "eslint 'src/**/*.{js,ts,tsx}' --quiet --fix",
+    "lint": "eslint 'src/**/*.{js,ts,tsx}' --fix",
     "alertSwitchAwsAccount": "sh ./AWS_ACCOUNT_ALERT.sh",
     "deploy:dev": "yarn alertSwitchAwsAccount && serverless deploy --stage dev",
     "deploy:prod": "yarn alertSwitchAwsAccount && serverless deploy --stage prod",
@@ -18,7 +18,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": "yarn lint"
     }
   },
   "dependencies": {
