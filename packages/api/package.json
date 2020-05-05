@@ -6,13 +6,15 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
+    "goCirculateAws": "sh ~/.aws/goAwsStreaming.sh",
     "build": "serverless webpack",
     "lint": "eslint 'src/**/*.{js,ts,tsx}' --quiet --fix",
-    "deploy:dev": "serverless deploy --stage dev",
-    "deploy:prod": "serverless deploy --stage prod",
+    "alertSwitchAwsAccount": "sh ./AWS_ACCOUNT_ALERT.sh",
+    "deploy:dev": "yarn alertSwitchAwsAccount && serverless deploy --stage dev",
+    "deploy:prod": "yarn alertSwitchAwsAccount && serverless deploy --stage prod",
     "dev": "serverless offline --stage dev --is_local true",
-    "delete-stack:dev": "serverless remove --stage dev",
-    "delete-stack:prod": "serverless remove --stage prod"
+    "delete-stack:dev": "yarn alertSwitchAwsAccount && serverless remove --stage dev",
+    "delete-stack:prod": "yarn alertSwitchAwsAccount && serverless remove --stage prod"
   },
   "husky": {
     "hooks": {
