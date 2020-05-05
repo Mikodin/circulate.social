@@ -4,7 +4,7 @@ import { insertEvent } from '../../interfaces/dynamo/eventsTable';
 
 import 'source-map-support/register';
 
-export const handler: APIGatewayProxyHandler = async (event, _context) => {
+export const handler: APIGatewayProxyHandler = async (event) => {
   const body = JSON.parse(event.body);
   const { name, description, circleId } = body;
 
