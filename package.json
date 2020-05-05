@@ -8,7 +8,7 @@
     "lint": "eslint 'packages/**/*.{js,ts,tsx}' --fix"
   },
   "husky": {
-    "pre-commit": "lint"
+    "pre-commit": "yarn lint"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.30.0",
