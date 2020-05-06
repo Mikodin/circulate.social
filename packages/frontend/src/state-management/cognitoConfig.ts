@@ -1,6 +1,6 @@
 import { Auth } from 'aws-amplify';
 
-function initAmplifyAuth() {
+function initAmplifyAuth(): void {
   const oauth = {
     domain: '.circulate-test2',
     scope: ['email', 'aws.cognito.signin.user.admin'],
@@ -9,14 +9,12 @@ function initAmplifyAuth() {
     responseType: 'code',
   };
 
-  const auth = Auth.configure({
+  Auth.configure({
     oauth,
     region: 'us-east-1',
     userPoolId: 'us-east-1_46TxJWTk9',
     userPoolWebClientId: '3bj35mgn74erbudvo6cbgd2ni3',
   });
-
-  return auth;
 }
 
 export default initAmplifyAuth;

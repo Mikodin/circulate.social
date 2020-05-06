@@ -10,10 +10,11 @@ import css from './Login.module.scss';
 interface Props {
   seedEmailAddress?: string;
   redirectTo?: string;
-  onSuccess?: (result?: any) => any;
-  showForm?: (form: AUTH_FORMS) => any;
+  // eslint-disable-next-line
+  onSuccess?: (result?: any) => void;
+  showForm?: (form: AUTH_FORMS) => void;
 }
-const Login = (props: Props) => {
+const Login = (props: Props): JSX.Element => {
   const router = useRouter();
   const { signIn } = useContext(UserContext);
   const [form] = Form.useForm();
@@ -22,7 +23,11 @@ const Login = (props: Props) => {
   const [isInvalidCredentials, setIsInvalidCredentials] = useState(false);
   const [isLoginInFlight, setIsLoginInFlight] = useState(false);
 
-  const onFinish = async (values) => {
+  interface FormValues {
+    email: string;
+    password: string;
+  }
+  const onFinish = async (values: FormValues): Promise<void> => {
     const { email, password } = values;
     try {
       setIsLoginInFlight(true);
@@ -89,7 +94,7 @@ const Login = (props: Props) => {
           <Alert message="Invalid username or password" type="error" showIcon />
         )}
         <Form.Item shouldUpdate={true}>
-          {() => {
+          {(): JSX.Element => {
             const isEmailTouched =
               form.isFieldTouched('email') ||
               Boolean(form.getFieldValue('email'));

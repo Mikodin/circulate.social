@@ -20,13 +20,16 @@ interface State {
 }
 interface Props {
   onLoginRedirectTo?: string;
-  onLoginSuccess?: (x: any) => any;
+  // eslint-disable-next-line
+  onLoginSuccess?: (result?: any) => void;
 
   onRegisterRedirectTo?: string;
-  onRegisterSuccess?: (x: any) => any;
+  // eslint-disable-next-line
+  onRegisterSuccess?: (result?: any) => void;
 
   onConfirmEmailRedirectTo?: string;
-  onConfirmEmailSuccess?: (x: any) => any;
+  // eslint-disable-next-line
+  onConfirmEmailSuccess?: (result?: any) => void;
 
   seedForm?: AUTH_FORMS;
 }
@@ -39,12 +42,12 @@ class AuthContainer extends PureComponent<Props, State> {
     showForgotPasswordForm: false,
   };
 
-  componentDidMount() {
+  componentDidMount(): void {
     const { seedForm } = this.props;
     this.showForm(seedForm);
   }
 
-  showForm = (form: AUTH_FORMS) => {
+  showForm = (form: AUTH_FORMS): void => {
     switch (form) {
       case AUTH_FORMS.login: {
         this.setState({
@@ -88,7 +91,7 @@ class AuthContainer extends PureComponent<Props, State> {
     }
   };
 
-  render() {
+  render(): JSX.Element {
     const {
       userEmailAddress,
       showConfirmEmailForm,

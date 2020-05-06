@@ -2839,83 +2839,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@circulate/api@workspace:packages/api":
-  version: 0.0.0-use.local
-  resolution: "@circulate/api@workspace:packages/api"
-  dependencies:
-    "@js-joda/core": ^2.0.0
-    "@js-joda/timezone": ^2.2.0
-    "@types/aws-lambda": ^8.10.47
-    "@types/jest": ^25.2.1
-    "@types/node": ^13.11.0
-    "@typescript-eslint/eslint-plugin": ^2.30.0
-    "@typescript-eslint/parser": ^2.30.0
-    aws-lambda: ^1.0.6
-    aws-sdk: ^2.668.0
-    eslint: ^6.8.0
-    eslint-config-airbnb-base: latest
-    eslint-config-prettier: ^6.11.0
-    eslint-plugin-import: ^2.20.2
-    eslint-plugin-prettier: ^3.1.3
-    eslint-plugin-react: ^7.19.0
-    fork-ts-checker-webpack-plugin: ^4.1.2
-    husky: ^4.2.3
-    jest: ^25.2.7
-    lambda-log: ^2.3.1
-    prettier: ^2.0.5
-    serverless: ^1.67.3
-    serverless-offline: ^6.1.4
-    serverless-plugin-monorepo: ^0.8.0
-    serverless-webpack: ^5.3.1
-    source-map-support: ^0.5.16
-    ts-jest: ^25.3.1
-    ts-loader: ^6.2.2
-    typescript: ^3.8.3
-    uuid: ^7.0.3
-    webpack: ^4.42.1
-    webpack-cli: ^3.3.11
-    webpack-node-externals: ^1.7.2
-  languageName: unknown
-  linkType: soft
-
-"@circulate/frontend@workspace:packages/frontend":
-  version: 0.0.0-use.local
-  resolution: "@circulate/frontend@workspace:packages/frontend"
-  dependencies:
-    "@ant-design/icons": ^4.1.0
-    "@testing-library/jest-dom": ^5.3.0
-    "@types/jest": ^25.1.4
-    "@types/react": ^16.9.30
-    "@typescript-eslint/eslint-plugin": ^2.30.0
-    "@typescript-eslint/parser": ^2.30.0
-    antd: ^4.1.4
-    aws-amplify: ^3.0.5
-    axios: ^0.19.2
-    babel-jest: ^25.2.4
-    babel-plugin-module-resolver: ^4.0.0
-    eslint: ^6.8.0
-    eslint-config-airbnb-base: latest
-    eslint-config-prettier: ^6.11.0
-    eslint-plugin-import: ^2.20.2
-    eslint-plugin-prettier: ^3.1.3
-    eslint-plugin-react: ^7.19.0
-    husky: ^4.2.3
-    identity-obj-proxy: ^3.0.0
-    jest: ^25.2.4
-    next: ^9.3.4
-    node-sass: ^4.13.1
-    prettier: ^2.0.5
-    react: 16.13.1
-    react-dom: 16.13.1
-    react-test-renderer: ^16.13.1
-    sass: ^1.26.5
-    serverless: ^1.69.0
-    serverless-next.js: ^1.11.0
-    typed-css-modules-webpack-plugin: ^0.1.3
-    typescript: ^3.8.3
-  languageName: unknown
-  linkType: soft
-
 "@cnakazawa/watch@npm:^1.0.3":
   version: 1.0.4
   resolution: "@cnakazawa/watch@npm:1.0.4"
@@ -4887,6 +4810,45 @@ __metadata:
   checksum: 3/cf61bbaf7f34d9f94dd966230b7a7f8f1f24e3e2185540741a2561118e108206d85101ee2fc9876cd756475dbe6573d84d91115c3abdbf53a64e26a5f1f06b67
   languageName: node
   linkType: hard
+
+"api@workspace:packages/api":
+  version: 0.0.0-use.local
+  resolution: "api@workspace:packages/api"
+  dependencies:
+    "@js-joda/core": ^2.0.0
+    "@js-joda/timezone": ^2.2.0
+    "@types/aws-lambda": ^8.10.47
+    "@types/jest": ^25.2.1
+    "@types/node": ^13.11.0
+    "@typescript-eslint/eslint-plugin": ^2.30.0
+    "@typescript-eslint/parser": ^2.30.0
+    aws-lambda: ^1.0.6
+    aws-sdk: ^2.668.0
+    eslint: ^6.8.0
+    eslint-config-airbnb-base: latest
+    eslint-config-prettier: ^6.11.0
+    eslint-plugin-import: ^2.20.2
+    eslint-plugin-prettier: ^3.1.3
+    eslint-plugin-react: ^7.19.0
+    fork-ts-checker-webpack-plugin: ^4.1.2
+    husky: ^4.2.3
+    jest: ^25.2.7
+    lambda-log: ^2.3.1
+    prettier: ^2.0.5
+    serverless: ^1.67.3
+    serverless-offline: ^6.1.4
+    serverless-plugin-monorepo: ^0.8.0
+    serverless-webpack: ^5.3.1
+    source-map-support: ^0.5.16
+    ts-jest: ^25.3.1
+    ts-loader: ^6.2.2
+    typescript: ^3.8.3
+    uuid: ^7.0.3
+    webpack: ^4.42.1
+    webpack-cli: ^3.3.11
+    webpack-node-externals: ^1.7.2
+  languageName: unknown
+  linkType: soft
 
 "app-module-path@npm:^2.2.0":
   version: 2.2.0
@@ -9529,6 +9491,44 @@ __metadata:
   checksum: 3/5f1a9bbff02d30cf5b4f12cfef20b47455876f8318b92d275ca39e3c5adf0636d3a0d8f4821a1c245339c47e79a551dce9ce5c7d9236c16347b934dc13d1d408
   languageName: node
   linkType: hard
+
+"frontend@workspace:packages/frontend":
+  version: 0.0.0-use.local
+  resolution: "frontend@workspace:packages/frontend"
+  dependencies:
+    "@ant-design/icons": ^4.1.0
+    "@testing-library/jest-dom": ^5.3.0
+    "@types/jest": ^25.1.4
+    "@types/react": ^16.9.30
+    "@typescript-eslint/eslint-plugin": ^2.30.0
+    "@typescript-eslint/parser": ^2.30.0
+    antd: ^4.1.4
+    aws-amplify: ^3.0.5
+    axios: ^0.19.2
+    babel-jest: ^25.2.4
+    babel-plugin-module-resolver: ^4.0.0
+    eslint: ^6.8.0
+    eslint-config-airbnb-base: latest
+    eslint-config-prettier: ^6.11.0
+    eslint-plugin-import: ^2.20.2
+    eslint-plugin-prettier: ^3.1.3
+    eslint-plugin-react: ^7.19.0
+    husky: ^4.2.3
+    identity-obj-proxy: ^3.0.0
+    jest: ^25.2.4
+    next: ^9.3.4
+    node-sass: ^4.13.1
+    prettier: ^2.0.5
+    react: 16.13.1
+    react-dom: 16.13.1
+    react-test-renderer: ^16.13.1
+    sass: ^1.26.5
+    serverless: ^1.69.0
+    serverless-next.js: ^1.11.0
+    typed-css-modules-webpack-plugin: ^0.1.3
+    typescript: ^3.8.3
+  languageName: unknown
+  linkType: soft
 
 "fs-constants@npm:^1.0.0":
   version: 1.0.0

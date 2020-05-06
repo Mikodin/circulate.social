@@ -10,10 +10,11 @@ import css from './ConfirmEmail.module.scss';
 interface Props {
   seedEmailAddress?: string;
   redirectTo?: string;
-  onSuccess?: (result?: any) => any;
-  showForm?: (form: AUTH_FORMS) => any;
+  // eslint-disable-next-line
+  onSuccess?: (result?: any) => void;
+  showForm?: (form: AUTH_FORMS) => void;
 }
-const ConfirmEmail = (props: Props) => {
+const ConfirmEmail = (props: Props): JSX.Element => {
   const router = useRouter();
   const { confirmEmail, resendRegisterCode } = useContext(UserContext);
   const [form] = Form.useForm();
@@ -22,7 +23,11 @@ const ConfirmEmail = (props: Props) => {
   const [isInvalidCredentials, setIsInvalidCredentials] = useState(false);
   const [isLoginInFlight, setIsLoginInFlight] = useState(false);
 
-  const onFinish = async (values) => {
+  interface FormValues {
+    email: string;
+    confirmationCode: string;
+  }
+  const onFinish = async (values: FormValues): Promise<void> => {
     const { email, confirmationCode } = values;
     try {
       setIsLoginInFlight(true);
@@ -38,11 +43,11 @@ const ConfirmEmail = (props: Props) => {
 
       setIsLoginInFlight(false);
     } catch (error) {
+      console.error(error);
       setIsLoginInFlight(false);
       if (error.code) {
         setIsInvalidCredentials(true);
       }
-      return error;
     }
   };
 
@@ -94,14 +99,14 @@ const ConfirmEmail = (props: Props) => {
           />
         )}
         <a
-          onClick={() => {
+          onClick={(): void => {
             resendRegisterCode(form.getFieldValue('email'));
           }}
         >
           {"Didn't receive the code? Resend it"}
         </a>
         <Form.Item shouldUpdate={true}>
-          {() => {
+          {(): JSX.Element => {
             const isEmailTouched =
               form.isFieldTouched('email') ||
               Boolean(form.getFieldValue('email'));

@@ -10,7 +10,11 @@ import UserContext from '../state-management/UserContext';
 import initAmplifyAuth from '../state-management/cognitoConfig';
 
 type State = {
-  user: any | null;
+  user: {
+    email: string;
+    firstName: string;
+    lastName: string;
+  } | null;
   userIsLoaded: boolean;
   jwtToken: string | null;
 };
@@ -21,13 +25,19 @@ class MyApp extends App<{}, State> {
     jwtToken: null,
   };
 
-  async componentDidMount(): Promise<any> {
+  async componentDidMount(): Promise<void> {
     initAmplifyAuth();
     await this.restoreSession();
     await this.restoreUser();
   }
 
-  register = async (username, password, firstName, lastName): Promise<any> => {
+  // eslint-disable-next-line
+  register = async (
+    username: string,
+    password: string,
+    firstName: string,
+    lastName: string
+  ) => {
     try {
       const auth = await Auth.signUp({
         username,
@@ -62,6 +72,8 @@ class MyApp extends App<{}, State> {
     username: string,
     code: string,
     routeOnSuccess?: string
+    // @TODO type this
+    // eslint-disable-next-line
   ): Promise<any> => {
     try {
       const auth = await Auth.confirmSignUp(username, code);
@@ -78,16 +90,19 @@ class MyApp extends App<{}, State> {
     }
   };
 
-  resendRegisterCode = async (username: string): Promise<any> => {
+  resendRegisterCode = async (username: string): Promise<boolean> => {
     try {
       await Auth.resendSignUp(username);
       return true;
     } catch (error) {
       console.error('resendRegisterCode', error);
+      return error;
     }
   };
 
-  signIn = async (username: string, password: string): Promise<any> => {
+  // @TODO type this
+  // eslint-disable-next-line
+  signIn = async (username: string, password: string) => {
     try {
       const cognitoUser = await Auth.signIn({
         username,
@@ -114,6 +129,8 @@ class MyApp extends App<{}, State> {
     }
   };
 
+  // @TODO type this
+  // eslint-disable-next-line
   signOut = async (): Promise<any> => {
     try {
       const auth = await Auth.signOut();
@@ -130,26 +147,23 @@ class MyApp extends App<{}, State> {
     }
   };
 
-  restoreSession = async (): Promise<any> => {
+  restoreSession = async (): Promise<void> => {
     try {
       const userSession = await Auth.currentSession();
       const jwtToken = userSession.getIdToken().getJwtToken();
       this.setState({ userIsLoaded: true, jwtToken });
     } catch (error) {
       console.error('restoreSession', error);
-
-      return error;
     }
   };
 
-  restoreUser = async (): Promise<any> => {
+  restoreUser = async (): Promise<void> => {
     try {
       const user = await Auth.currentAuthenticatedUser();
       this.setState({
         user,
         userIsLoaded: true,
       });
-      return;
     } catch (error) {
       console.error('restoreUser', error);
       if (error === 'not authenticated') {
@@ -157,10 +171,11 @@ class MyApp extends App<{}, State> {
           userIsLoaded: true,
         });
       }
-      return error;
     }
   };
 
+  // @TODO type this
+  // eslint-disable-next-line
   forgotPasswordInit = async (username: string): Promise<any> => {
     try {
       const sent = await Auth.forgotPassword(username);
@@ -175,6 +190,8 @@ class MyApp extends App<{}, State> {
     username: string,
     code: string,
     newPassword: string
+    // @TODO type this
+    // eslint-disable-next-line
   ): Promise<any> => {
     try {
       const sent = await Auth.forgotPasswordSubmit(username, code, newPassword);
@@ -190,7 +207,7 @@ class MyApp extends App<{}, State> {
     return Boolean(userIsLoaded && jwtToken);
   };
 
-  render() {
+  render(): JSX.Element {
     const { Component, pageProps } = this.props;
     const { userIsLoaded } = this.state;
 

@@ -7,14 +7,14 @@ import css from './StartCircleForm.module.scss';
 const CREATE_CIRCLE_ENDPOINT =
   'https://z3edrz53yg.execute-api.us-east-1.amazonaws.com/dev/circles/create';
 
-const StartCircleForm = () => {
+const StartCircleForm = (): JSX.Element => {
   const router = useRouter();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [isPublic, setIsPublic] = useState(false);
   const { jwtToken } = useContext(UserContext);
 
-  async function handleSubmit(event) {
+  async function handleSubmit(event): Promise<void> {
     event.preventDefault();
 
     try {
@@ -36,7 +36,12 @@ const StartCircleForm = () => {
 
   return (
     <Fragment>
-      <form className={css.container} onSubmit={(e) => handleSubmit(e)}>
+      <form
+        className={css.container}
+        onSubmit={(e): void => {
+          handleSubmit(e);
+        }}
+      >
         <label>
           <b>Name</b>
         </label>
@@ -44,7 +49,9 @@ const StartCircleForm = () => {
           type="text"
           placeholder="#notasexparty"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e): void => {
+            setName(e.target.value);
+          }}
         />
 
         <label>
@@ -52,7 +59,9 @@ const StartCircleForm = () => {
         </label>
         <textarea
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={(e): void => {
+            setDescription(e.target.value);
+          }}
         />
 
         <label>
@@ -61,7 +70,9 @@ const StartCircleForm = () => {
         <input
           type="checkbox"
           checked={isPublic}
-          onChange={(e) => setIsPublic(e.target.checked)}
+          onChange={(e): void => {
+            setIsPublic(e.target.checked);
+          }}
         />
 
         <button type="submit">Create Circle</button>

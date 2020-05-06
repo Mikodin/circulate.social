@@ -37,6 +37,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
         message: 'Name and description fields are required',
       }),
       headers: {
+        // @TODO limit to only my domain
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
       },

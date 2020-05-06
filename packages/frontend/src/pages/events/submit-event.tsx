@@ -11,13 +11,13 @@ interface Props {
   router: NextRouter;
 }
 class SubmitEvent extends PureComponent<Props, {}> {
-  componentDidMount() {
+  componentDidMount(): void {
     if (!this.context.getIsUserLoggedIn) {
       this.props.router.push('/');
     }
   }
 
-  render() {
+  render(): JSX.Element {
     const { getIsUserLoggedIn } = this.context;
     const { router } = this.props;
 

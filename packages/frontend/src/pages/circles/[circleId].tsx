@@ -3,6 +3,7 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { withRouter, NextRouter } from 'next/router';
 import axios from 'axios';
+import { Circle } from '../../types/ApiTypes';
 
 import AuthContainer from '../../components/authContainer/AuthContainer';
 import Layout from '../../components/layout/Layout';
@@ -18,7 +19,7 @@ interface Props {
 }
 
 interface State {
-  circle: any;
+  circle: Circle;
   getCircleNotAuthorized: boolean;
   showRegisterFlow: boolean;
   isFetchingCircle: boolean;
@@ -33,11 +34,11 @@ class CirclePage extends PureComponent<Props, State> {
     isFetchingJoinCircle: false,
   };
 
-  async componentDidMount() {
+  async componentDidMount(): Promise<void> {
     await this.fetchCircleData();
   }
 
-  async fetchCircleData() {
+  async fetchCircleData(): Promise<void> {
     const { join } = this.props.router.query;
     const { jwtToken } = this.context;
 
@@ -53,7 +54,7 @@ class CirclePage extends PureComponent<Props, State> {
     }
   }
 
-  async joinCircle(idToken: string) {
+  async joinCircle(idToken: string): Promise<boolean> {
     const { circleId } = this.props.router.query;
 
     this.setState({ isFetchingJoinCircle: true });
@@ -65,10 +66,10 @@ class CirclePage extends PureComponent<Props, State> {
           headers: { Authorization: idToken },
         }
       );
-      const joinedCircle = createResponse.data.joined;
+      const { joined } = createResponse.data;
 
       this.setState({ isFetchingJoinCircle: false });
-      return joinedCircle;
+      return Boolean(joined);
     } catch (error) {
       console.error('joinCircle', error);
       const { response } = error;
@@ -82,7 +83,7 @@ class CirclePage extends PureComponent<Props, State> {
     }
   }
 
-  async getCircle(idToken: string) {
+  async getCircle(idToken: string): Promise<Circle> {
     const { circleId } = this.props.router.query;
 
     this.setState({ isFetchingCircle: true });
@@ -99,7 +100,7 @@ class CirclePage extends PureComponent<Props, State> {
         showRegisterFlow: false,
         isFetchingCircle: false,
       });
-      return circle;
+      return circle as Circle;
     } catch (error) {
       console.error('getCircle', error);
       if (error.response && error.response.status === 401) {
@@ -126,7 +127,7 @@ class CirclePage extends PureComponent<Props, State> {
     );
   }
 
-  render() {
+  render(): JSX.Element {
     const {
       circle,
       getCircleNotAuthorized,
@@ -143,7 +144,11 @@ class CirclePage extends PureComponent<Props, State> {
         {showRegisterFlow ? (
           <Fragment>
             <h2>Please sign in or register to join this Circle</h2>
-            <AuthContainer onLoginSuccess={() => this.fetchCircleData()} />
+            <AuthContainer
+              onLoginSuccess={(): void => {
+                this.fetchCircleData();
+              }}
+            />
           </Fragment>
         ) : (
           <div>

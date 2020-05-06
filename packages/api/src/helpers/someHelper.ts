@@ -1,4 +1,4 @@
-const testFunction = (someVal: boolean) => {
+const testFunction = (someVal: boolean): boolean => {
   return someVal;
 };
 

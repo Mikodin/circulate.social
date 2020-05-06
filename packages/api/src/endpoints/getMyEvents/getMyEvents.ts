@@ -21,6 +21,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
         message: 'Please verify your email address',
       }),
       headers: {
+        // @TODO limit to only my domain
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
       },

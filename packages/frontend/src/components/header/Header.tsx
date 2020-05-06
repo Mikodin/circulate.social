@@ -4,7 +4,7 @@ import UserContext from '../../state-management/UserContext';
 
 import css from './Header.module.scss';
 
-const Header = () => {
+const Header = (): JSX.Element => {
   const { signOut, getIsUserLoggedIn } = useContext(UserContext);
   return (
     <Fragment>

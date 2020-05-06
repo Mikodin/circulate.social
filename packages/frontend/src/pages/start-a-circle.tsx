@@ -13,7 +13,7 @@ interface Props {
   router: NextRouter;
 }
 class StartACircle extends PureComponent<Props, {}> {
-  render() {
+  render(): JSX.Element {
     const { getIsUserLoggedIn } = this.context;
     return (
       <Layout>

@@ -10,10 +10,11 @@ import css from './Register.module.scss';
 interface Props {
   seedEmailAddress?: string;
   redirectTo?: string;
-  onSuccess?: (result?: any) => any;
-  showForm?: (form: AUTH_FORMS) => any;
+  // eslint-disable-next-line
+  onSuccess?: (result?: any) => void;
+  showForm?: (form: AUTH_FORMS) => void;
 }
-const Register = (props: Props) => {
+const Register = (props: Props): JSX.Element => {
   const router = useRouter();
   const { register } = useContext(UserContext);
   const [form] = Form.useForm();
@@ -22,7 +23,13 @@ const Register = (props: Props) => {
   const [isInvalidCredentials] = useState(false);
   const [isRegisterInFlight, setIsRegisterInFlight] = useState(false);
 
-  const onFinish = async (values) => {
+  interface FormValues {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+  }
+  const onFinish = async (values: FormValues): Promise<void> => {
     const { email, password, firstName, lastName } = values;
     try {
       setIsRegisterInFlight(true);
@@ -38,8 +45,8 @@ const Register = (props: Props) => {
 
       setIsRegisterInFlight(false);
     } catch (error) {
+      console.error(error);
       setIsRegisterInFlight(false);
-      return error;
     }
   };
 
@@ -105,7 +112,7 @@ const Register = (props: Props) => {
           <Alert message="Invalid username or password" type="error" showIcon />
         )}
         <Form.Item shouldUpdate={true}>
-          {() => {
+          {(): JSX.Element => {
             const isEmailTouched =
               form.isFieldTouched('email') ||
               Boolean(form.getFieldValue('email'));

@@ -2,23 +2,25 @@ import { DynamoDB } from 'aws-sdk';
 import log from 'lambda-log';
 import { v4 as uuidv4 } from 'uuid';
 import { ZonedDateTime, ZoneOffset } from '@js-joda/core';
+import { Event } from './eventsTable';
 
 const defaultDynamoClient = new DynamoDB.DocumentClient();
 
 export interface Circle {
-  circleId: string;
+  id: string;
   createdAt: string;
   updatedAt: string;
   members: string[];
   creatorId: string;
   name: string;
   description: string;
-  events: object[];
+  events: string[];
+  upcomingEventDetails?: Event[];
 }
 
 type PartialCircle = Omit<
   Circle,
-  'circleId' | 'createdAt' | 'updatedAt' | 'members' | 'creatorId' | 'events'
+  'id' | 'createdAt' | 'updatedAt' | 'members' | 'creatorId' | 'events'
 >;
 
 const { CIRCLES_TABLE_NAME } = process.env;
@@ -28,7 +30,7 @@ export async function insertCircle(
   creatorId: string,
   tableName: string = CIRCLES_TABLE_NAME,
   dynamoClient: DynamoDB.DocumentClient = defaultDynamoClient
-) {
+): Promise<Circle> {
   const timestamp = ZonedDateTime.now(ZoneOffset.UTC).toString();
 
   const params = {
@@ -50,7 +52,7 @@ export async function insertCircle(
     });
     await dynamoClient.put(params).promise();
 
-    return params.Item;
+    return params.Item as Circle;
   } catch (error) {
     log.info('Failed to insert into the Circle table', {
       method: 'interfaces/dynamo/circlesTable.insertCircle',
@@ -67,7 +69,7 @@ export async function joinCircle(
   memberId: string,
   tableName: string = CIRCLES_TABLE_NAME,
   dynamoClient: DynamoDB.DocumentClient = defaultDynamoClient
-) {
+): Promise<{ memberJoinedCircle: boolean; memberAlreadyInCirlce: boolean }> {
   const timestamp = ZonedDateTime.now(ZoneOffset.UTC).toString();
 
   const params = {
@@ -113,7 +115,7 @@ export async function getCircle(
   circleId: string,
   tableName: string = CIRCLES_TABLE_NAME,
   dynamoClient: DynamoDB.DocumentClient = defaultDynamoClient
-) {
+): Promise<Circle> {
   const params = {
     TableName: tableName,
     Key: {
@@ -127,7 +129,7 @@ export async function getCircle(
     });
     const { Item } = await dynamoClient.get(params).promise();
 
-    return Item;
+    return Item as Circle;
   } catch (error) {
     log.info('Failed to get the Circle', {
       method: 'interfaces/dynamo/circlesTable.getCircle',
@@ -144,7 +146,7 @@ export async function addEventToCircle(
   eventId: string,
   tableName: string = CIRCLES_TABLE_NAME,
   dynamoClient: DynamoDB.DocumentClient = defaultDynamoClient
-) {
+): Promise<{ eventId: string }> {
   const timestamp = ZonedDateTime.now(ZoneOffset.UTC).toString();
 
   const params = {
@@ -167,9 +169,9 @@ export async function addEventToCircle(
       }
     );
 
-    const inserted = await dynamoClient.update(params).promise();
+    await dynamoClient.update(params).promise();
 
-    return inserted;
+    return { eventId };
   } catch (error) {
     log.info('Failed to add event to the Circle', {
       method: 'interfaces/dynamo/circlesTable.joinCircle',
@@ -185,7 +187,7 @@ export async function getMyCircles(
   memberId: string,
   tableName: string = CIRCLES_TABLE_NAME,
   dynamoClient: DynamoDB.DocumentClient = defaultDynamoClient
-) {
+): Promise<Circle[]> {
   const params = {
     TableName: tableName,
     FilterExpression: 'contains (members, :memberId)',
@@ -202,7 +204,7 @@ export async function getMyCircles(
 
     const myCircles = await dynamoClient.scan(params).promise();
 
-    return myCircles.Items;
+    return myCircles.Items as Circle[];
   } catch (error) {
     log.info('Failed to get my circles', {
       method: 'interfaces/dynamo/circlesTable.getMyCircles',
@@ -218,7 +220,7 @@ export async function getCircleById(
   circleId: string,
   tableName: string = CIRCLES_TABLE_NAME,
   dynamoClient: DynamoDB.DocumentClient = defaultDynamoClient
-) {
+): Promise<Circle> {
   const params = {
     TableName: tableName,
     Key: {
@@ -233,7 +235,7 @@ export async function getCircleById(
 
     const circle = await dynamoClient.get(params).promise();
 
-    return circle.Item;
+    return circle.Item as Circle;
   } catch (error) {
     log.info('Failed to get circle', {
       method: 'interfaces/dynamo/circlesTable.getCircleById',
