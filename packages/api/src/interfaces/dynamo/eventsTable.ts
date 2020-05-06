@@ -7,8 +7,8 @@ import { addEventToCircle } from './circlesTable';
 
 const defaultDynamoClient = new DynamoDB.DocumentClient();
 
-interface Event {
-  eventId: string;
+export interface Event {
+  id: string;
   createdAt: string;
   updatedAt: string;
   members: string[];
@@ -20,7 +20,7 @@ interface Event {
 
 type PartialEvent = Omit<
   Event,
-  'eventId' | 'createdAt' | 'updatedAt' | 'members' | 'creatorId'
+  'id' | 'createdAt' | 'updatedAt' | 'members' | 'creatorId'
 >;
 
 const { EVENTS_TABLE_NAME } = process.env;
@@ -30,7 +30,7 @@ export async function insertEvent(
   creatorId: string,
   tableName: string = EVENTS_TABLE_NAME,
   dynamoClient: DynamoDB.DocumentClient = defaultDynamoClient
-) {
+): Promise<Event> {
   const timestamp = ZonedDateTime.now(ZoneOffset.UTC).toString();
 
   const params = {
@@ -74,7 +74,7 @@ export async function getEventById(
   eventId: string,
   tableName: string = EVENTS_TABLE_NAME,
   dynamoClient: DynamoDB.DocumentClient = defaultDynamoClient
-) {
+): Promise<Event> {
   const params = {
     TableName: tableName,
     Key: {
@@ -88,7 +88,7 @@ export async function getEventById(
     });
     const { Item } = await dynamoClient.get(params).promise();
 
-    return Item;
+    return Item as Event;
   } catch (error) {
     log.info(`Failed to get the Event:[${eventId}]`, {
       method: 'interfaces/dynamo/eventsTable.getEvent',
@@ -104,7 +104,7 @@ export async function getMyEvents(
   memberId: string,
   tableName: string = EVENTS_TABLE_NAME,
   dynamoClient: DynamoDB.DocumentClient = defaultDynamoClient
-) {
+): Promise<Event[]> {
   const params = {
     TableName: tableName,
     FilterExpression: 'contains (members, :memberId)',
@@ -121,7 +121,7 @@ export async function getMyEvents(
 
     const myEvents = await dynamoClient.scan(params).promise();
 
-    return myEvents.Items;
+    return myEvents.Items as Event[];
   } catch (error) {
     log.info('Failed to get my circles', {
       method: 'interfaces/dynamo/circlesTable.getMyCircles',
@@ -137,7 +137,7 @@ export async function getUpcomingCircleEvents(
   circleId: string,
   tableName: string = EVENTS_TABLE_NAME,
   dynamoClient: DynamoDB.DocumentClient = defaultDynamoClient
-) {
+): Promise<Event[]> {
   const params = {
     TableName: tableName,
     FilterExpression: 'circleId = :circleId',
@@ -154,7 +154,7 @@ export async function getUpcomingCircleEvents(
 
     const upcomingEvents = await dynamoClient.scan(params).promise();
 
-    return upcomingEvents.Items;
+    return upcomingEvents.Items as Event[];
   } catch (error) {
     log.info(`Failed to get Events for Circles:${circleId}`, {
       method: 'interfaces/dynamo/circlesTable.getUpcomingCircleEvents',
