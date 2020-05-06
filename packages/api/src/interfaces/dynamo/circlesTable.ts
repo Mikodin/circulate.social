@@ -15,7 +15,7 @@ export interface Circle {
   name: string;
   description: string;
   events: string[];
-  upcomingEventDetails: Event[];
+  upcomingEventDetails?: Event[];
 }
 
 type PartialCircle = Omit<
