@@ -10,10 +10,11 @@ import css from './ForgotPassword.module.scss';
 interface Props {
   seedEmailAddress?: string;
   redirectTo?: string;
-  onSuccess?: (result?: any) => any;
-  showForm?: (form: AUTH_FORMS) => any;
+  // eslint-disable-next-line
+  onSuccess?: (result?: any) => void;
+  showForm?: (form: AUTH_FORMS) => void;
 }
-const ForgotPassword = (props: Props) => {
+const ForgotPassword = (props: Props): JSX.Element => {
   const router = useRouter();
   const { forgotPasswordInit, forgotPasswordSubmit } = useContext(UserContext);
   const [form] = Form.useForm();
@@ -24,7 +25,12 @@ const ForgotPassword = (props: Props) => {
   const [showLimitError, setShowLimitError] = useState(false);
   const [isLoginInFlight] = useState(false);
 
-  const onFinish = async (values) => {
+  interface FormValues {
+    email: string;
+    newPassword: string;
+    confirmationCode: string;
+  }
+  const onFinish = async (values: FormValues): Promise<void> => {
     const { email, newPassword, confirmationCode } = values;
     try {
       let result;
@@ -119,7 +125,7 @@ const ForgotPassword = (props: Props) => {
               />
             </Form.Item>
             <a
-              onClick={() => {
+              onClick={(): void => {
                 forgotPasswordInit(form.getFieldValue('email'));
               }}
             >
@@ -143,7 +149,7 @@ const ForgotPassword = (props: Props) => {
         )}
 
         <Form.Item shouldUpdate={true}>
-          {() => {
+          {(): JSX.Element => {
             const isEmailTouched =
               form.isFieldTouched('email') ||
               Boolean(form.getFieldValue('email'));

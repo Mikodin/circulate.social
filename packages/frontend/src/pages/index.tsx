@@ -5,7 +5,7 @@ import AuthContainer from '../components/authContainer/AuthContainer';
 import styles from './index.module.scss';
 import UserContext from '../state-management/UserContext';
 
-const Home = () => {
+const Home = (): JSX.Element => {
   const { getIsUserLoggedIn } = useContext(UserContext);
   const router = useRouter();
   if (getIsUserLoggedIn()) {

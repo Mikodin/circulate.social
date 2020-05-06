@@ -11,7 +11,7 @@ interface Props {
   seedCircleId?: string;
 }
 
-const SubmitEventForm = (props: Props) => {
+const SubmitEventForm = (props: Props): JSX.Element => {
   const router = useRouter();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -19,11 +19,11 @@ const SubmitEventForm = (props: Props) => {
   const { jwtToken } = useContext(UserContext);
   const { seedCircleId } = props;
 
-  async function handleSubmit(event) {
+  async function handleSubmit(event): Promise<void> {
     event.preventDefault();
 
     try {
-      const createResponse = await axios.post(
+      await axios.post(
         SUBMIT_EVENT_ENDPOINT,
         {
           name,
@@ -33,9 +33,7 @@ const SubmitEventForm = (props: Props) => {
         { headers: { Authorization: jwtToken } }
       );
 
-      const newEvent = createResponse.data.event;
       router.push(`/circles/${seedCircleId}`);
-      return newEvent;
     } catch (e) {
       alert(e);
     }
@@ -43,7 +41,12 @@ const SubmitEventForm = (props: Props) => {
 
   return (
     <Fragment>
-      <form className={css.container} onSubmit={(e) => handleSubmit(e)}>
+      <form
+        className={css.container}
+        onSubmit={(e): void => {
+          handleSubmit(e);
+        }}
+      >
         <label>
           <b>Name</b>
         </label>
@@ -51,7 +54,9 @@ const SubmitEventForm = (props: Props) => {
           type="text"
           placeholder="Some Event"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e): void => {
+            setName(e.target.value);
+          }}
         />
 
         <label>
@@ -59,7 +64,9 @@ const SubmitEventForm = (props: Props) => {
         </label>
         <textarea
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={(e): void => {
+            setDescription(e.target.value);
+          }}
         />
         <label>
           <b>Allow this Event to be discoverable?</b>
@@ -67,7 +74,9 @@ const SubmitEventForm = (props: Props) => {
         <input
           type="checkbox"
           checked={isPublic}
-          onChange={(e) => setIsPublic(e.target.checked)}
+          onChange={(e): void => {
+            setIsPublic(e.target.checked);
+          }}
         />
 
         <button type="submit">Submit Event</button>

@@ -7,6 +7,7 @@ import Layout from '../../components/layout/Layout';
 
 import UserContext from '../../state-management/UserContext';
 import css from './home.module.scss';
+import { Circle } from '../../types/ApiTypes';
 
 const GET_MY_CIRCLES_ENDPOINT =
   'https://z3edrz53yg.execute-api.us-east-1.amazonaws.com/dev/circles';
@@ -15,7 +16,7 @@ interface Props {
   router: Router;
 }
 interface State {
-  circles: any;
+  circles: Circle[];
   isFetchingCircles: boolean;
 }
 class CircleHome extends PureComponent<Props, State> {
@@ -31,7 +32,7 @@ class CircleHome extends PureComponent<Props, State> {
     });
   }
 
-  async getMyCircles(): Promise<any[]> {
+  async getMyCircles(): Promise<Circle[]> {
     const { jwtToken } = this.context;
 
     try {
@@ -67,7 +68,7 @@ class CircleHome extends PureComponent<Props, State> {
     );
   }
 
-  render() {
+  render(): JSX.Element {
     const { circles, isFetchingCircles } = this.state;
     return (
       <Layout>
