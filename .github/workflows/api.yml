@@ -39,10 +39,10 @@ jobs:
         run: yarn workspace api lint
       - name: Run tests
         run: yarn workspace api test
-      # - name: deploy
-      #   if: github.ref == 'refs/heads/master'
-      #   uses: serverless/github-action@master
-      #   run: yarn workspace api deploy:prod
-      #   env:
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: deploy
+        # if: github.ref == 'refs/heads/master'
+        uses: serverless/github-action@master
+        run: yarn workspace api deploy:prod
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
