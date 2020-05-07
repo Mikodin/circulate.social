@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { withRouter, NextRouter } from 'next/router';
 import axios from 'axios';
-import { Circle } from '../../types/ApiTypes';
+import { Circle } from '@circulate/types';
 
 import AuthContainer from '../../components/authContainer/AuthContainer';
 import Layout from '../../components/layout/Layout';
@@ -19,14 +19,14 @@ interface Props {
 }
 
 interface State {
-  circle: Circle;
+  circle: Circle | undefined;
   getCircleNotAuthorized: boolean;
   showRegisterFlow: boolean;
   isFetchingCircle: boolean;
   isFetchingJoinCircle: boolean;
 }
 class CirclePage extends PureComponent<Props, State> {
-  state = {
+  state: State = {
     circle: undefined,
     getCircleNotAuthorized: false,
     showRegisterFlow: false,
@@ -92,7 +92,7 @@ class CirclePage extends PureComponent<Props, State> {
         `${GET_CIRCLE_BY_ID_ENDPOINT}/${circleId}?getUpcomingEvents=true`,
         { headers: { Authorization: idToken } }
       );
-      const { circle } = createResponse.data;
+      const { circle }: { circle: Circle } = createResponse.data;
 
       this.setState({
         circle,
@@ -139,6 +139,7 @@ class CirclePage extends PureComponent<Props, State> {
       this.props.router.push('/');
       return <Fragment></Fragment>;
     }
+
     return (
       <Layout>
         {showRegisterFlow ? (
