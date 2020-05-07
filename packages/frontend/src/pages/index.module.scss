@@ -1,0 +1,45 @@
+// @type
+@import '../mixins/breakpoint/_breakpoint.module.scss';
+
+.container {
+  margin-top: 15px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  @include atMediaUp(medium) {
+    flex-direction: row;
+    align-items: center;
+    height: 80vh;
+    justify-content: space-between;
+  }
+
+  h1 {
+    margin: 0px 0px 10px 0px;
+  }
+}
+
+.infoContainer {
+  // margin-right: 10%;
+  flex-grow: 1;
+  width: 100%;
+  margin-bottom: 15px;
+
+  @include atMediaUp(medium) {
+    margin-right: 50px;
+    margin-bottom: 0px;
+  }
+}
+
+.loginContainer {
+  flex-grow: 1;
+  width: 100%;
+  h2 {
+    border-style: dashed;
+    margin-bottom: 0px;
+    width: fit-content;
+    padding: 2px 10px;
+    border-width: 1px;
+  }
+}
