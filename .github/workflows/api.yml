@@ -1,0 +1,50 @@
+name: api
+
+on:
+  push:
+    paths:
+      - 'packages/api/**'
+
+jobs:
+  api_test_and_deploy:
+    name: API test and deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - uses: actions/checkout@v2
+
+      - name: Choose yarn cache directory
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v1
+        name: Restore yarn cache
+        id: cache
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Yarn install
+        run: yarn install
+
+      - name: Lint all
+        run: yarn workspace api lint
+
+      - name: Run tests
+        run: yarn workspace api test
+
+      - name: deploy
+        if: github.ref == 'refs/heads/master'
+        uses: serverless/github-action@master
+        run: yarn workspace api deploy:prod
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
