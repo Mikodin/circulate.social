@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "goCirculateAws": "sh ~/.aws/goAwsStreaming.sh",
+    "goCirculateAws": "sh ~/.aws/goAwsStreaming.sh ",
     "build": "serverless webpack",
     "lint": "eslint 'src/**/*.{js,ts,tsx}' --fix",
     "alertSwitchAwsAccount": "sh ./AWS_ACCOUNT_ALERT.sh",
