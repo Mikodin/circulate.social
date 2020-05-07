@@ -51,7 +51,8 @@ jobs:
       - name: Build
         run: yarn workspace frontend build
 
-      - name: deploy beta
+      - name: deploy prod
+        if: github.ref == 'refs/heads/master'
         run: yarn workspace frontend deploy
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_GITHUB_ACTIONS_USER }}
