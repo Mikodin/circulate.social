@@ -2839,6 +2839,14 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@circulate/types@1.0.0, @circulate/types@workspace:packages/types":
+  version: 0.0.0-use.local
+  resolution: "@circulate/types@workspace:packages/types"
+  dependencies:
+    typescript: ^3.8.3
+  languageName: unknown
+  linkType: soft
+
 "@cnakazawa/watch@npm:^1.0.3":
   version: 1.0.4
   resolution: "@cnakazawa/watch@npm:1.0.4"
@@ -4811,10 +4819,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"api@workspace:packages/api":
+"api@1.0.0, api@workspace:packages/api":
   version: 0.0.0-use.local
   resolution: "api@workspace:packages/api"
   dependencies:
+    "@circulate/types": 1.0.0
     "@js-joda/core": ^2.0.0
     "@js-joda/timezone": ^2.2.0
     "@types/aws-lambda": ^8.10.47
@@ -9497,12 +9506,14 @@ __metadata:
   resolution: "frontend@workspace:packages/frontend"
   dependencies:
     "@ant-design/icons": ^4.1.0
+    "@circulate/types": 1.0.0
     "@testing-library/jest-dom": ^5.3.0
     "@types/jest": ^25.1.4
     "@types/react": ^16.9.30
     "@typescript-eslint/eslint-plugin": ^2.30.0
     "@typescript-eslint/parser": ^2.30.0
     antd: ^4.1.4
+    api: 1.0.0
     aws-amplify: ^3.0.5
     axios: ^0.19.2
     babel-jest: ^25.2.4

@@ -2,12 +2,12 @@ import { PureComponent, Fragment } from 'react';
 import { withRouter, Router } from 'next/router';
 import Link from 'next/link';
 import axios from 'axios';
+import { Circle } from '@circulate/types';
 
 import Layout from '../../components/layout/Layout';
 
 import UserContext from '../../state-management/UserContext';
 import css from './home.module.scss';
-import { Circle } from '../../types/ApiTypes';
 
 const GET_MY_CIRCLES_ENDPOINT =
   'https://z3edrz53yg.execute-api.us-east-1.amazonaws.com/dev/circles';

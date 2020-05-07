@@ -22,6 +22,7 @@
     }
   },
   "dependencies": {
+    "@circulate/types": "1.0.0",
     "@js-joda/core": "^2.0.0",
     "@js-joda/timezone": "^2.2.0",
     "aws-lambda": "^1.0.6",

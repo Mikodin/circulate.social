@@ -2,21 +2,11 @@ import { DynamoDB } from 'aws-sdk';
 import log from 'lambda-log';
 import { v4 as uuidv4 } from 'uuid';
 import { ZonedDateTime, ZoneOffset } from '@js-joda/core';
+import { Event } from '@circulate/types';
 
 import { addEventToCircle } from './circlesTable';
 
 const defaultDynamoClient = new DynamoDB.DocumentClient();
-
-export interface Event {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  members: string[];
-  creatorId: string;
-  name: string;
-  description: string;
-  circleId?: string;
-}
 
 type PartialEvent = Omit<
   Event,
