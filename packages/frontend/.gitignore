@@ -15,7 +15,6 @@
 
 # production
 /build
-.serverless
 .serverless_nextjs
 
 # misc

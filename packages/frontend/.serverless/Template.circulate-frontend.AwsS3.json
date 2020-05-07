@@ -1,0 +1,6 @@
+{
+  "name": "circulate-frontend",
+  "region": "us-east-1",
+  "accelerated": true,
+  "url": "https://circulate-frontend.s3.amazonaws.com"
+}

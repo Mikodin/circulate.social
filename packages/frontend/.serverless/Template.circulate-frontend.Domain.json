@@ -1,0 +1,13 @@
+{
+  "region": "us-east-1",
+  "privateZone": false,
+  "domain": "circulate.social",
+  "subdomains": [
+    {
+      "domain": "beta.circulate.social",
+      "distributionId": "E26WFX0Q23I9KI",
+      "url": "https://d2k6k3x39de6fn.cloudfront.net",
+      "type": "awsCloudFront"
+    }
+  ]
+}
