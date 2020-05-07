@@ -1,0 +1,12 @@
+{
+  "name": "53upso9-pabdg22",
+  "arn": "arn:aws:iam::441799942923:role/53upso9-pabdg22",
+  "service": [
+    "edgelambda.amazonaws.com",
+    "lambda.amazonaws.com"
+  ],
+  "policy": {
+    "arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  },
+  "region": "us-east-1"
+}
