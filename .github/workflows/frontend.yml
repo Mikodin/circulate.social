@@ -39,16 +39,16 @@ jobs:
         run: yarn install
 
       - name: Lint
-        run: yarn workspace api lint
+        run: yarn workspace frontend lint
 
       - name: Run tests
-        run: yarn workspace api test
+        run: yarn workspace frontend test
 
       - name: Build
-        run: yarn workspace api build
+        run: yarn workspace frontend build
 
       - name: deploy beta
-        run: yarn workspace api deploy
+        run: yarn workspace frontend deploy
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_GITHUB_ACTIONS_USER }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_GITHUB_ACTIONS_USER }}
