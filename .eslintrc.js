@@ -19,6 +19,9 @@ module.exports = {
     'plugin:react/recommended',
     'prettier',
     'prettier/@typescript-eslint',
+    'plugin:import/errors',
+    'plugin:import/warnings',
+    'plugin:import/typescript',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
@@ -35,6 +38,7 @@ module.exports = {
   },
   plugins: ['@typescript-eslint', 'prettier'],
   rules: {
+    'import/no-cycle': 0,
     'prettier/prettier': 'error',
     'import/prefer-default-export': 0,
     '@typescript-eslint/no-unused-vars': ['error'],
