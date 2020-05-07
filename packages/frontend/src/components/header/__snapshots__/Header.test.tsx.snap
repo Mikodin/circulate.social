@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header When user is signed in Should match the snapshot 1`] = `
+<div>
+  <div
+    class="container"
+  >
+    <div
+      class="logoContainer"
+    >
+      <h2>
+        <a
+          href="/"
+        >
+          Circulate.social
+        </a>
+      </h2>
+    </div>
+    <div
+      class="actionsContainer"
+    >
+      <a>
+        Logout
+      </a>
+      <a
+        href="/circles/home"
+      >
+        My Circles
+      </a>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Header When user is signed out Should match the snapshot 1`] = `
+<div>
+  <div
+    class="container"
+  >
+    <div
+      class="logoContainer"
+    >
+      <h2>
+        <a
+          href="/"
+        >
+          Circulate.social
+        </a>
+      </h2>
+    </div>
+    <div
+      class="actionsContainer"
+    >
+      <a
+        href="/start-a-circle"
+      >
+        Start a circle
+      </a>
+    </div>
+  </div>
+</div>
+`;
