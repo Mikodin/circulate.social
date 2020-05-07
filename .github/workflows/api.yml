@@ -38,6 +38,7 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: Yarn install
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install
       - name: Lint all
         run: yarn workspace api lint
