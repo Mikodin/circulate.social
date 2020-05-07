@@ -6,9 +6,6 @@ module.exports = {
   },
   settings: {
     'import/resolver': {
-      webpack: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx', '.scss'],
-      },
       node: {
         extensions: ['.js', '.jsx', '.ts', '.tsx', '.scss'],
       },
