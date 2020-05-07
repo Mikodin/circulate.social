@@ -33,12 +33,12 @@ jobs:
         with:
           path: ${{ steps.yarn-cache.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-      # - name: Yarn install
-      #   run: yarn install
-      # - name: Lint all
-      #   run: yarn workspace api lint
-      # - name: Run tests
-      #   run: yarn workspace api test
+      - name: Yarn install
+        run: yarn install
+      - name: Lint all
+        run: yarn workspace api lint
+      - name: Run tests
+        run: yarn workspace api test
       # - name: deploy
       #   if: github.ref == 'refs/heads/master'
       #   uses: serverless/github-action@master
