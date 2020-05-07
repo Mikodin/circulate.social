@@ -6,6 +6,7 @@ on:
       - GithubActions
     paths:
       - 'packages/api/**'
+      - '.github/workflows/api'
 
 jobs:
   api_test_and_deploy:
