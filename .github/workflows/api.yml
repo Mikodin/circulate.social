@@ -2,8 +2,6 @@ name: api
 
 on:
   push:
-    branches:
-      - 'GithubActions'
     paths:
       - 'packages/api/**'
       - '.github/workflows/api.yml'

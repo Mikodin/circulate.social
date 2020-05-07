@@ -2,8 +2,6 @@ name: frontend
 
 on:
   push:
-    branches:
-      - 'GithubActions'
     paths:
       - 'packages/frontend/**'
       - '.github/workflows/frontend.yml'
