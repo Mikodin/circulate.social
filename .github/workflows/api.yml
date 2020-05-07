@@ -42,7 +42,7 @@ jobs:
       - name: deploy
         # if: github.ref == 'refs/heads/master'
         # uses: serverless/github-action@master
-        run: yarn workspace api deploy:prod
+        run: yarn workspace api deploy:dev
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_GITHUB_ACTIONS_USER }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_GITHUB_ACTIONS_USER }}
