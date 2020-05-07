@@ -45,8 +45,8 @@ jobs:
       # - name: Lint
       #   run: yarn workspace frontend lint
 
-      - name: Run tests
-        run: yarn workspace frontend test
+      # - name: Run tests
+      #   run: yarn workspace frontend test
 
       - name: Build
         run: yarn workspace frontend build
