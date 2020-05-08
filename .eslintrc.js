@@ -38,6 +38,10 @@ module.exports = {
   },
   plugins: ['@typescript-eslint', 'prettier'],
   rules: {
+    'import/no-extraneous-dependencies': [
+      'error',
+      { devDependencies: ['**/*.test.ts', '**/*.test.tsx'] },
+    ],
     'import/no-cycle': 0,
     'prettier/prettier': 'error',
     'import/prefer-default-export': 0,

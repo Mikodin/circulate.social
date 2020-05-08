@@ -5,6 +5,7 @@
     "packages/*"
   ],
   "scripts": {
+    "ws": "yarn workspace",
     "lint": "eslint 'packages/**/*.{js,ts,tsx}' --fix"
   },
   "husky": {
