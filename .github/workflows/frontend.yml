@@ -7,18 +7,10 @@ on:
       - '.github/workflows/frontend.yml'
       - '.eslintrc.js'
       - 'package.json'
-  # pull_request:
-  #   branch:
-  #     - master
-  #   paths:
-  #     - 'packages/frontend/**'
-  #     - '.github/workflows/frontend.yml'
-  #     - '.eslintrc.js'
-  #     - 'package.json'
 
 jobs:
-  lint:
-    name: Lint
+  lint_test:
+    name: Lint and Test
     runs-on: ubuntu-latest
     steps:
       - name: Configure AWS Credentials
@@ -51,43 +43,12 @@ jobs:
       - name: Lint
         run: yarn workspace frontend lint
 
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_GITHUB_ACTIONS_USER }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_GITHUB_ACTIONS_USER }}
-          aws-region: us-east-1
-
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '14.x'
-      - uses: actions/checkout@v2
-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - uses: actions/cache@v1
-        id: yarn-cache #unsure what happened?
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - name: Yarn install
-        run: yarn install
-
       - name: Run tests
         run: yarn workspace frontend test
 
   build:
     name: Build
-    needs: [lint, test]
+    needs: [lint_test]
     runs-on: ubuntu-latest
     steps:
       - name: Configure AWS Credentials
@@ -122,7 +83,8 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: [lint, test, build]
+    if: github.ref == 'refs/heads/master'
+    needs: [lint_test, build]
     runs-on: ubuntu-latest
     steps:
       - name: Configure AWS Credentials
@@ -145,11 +107,11 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
+
       - name: Yarn install
         run: yarn install
 
-      - name: deploy prod
-        if: github.ref == 'refs/heads/master'
+      - name: deploy
         run: yarn workspace frontend deploy
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_GITHUB_ACTIONS_USER }}
