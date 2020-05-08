@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, RenderResult } from '@testing-library/react';
 import UserContext from '../../state-management/UserContext';
 
 import Header from './Header';
@@ -10,13 +10,16 @@ describe('It should pass', () => {
   });
 });
 
-function renderHeader(props?: any) {
-  const defaultProps = {
+function renderHeader(context?: {
+  signOut?: () => void;
+  getIsUserLoggedIn?: () => boolean;
+}): RenderResult {
+  const defaultContext = {
     signOut: jest.fn(),
     getIsUserLoggedIn: jest.fn(() => false),
   };
   return render(
-    <UserContext.Provider value={{ ...defaultProps, ...props }}>
+    <UserContext.Provider value={{ ...defaultContext, ...context }}>
       <Header />
     </UserContext.Provider>
   );
@@ -37,7 +40,7 @@ describe('Header', () => {
     });
   });
   describe('When user is signed out', () => {
-    const renderSignedOutHeader = () =>
+    const renderSignedOutHeader = (): RenderResult =>
       renderHeader({ getIsUserLoggedIn: jest.fn(() => false) });
     it('Should match the snapshot', () => {
       const { container } = renderSignedOutHeader();
@@ -63,7 +66,7 @@ describe('Header', () => {
     });
   });
   describe('When user is signed in', () => {
-    const renderSignedInHeader = () =>
+    const renderSignedInHeader = (): RenderResult =>
       renderHeader({ getIsUserLoggedIn: jest.fn(() => true) });
     it('Should match the snapshot', () => {
       const { container } = renderSignedInHeader();
