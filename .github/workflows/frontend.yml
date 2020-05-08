@@ -7,14 +7,14 @@ on:
       - '.github/workflows/frontend.yml'
       - '.eslintrc.js'
       - 'package.json'
-  pull_request:
-    branch:
-      - master
-    paths:
-      - 'packages/frontend/**'
-      - '.github/workflows/frontend.yml'
-      - '.eslintrc.js'
-      - 'package.json'
+  # pull_request:
+  #   branch:
+  #     - master
+  #   paths:
+  #     - 'packages/frontend/**'
+  #     - '.github/workflows/frontend.yml'
+  #     - '.eslintrc.js'
+  #     - 'package.json'
 
 jobs:
   lint:
