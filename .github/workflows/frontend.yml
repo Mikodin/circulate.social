@@ -8,6 +8,8 @@ on:
       - '.eslintrc.js'
       - 'package.json'
   pull_request:
+    branch:
+      - master
     paths:
       - 'packages/frontend/**'
       - '.github/workflows/frontend.yml'
