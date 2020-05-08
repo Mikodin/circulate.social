@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'packages/frontend/**'
+      - 'packages/types/**'
       - '.github/workflows/frontend.yml'
       - '.eslintrc.js'
       - 'package.json'
