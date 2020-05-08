@@ -2,9 +2,6 @@ name: api
 
 on:
   push:
-    branches:
-      - 'master'
-  pull_request:
     paths:
       - 'packages/api/**'
       - '.github/workflows/api.yml'
