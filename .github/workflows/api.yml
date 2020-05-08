@@ -3,7 +3,8 @@ name: api
 on:
   push:
     branches:
-      - 'GithubActions'
+      - 'master'
+  pull_request:
     paths:
       - 'packages/api/**'
       - '.github/workflows/api.yml'

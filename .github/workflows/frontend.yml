@@ -1,12 +1,11 @@
 name: frontend
 
-on:
-  push:
+on: [push, pull_request]
     branches:
-      - 'GithubActions'
+      - master
     paths:
-      - 'packages/frontend/**'
-      - '.github/workflows/frontend.yml'
+      - 'packages/api/**'
+      - '.github/workflows/api.yml'
       - '.eslintrc.js'
       - 'package.json'
 
