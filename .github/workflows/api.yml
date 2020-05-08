@@ -1,11 +1,18 @@
 name: api
 
-on: [push, pull_request]
-  paths:
-    - 'packages/api/**'
-    - '.github/workflows/api.yml'
-    - '.eslintrc.js'
-    - 'package.json'
+on:
+  push:
+    paths:
+      - 'packages/api/**'
+      - '.github/workflows/api.yml'
+      - '.eslintrc.js'
+      - 'package.json'
+  pull_request:
+    paths:
+      - 'packages/api/**'
+      - '.github/workflows/api.yml'
+      - '.eslintrc.js'
+      - 'package.json'
 
 jobs:
   lint:
