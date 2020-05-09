@@ -11,7 +11,7 @@ import type {
 import 'antd/dist/antd.css';
 import '../styles.scss';
 
-import UserContext from '../state-management/UserContext';
+import UserContext, { UserContextType } from '../state-management/UserContext';
 import initAmplifyAuth from '../state-management/cognitoConfig';
 
 type State = {
@@ -45,7 +45,7 @@ class MyApp extends App<{}, State> {
     password: string,
     firstName: string,
     lastName: string
-  ): Promise<State['user']> => {
+  ): Promise<UserContextType['user']> => {
     try {
       await Auth.signUp({
         username,
@@ -110,7 +110,7 @@ class MyApp extends App<{}, State> {
   signIn = async (
     username: string,
     password: string
-  ): Promise<State['user']> => {
+  ): Promise<UserContextType['user']> => {
     try {
       const cognitoUser = await Auth.signIn({
         username,
@@ -165,7 +165,7 @@ class MyApp extends App<{}, State> {
     }
   };
 
-  restoreUser = async (): Promise<State['user']> => {
+  restoreUser = async (): Promise<UserContextType['user']> => {
     try {
       const currentAuthenticatedUser: CurrentAuthenticatedUser = await Auth.currentAuthenticatedUser();
       const { attributes } = currentAuthenticatedUser;

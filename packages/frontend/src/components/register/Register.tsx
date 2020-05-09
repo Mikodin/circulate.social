@@ -35,7 +35,7 @@ const Register = (props: Props): JSX.Element => {
       setIsRegisterInFlight(true);
       const result = await register(email, password, firstName, lastName);
       if (onSuccess) {
-        onSuccess({ ...result, email: result.user && result.user.username });
+        onSuccess({ ...result, email: result.email });
       }
 
       if (redirectTo) {
