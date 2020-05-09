@@ -70,6 +70,7 @@ const ConfirmEmail = (props: Props): JSX.Element => {
           label="Email Address"
         >
           <Input
+            autoComplete="email"
             prefix={<MailOutlined className="site-form-item-icon" />}
             placeholder="johndoe@gmail.com"
             type="email"
@@ -86,6 +87,7 @@ const ConfirmEmail = (props: Props): JSX.Element => {
           label="Confirmation Code"
         >
           <Input
+            autoComplete="one-time-code"
             prefix={<LockOutlined className="site-form-item-icon" />}
             placeholder="123456"
           />

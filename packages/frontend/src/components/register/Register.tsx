@@ -72,6 +72,7 @@ const Register = (props: Props): JSX.Element => {
         >
           <Input
             prefix={<UserOutlined className="site-form-item-icon" />}
+            autoComplete="given-name"
             placeholder="John"
           />
         </Form.Item>
@@ -81,6 +82,7 @@ const Register = (props: Props): JSX.Element => {
           label="Last name"
         >
           <Input
+            autoComplete="family-name"
             prefix={<UserOutlined className="site-form-item-icon" />}
             placeholder="Doe"
           />
@@ -91,6 +93,7 @@ const Register = (props: Props): JSX.Element => {
           label="Email Address"
         >
           <Input
+            autoComplete="email"
             prefix={<MailOutlined className="site-form-item-icon" />}
             placeholder="johndoe@gmail.com"
             type="email"
@@ -103,6 +106,7 @@ const Register = (props: Props): JSX.Element => {
         >
           <Input
             prefix={<LockOutlined className="site-form-item-icon" />}
+            autoComplete="new-password"
             type="password"
             placeholder="Password"
           />

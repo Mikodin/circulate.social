@@ -89,6 +89,7 @@ const ForgotPassword = (props: Props): JSX.Element => {
         >
           <Input
             prefix={<MailOutlined className="site-form-item-icon" />}
+            autoComplete="email"
             placeholder="johndoe@gmail.com"
             type="email"
           />
@@ -104,6 +105,7 @@ const ForgotPassword = (props: Props): JSX.Element => {
             >
               <Input
                 prefix={<LockOutlined className="site-form-item-icon" />}
+                autoComplete="new-password"
                 type="password"
                 placeholder="Password"
               />
@@ -120,7 +122,7 @@ const ForgotPassword = (props: Props): JSX.Element => {
             >
               <Input
                 prefix={<LockOutlined className="site-form-item-icon" />}
-                type="password"
+                autoComplete="one-time-code"
                 placeholder="Password"
               />
             </Form.Item>

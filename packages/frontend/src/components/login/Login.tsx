@@ -75,6 +75,7 @@ const Login = (props: Props): JSX.Element => {
           <Input
             prefix={<MailOutlined className="site-form-item-icon" />}
             placeholder="joedoe@gmail.com"
+            autoComplete="email"
             type="email"
           />
         </Form.Item>
@@ -84,6 +85,7 @@ const Login = (props: Props): JSX.Element => {
           label="Password"
         >
           <Input
+            autoComplete="current-password"
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
             placeholder="Password"
