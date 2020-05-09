@@ -1,11 +1,19 @@
 import { useContext, Fragment } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import UserContext from '../../state-management/UserContext';
 
 import css from './Header.module.scss';
 
 const Header = (): JSX.Element => {
   const { signOut, getIsUserLoggedIn } = useContext(UserContext);
+  const router = useRouter();
+
+  const signOutThenRouteIndex = async (): Promise<void> => {
+    await signOut();
+    router.push('/');
+  };
+
   return (
     <Fragment>
       <div className={css.container}>
@@ -19,7 +27,7 @@ const Header = (): JSX.Element => {
         <div className={css.actionsContainer}>
           {getIsUserLoggedIn() ? (
             <Fragment>
-              <a onClick={signOut}>Logout</a>
+              <a onClick={signOutThenRouteIndex}>Logout</a>
               <Link href="/circles/home">
                 <a>My Circles</a>
               </Link>

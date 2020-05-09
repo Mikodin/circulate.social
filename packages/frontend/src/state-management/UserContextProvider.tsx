@@ -123,6 +123,7 @@ class UserContextProvider extends Component<Props, State> {
         lastName: attributes.family_name,
         email: attributes.email,
       };
+
       await this.restoreSession();
       this.setState({
         user: userInfo,
@@ -134,7 +135,8 @@ class UserContextProvider extends Component<Props, State> {
       if (error.code === 'UserNotConfirmedException') {
         alert(`signIn: ${error.message}`);
       }
-      return error;
+
+      throw error;
     }
   };
 
