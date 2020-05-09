@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/no-explicit-any: 0 */
+
 export interface CurrentAuthenticatedUser {
   Session: null;
   attributes: {
@@ -49,6 +51,7 @@ export interface SignUp {
     client: Record<string, any>;
     pool: Record<string, any>;
     signInUserSession: Record<string, any> | null;
+
     storage: Record<string, any>;
     userDataKey: string;
     username: string;
