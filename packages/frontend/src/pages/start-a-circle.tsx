@@ -2,10 +2,10 @@ import { PureComponent, Fragment } from 'react';
 import { withRouter, NextRouter } from 'next/router';
 
 import Layout from '../components/layout/Layout';
-import StartCircleForm from '../components/startCircleForm/StartCircleForm';
+import StartCircleForm from '../page-components/start-a-circle/StartCircleForm';
 import AuthContainer, {
   AUTH_FORMS,
-} from '../components/authorization/authContainer/AuthContainer';
+} from '../components/authorization/AuthContainer';
 
 import UserContext from '../state-management/UserContext';
 

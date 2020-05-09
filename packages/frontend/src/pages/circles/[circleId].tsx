@@ -5,7 +5,7 @@ import { withRouter, NextRouter } from 'next/router';
 import axios from 'axios';
 import { Circle } from '@circulate/types';
 
-import AuthContainer from '../../components/authorization/authContainer/AuthContainer';
+import AuthContainer from '../../components/authorization/AuthContainer';
 import Layout from '../../components/layout/Layout';
 // import css from './[circleId].module.scss';
 

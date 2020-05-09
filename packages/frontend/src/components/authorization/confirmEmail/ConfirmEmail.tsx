@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { Form, Input, Button, Alert } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
-import { AUTH_FORMS } from '../authContainer/AuthContainer';
+import { AUTH_FORMS } from '../AuthContainer';
 import UserContext from '../../../state-management/UserContext';
 import css from './ConfirmEmail.module.scss';
 

@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next';
 import { withRouter, NextRouter } from 'next/router';
 
 import Layout from '../../components/layout/Layout';
-import SubmitEventForm from '../../components/submitEventForm/SubmitEventForm';
+import SubmitEventForm from '../../page-components/events/SubmitEventForm';
 
 import UserContext from '../../state-management/UserContext';
 
