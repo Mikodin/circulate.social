@@ -1,11 +1,11 @@
 import { useState, Fragment, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { Form, Input, Button, Alert } from 'antd';
-import { UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
+import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
 import { AUTH_FORMS } from '../authContainer/AuthContainer';
-import UserContext from '../../state-management/UserContext';
-import css from './Register.module.scss';
+import UserContext from '../../../state-management/UserContext';
+import css from './Login.module.scss';
 
 interface Props {
   seedEmailAddress?: string;
@@ -14,39 +14,43 @@ interface Props {
   onSuccess?: (result?: any) => void;
   showForm?: (form: AUTH_FORMS) => void;
 }
-const Register = (props: Props): JSX.Element => {
+const Login = (props: Props): JSX.Element => {
   const router = useRouter();
-  const { register } = useContext(UserContext);
+  const { signIn } = useContext(UserContext);
   const [form] = Form.useForm();
 
-  const { redirectTo, onSuccess, seedEmailAddress } = props;
-  const [isInvalidCredentials] = useState(false);
-  const [isRegisterInFlight, setIsRegisterInFlight] = useState(false);
+  const { redirectTo, onSuccess, seedEmailAddress, showForm } = props;
+  const [isInvalidCredentials, setIsInvalidCredentials] = useState(false);
+  const [isLoginInFlight, setIsLoginInFlight] = useState(false);
 
   interface FormValues {
     email: string;
     password: string;
-    firstName: string;
-    lastName: string;
   }
   const onFinish = async (values: FormValues): Promise<void> => {
-    const { email, password, firstName, lastName } = values;
+    const { email, password } = values;
     try {
-      setIsRegisterInFlight(true);
-      const result = await register(email, password, firstName, lastName);
-      if (onSuccess) {
-        onSuccess({ ...result, email: result.email });
-      }
+      setIsLoginInFlight(true);
+      const result = await signIn(email, password);
 
+      if (onSuccess) {
+        onSuccess(result);
+      }
       if (redirectTo) {
         router.push(redirectTo);
         return;
       }
-
-      setIsRegisterInFlight(false);
+      setIsLoginInFlight(false);
     } catch (error) {
-      console.error(error);
-      setIsRegisterInFlight(false);
+      setIsLoginInFlight(false);
+      if (error && error.code === 'NotAuthorizedException') {
+        setIsInvalidCredentials(true);
+      }
+
+      if (error && error.code === 'UserNotConfirmedException' && showForm) {
+        showForm(AUTH_FORMS.confirmEmail);
+      }
+      throw error;
     }
   };
 
@@ -59,43 +63,19 @@ const Register = (props: Props): JSX.Element => {
         layout="vertical"
         onFinish={onFinish}
         initialValues={{
-          firstName: undefined,
-          lastName: undefined,
           email: seedEmailAddress || undefined,
           password: undefined,
         }}
       >
-        <Form.Item
-          name="firstName"
-          rules={[{ required: true, message: 'Please input name' }]}
-          label="First name"
-        >
-          <Input
-            prefix={<UserOutlined className="site-form-item-icon" />}
-            autoComplete="given-name"
-            placeholder="John"
-          />
-        </Form.Item>
-        <Form.Item
-          name="lastName"
-          rules={[{ required: true, message: 'Please input your last name' }]}
-          label="Last name"
-        >
-          <Input
-            autoComplete="family-name"
-            prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="Doe"
-          />
-        </Form.Item>
         <Form.Item
           name="email"
           rules={[{ required: true, message: 'Please input your email' }]}
           label="Email Address"
         >
           <Input
-            autoComplete="email"
             prefix={<MailOutlined className="site-form-item-icon" />}
-            placeholder="johndoe@gmail.com"
+            placeholder="joedoe@gmail.com"
+            autoComplete="email"
             type="email"
           />
         </Form.Item>
@@ -105,8 +85,8 @@ const Register = (props: Props): JSX.Element => {
           label="Password"
         >
           <Input
+            autoComplete="current-password"
             prefix={<LockOutlined className="site-form-item-icon" />}
-            autoComplete="new-password"
             type="password"
             placeholder="Password"
           />
@@ -120,28 +100,21 @@ const Register = (props: Props): JSX.Element => {
             const isEmailTouched =
               form.isFieldTouched('email') ||
               Boolean(form.getFieldValue('email'));
-            const isFirstNameTouched = form.isFieldTouched('firstName');
-            const isLastNameTouched = form.isFieldTouched('lastName');
             const isPasswordTouched = form.isFieldTouched('password');
-            const isFormTouched =
-              isFirstNameTouched &&
-              isLastNameTouched &&
-              isPasswordTouched &&
-              isEmailTouched;
             return (
               <Button
-                loading={isRegisterInFlight}
+                loading={isLoginInFlight}
                 type="primary"
                 htmlType="submit"
                 size="large"
                 block
                 disabled={Boolean(
-                  !isFormTouched ||
+                  !(isEmailTouched && isPasswordTouched) ||
                     form.getFieldsError().filter(({ errors }) => errors.length)
                       .length
                 )}
               >
-                {isRegisterInFlight ? 'Signing up' : 'Sign up'}
+                {isLoginInFlight ? 'Logging in' : 'Log in'}
               </Button>
             );
           }}
@@ -151,4 +124,4 @@ const Register = (props: Props): JSX.Element => {
   );
 };
 
-export default Register;
+export default Login;

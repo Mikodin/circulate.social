@@ -5,7 +5,7 @@ import Layout from '../components/layout/Layout';
 import StartCircleForm from '../components/startCircleForm/StartCircleForm';
 import AuthContainer, {
   AUTH_FORMS,
-} from '../components/authContainer/AuthContainer';
+} from '../components/authorization/authContainer/AuthContainer';
 
 import UserContext from '../state-management/UserContext';
 

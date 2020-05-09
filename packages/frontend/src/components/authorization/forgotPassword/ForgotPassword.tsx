@@ -4,7 +4,7 @@ import { Form, Input, Button, Alert } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
 import { AUTH_FORMS } from '../authContainer/AuthContainer';
-import UserContext from '../../state-management/UserContext';
+import UserContext from '../../../state-management/UserContext';
 import css from './ForgotPassword.module.scss';
 
 interface Props {
