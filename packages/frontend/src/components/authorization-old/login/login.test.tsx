@@ -4,17 +4,17 @@ import { render, RenderResult } from '@testing-library/react';
 
 import Login, { Props } from './Login';
 
-function renderLogin(props?: Props): RenderResult {
-  const defaultProps = {
-    seedEmail: '',
-    seedPassword: '',
-    redirectTo: '',
-    onSuccess: jest.fn(),
-    showForm: jest.fn(),
-    fetchSignIn: jest.fn(),
-    updateSeedValues: jest.fn(),
-  };
+const defaultProps = {
+  seedEmail: '',
+  seedPassword: '',
+  redirectTo: '',
+  onSuccess: jest.fn(),
+  showForm: jest.fn(),
+  fetchSignIn: jest.fn(),
+  updateSeedValues: jest.fn(),
+};
 
+function renderLogin(props?: Props): RenderResult {
   return render(<Login {...defaultProps} {...props} />);
 }
 
