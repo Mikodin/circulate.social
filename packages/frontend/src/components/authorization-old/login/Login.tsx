@@ -1,25 +1,30 @@
-import { useState, Fragment, useContext } from 'react';
+import { useState, Fragment } from 'react';
 import { useRouter } from 'next/router';
 import { Form, Input, Button, Alert } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
 import { AUTH_FORMS } from '../AuthContainer';
-import UserContext from '../../../state-management/UserContext';
+import { UserContextType } from '../../../state-management/UserContext';
 import css from './Login.module.scss';
 
 interface Props {
-  seedEmailAddress?: string;
+  seedEmail?: string;
+  seedPassword?: string;
   redirectTo?: string;
   // eslint-disable-next-line
   onSuccess?: (result?: any) => void;
   showForm?: (form: AUTH_FORMS) => void;
+  fetchSignIn?: UserContextType['signIn'];
+  updateSeedValues?: (userValues: {
+    email?: string;
+    password?: string;
+  }) => void;
 }
 const Login = (props: Props): JSX.Element => {
   const router = useRouter();
-  const { signIn } = useContext(UserContext);
   const [form] = Form.useForm();
 
-  const { redirectTo, onSuccess, seedEmailAddress, showForm } = props;
+  const { redirectTo, onSuccess, seedEmail, showForm } = props;
   const [isInvalidCredentials, setIsInvalidCredentials] = useState(false);
   const [isLoginInFlight, setIsLoginInFlight] = useState(false);
 
@@ -28,10 +33,11 @@ const Login = (props: Props): JSX.Element => {
     password: string;
   }
   const onFinish = async (values: FormValues): Promise<void> => {
+    const { fetchSignIn } = props;
     const { email, password } = values;
     try {
       setIsLoginInFlight(true);
-      const result = await signIn(email, password);
+      const result = await fetchSignIn(email, password);
 
       if (onSuccess) {
         onSuccess(result);
@@ -54,6 +60,11 @@ const Login = (props: Props): JSX.Element => {
     }
   };
 
+  const updateValues = (changedValues: { email: string; password: string }) => {
+    const { email, password } = changedValues;
+    props.updateSeedValues({ email, password });
+  };
+
   return (
     <Fragment>
       <Form
@@ -63,9 +74,10 @@ const Login = (props: Props): JSX.Element => {
         layout="vertical"
         onFinish={onFinish}
         initialValues={{
-          email: seedEmailAddress || undefined,
+          email: seedEmail || undefined,
           password: undefined,
         }}
+        onValuesChange={updateValues}
       >
         <Form.Item
           name="email"

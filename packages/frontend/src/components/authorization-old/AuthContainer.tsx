@@ -4,19 +4,18 @@ import ConfirmEmail from './confirmEmail/ConfirmEmail';
 import Login from './login/Login';
 import ForgotPassword from './forgotPassword/ForgotPassword';
 import css from './AuthContainer.module.scss';
+import UserContext from '../../state-management/UserContext';
 
 export enum AUTH_FORMS {
-  'login',
-  'register',
-  'confirmEmail',
-  'forgotPassword',
+  login = 'login',
+  register = 'register',
+  confirmEmail = 'confirmEmail',
+  forgotPassword = 'forgotPassword',
 }
 interface State {
-  showRegisterForm: boolean;
-  showConfirmEmailForm: boolean;
-  showLoginForm: boolean;
-  showForgotPasswordForm: boolean;
-  userEmailAddress: string | undefined;
+  seedEmail: string;
+  seedPassword: string;
+  formToShow: AUTH_FORMS;
 }
 interface Props {
   onLoginRedirectTo?: string;
@@ -34,12 +33,14 @@ interface Props {
   seedForm?: AUTH_FORMS;
 }
 class AuthContainer extends PureComponent<Props, State> {
+  static contextType = UserContext;
+
+  context: React.ContextType<typeof UserContext>;
+
   state = {
-    showRegisterForm: true,
-    showConfirmEmailForm: false,
-    showLoginForm: false,
-    userEmailAddress: undefined,
-    showForgotPasswordForm: false,
+    seedEmail: '',
+    seedPassword: '',
+    formToShow: AUTH_FORMS.register,
   };
 
   componentDidMount(): void {
@@ -51,37 +52,25 @@ class AuthContainer extends PureComponent<Props, State> {
     switch (form) {
       case AUTH_FORMS.login: {
         this.setState({
-          showLoginForm: true,
-          showRegisterForm: false,
-          showConfirmEmailForm: false,
-          showForgotPasswordForm: false,
+          formToShow: AUTH_FORMS.login,
         });
         break;
       }
       case AUTH_FORMS.register: {
         this.setState({
-          showRegisterForm: true,
-          showConfirmEmailForm: false,
-          showLoginForm: false,
-          showForgotPasswordForm: false,
+          formToShow: AUTH_FORMS.register,
         });
         break;
       }
       case AUTH_FORMS.confirmEmail: {
         this.setState({
-          showConfirmEmailForm: true,
-          showLoginForm: false,
-          showRegisterForm: false,
-          showForgotPasswordForm: false,
+          formToShow: AUTH_FORMS.confirmEmail,
         });
         break;
       }
       case AUTH_FORMS.forgotPassword: {
         this.setState({
-          showForgotPasswordForm: true,
-          showRegisterForm: false,
-          showConfirmEmailForm: false,
-          showLoginForm: false,
+          formToShow: AUTH_FORMS.forgotPassword,
         });
         break;
       }
@@ -91,14 +80,20 @@ class AuthContainer extends PureComponent<Props, State> {
     }
   };
 
+  updateSeedValues = (userValues: {
+    email?: string;
+    password?: string;
+  }): void => {
+    const { email, password } = userValues;
+    const { seedEmail, seedPassword } = this.state;
+    this.setState({
+      seedEmail: email || seedEmail,
+      seedPassword: password || seedPassword,
+    });
+  };
+
   render(): JSX.Element {
-    const {
-      userEmailAddress,
-      showConfirmEmailForm,
-      showLoginForm,
-      showRegisterForm,
-      showForgotPasswordForm,
-    } = this.state;
+    const { seedEmail, formToShow } = this.state;
     const {
       onLoginRedirectTo,
       onLoginSuccess,
@@ -108,13 +103,13 @@ class AuthContainer extends PureComponent<Props, State> {
 
     return (
       <div className={css.container}>
-        {showRegisterForm && (
+        {formToShow === AUTH_FORMS.register && (
           <Fragment>
             <Register
               redirectTo={onRegisterRedirectTo}
               onSuccess={(vals): void => {
                 if (vals && vals.email) {
-                  this.setState({ userEmailAddress: vals.email });
+                  this.setState({ seedEmail: vals.email });
                 }
                 this.showForm(AUTH_FORMS.confirmEmail);
               }}
@@ -124,25 +119,27 @@ class AuthContainer extends PureComponent<Props, State> {
             </p>
           </Fragment>
         )}
-        {showConfirmEmailForm && (
+        {formToShow === AUTH_FORMS.confirmEmail && (
           <Fragment>
             <ConfirmEmail
               redirectTo={onConfirmEmailRedirectTo}
               onSuccess={(): void => this.showForm(AUTH_FORMS.login)}
-              seedEmailAddress={userEmailAddress}
+              seedEmailAddress={seedEmail}
             />
             <p onClick={(): void => this.showForm(AUTH_FORMS.login)}>
               Already a member? Sign in
             </p>
           </Fragment>
         )}
-        {showLoginForm && (
+        {formToShow === AUTH_FORMS.login && (
           <Fragment>
             <Login
-              seedEmailAddress={userEmailAddress}
+              seedEmail={seedEmail}
               redirectTo={onLoginRedirectTo}
+              updateSeedValues={this.updateSeedValues}
               onSuccess={onLoginSuccess}
               showForm={this.showForm}
+              fetchSignIn={this.context.signIn}
             />
             <p onClick={(): void => this.showForm(AUTH_FORMS.forgotPassword)}>
               Forgot password?
@@ -152,10 +149,10 @@ class AuthContainer extends PureComponent<Props, State> {
             </p>
           </Fragment>
         )}
-        {showForgotPasswordForm && (
+        {formToShow === AUTH_FORMS.forgotPassword && (
           <Fragment>
             <ForgotPassword
-              seedEmailAddress={userEmailAddress}
+              seedEmailAddress={seedEmail}
               onSuccess={(): void => this.showForm(AUTH_FORMS.login)}
             />
             <p onClick={(): void => this.showForm(AUTH_FORMS.register)}>

@@ -20,6 +20,10 @@ interface State {
   isFetchingCircles: boolean;
 }
 class CircleHome extends PureComponent<Props, State> {
+  static contextType = UserContext;
+
+  context: React.ContextType<typeof UserContext>;
+
   state = {
     circles: [],
     isFetchingCircles: true,
@@ -100,7 +104,5 @@ class CircleHome extends PureComponent<Props, State> {
     );
   }
 }
-
-CircleHome.contextType = UserContext;
 
 export default withRouter(CircleHome);

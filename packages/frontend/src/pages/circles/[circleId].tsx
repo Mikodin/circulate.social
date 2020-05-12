@@ -26,6 +26,10 @@ interface State {
   isFetchingJoinCircle: boolean;
 }
 class CirclePage extends PureComponent<Props, State> {
+  static contextType = UserContext;
+
+  context: React.ContextType<typeof UserContext>;
+
   state: State = {
     circle: undefined,
     getCircleNotAuthorized: false,
@@ -201,7 +205,5 @@ export const getServerSideProps: GetServerSideProps = async () => {
     props: {}, // will be passed to the page component as props
   };
 };
-
-CirclePage.contextType = UserContext;
 
 export default withRouter(CirclePage);
