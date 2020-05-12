@@ -7,7 +7,7 @@ import { AUTH_FORMS } from '../AuthContainer';
 import { UserContextType } from '../../../state-management/UserContext';
 import css from './Login.module.scss';
 
-interface Props {
+export interface Props {
   seedEmail?: string;
   seedPassword?: string;
   redirectTo?: string;
