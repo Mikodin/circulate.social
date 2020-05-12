@@ -80,11 +80,11 @@ class AuthContainer extends PureComponent<Props, State> {
     }
   };
 
-  updateSeedValues = (userValues: {
+  updateSeedValues = (formValues: {
     email?: string;
     password?: string;
   }): void => {
-    const { email, password } = userValues;
+    const { email, password } = formValues;
     const { seedEmail, seedPassword } = this.state;
     this.setState({
       seedEmail: email || seedEmail,

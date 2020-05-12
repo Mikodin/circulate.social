@@ -32,21 +32,15 @@ const Login = (props: Props): JSX.Element => {
     email: string;
     password: string;
   }
-  const onFinish = async (values: FormValues): Promise<void> => {
+
+  const handleSignIn = async (email: string, password: string) => {
     const { fetchSignIn } = props;
-    const { email, password } = values;
+
     try {
       setIsLoginInFlight(true);
       const result = await fetchSignIn(email, password);
-
-      if (onSuccess) {
-        onSuccess(result);
-      }
-      if (redirectTo) {
-        router.push(redirectTo);
-        return;
-      }
       setIsLoginInFlight(false);
+      return result;
     } catch (error) {
       setIsLoginInFlight(false);
       if (error && error.code === 'NotAuthorizedException') {
@@ -60,9 +54,16 @@ const Login = (props: Props): JSX.Element => {
     }
   };
 
-  const updateValues = (changedValues: { email: string; password: string }) => {
-    const { email, password } = changedValues;
-    props.updateSeedValues({ email, password });
+  const onFormFinish = async (values: FormValues): Promise<void> => {
+    const { email, password } = values;
+    const signInResult = handleSignIn(email, password);
+
+    if (onSuccess) {
+      onSuccess(signInResult);
+    }
+    if (redirectTo) {
+      router.push(redirectTo);
+    }
   };
 
   return (
@@ -72,12 +73,14 @@ const Login = (props: Props): JSX.Element => {
         form={form}
         name="horizontal_login"
         layout="vertical"
-        onFinish={onFinish}
+        onFinish={onFormFinish}
         initialValues={{
           email: seedEmail || undefined,
           password: undefined,
         }}
-        onValuesChange={updateValues}
+        onValuesChange={({ email, password }): void =>
+          props.updateSeedValues({ email, password })
+        }
       >
         <Form.Item
           name="email"
