@@ -19,7 +19,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.1.0",
     "@circulate/types": "1.0.0",
-    "antd": "^4.1.4",
+    "antd": "^4.2.2",
     "api": "1.0.0",
     "aws-amplify": "^3.0.5",
     "axios": "^0.19.2",
