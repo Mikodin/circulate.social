@@ -123,7 +123,7 @@ exports[`Login should render 1`] = `
                 autocomplete="current-password"
                 class="ant-input"
                 id="horizontal_login_password"
-                placeholder="Password"
+                placeholder="password"
                 type="password"
                 value=""
               />
@@ -146,6 +146,7 @@ exports[`Login should render 1`] = `
           >
             <button
               class="ant-btn ant-btn-primary ant-btn-lg ant-btn-block"
+              data-testid="submitButton"
               disabled=""
               type="submit"
             >

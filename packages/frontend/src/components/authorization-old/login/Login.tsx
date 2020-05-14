@@ -21,10 +21,11 @@ export interface Props {
   }) => void;
 }
 const Login = (props: Props): JSX.Element => {
+  const { redirectTo, onSuccess, seedEmail, seedPassword, showForm } = props;
+
   const router = useRouter();
   const [form] = Form.useForm();
 
-  const { redirectTo, onSuccess, seedEmail, showForm } = props;
   const [isInvalidCredentials, setIsInvalidCredentials] = useState(false);
   const [isLoginInFlight, setIsLoginInFlight] = useState(false);
 
@@ -33,12 +34,13 @@ const Login = (props: Props): JSX.Element => {
     password: string;
   }
 
-  const handleSignIn = async (email: string, password: string) => {
-    const { fetchSignIn } = props;
-
+  const handleSignIn = async (
+    email: string,
+    password: string
+  ): Promise<UserContextType['user']> => {
+    setIsLoginInFlight(true);
     try {
-      setIsLoginInFlight(true);
-      const result = await fetchSignIn(email, password);
+      const result = await props.fetchSignIn(email, password);
       setIsLoginInFlight(false);
       return result;
     } catch (error) {
@@ -56,7 +58,7 @@ const Login = (props: Props): JSX.Element => {
 
   const onFormFinish = async (values: FormValues): Promise<void> => {
     const { email, password } = values;
-    const signInResult = handleSignIn(email, password);
+    const signInResult = await handleSignIn(email, password);
 
     if (onSuccess) {
       onSuccess(signInResult);
@@ -76,7 +78,7 @@ const Login = (props: Props): JSX.Element => {
         onFinish={onFormFinish}
         initialValues={{
           email: seedEmail || undefined,
-          password: undefined,
+          password: seedPassword || undefined,
         }}
         onValuesChange={({ email, password }): void =>
           props.updateSeedValues({ email, password })
@@ -103,7 +105,7 @@ const Login = (props: Props): JSX.Element => {
             autoComplete="current-password"
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
-            placeholder="Password"
+            placeholder="password"
           />
         </Form.Item>
 
@@ -118,6 +120,7 @@ const Login = (props: Props): JSX.Element => {
             const isPasswordTouched = form.isFieldTouched('password');
             return (
               <Button
+                data-testid="submitButton"
                 loading={isLoginInFlight}
                 type="primary"
                 htmlType="submit"
