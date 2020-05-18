@@ -159,7 +159,9 @@ describe('Login', () => {
       fetchSignInSpy.mockClear();
     });
 
-    const setup = (fieldToUpdate: 'email' | 'password'): RenderResult => {
+    const setupIncompleteForm = (
+      fieldToUpdate: 'email' | 'password'
+    ): RenderResult => {
       const container = renderLogin({
         fetchSignIn: fetchSignInSpy,
       });
@@ -195,7 +197,7 @@ describe('Login', () => {
 
     describe('When password field is empty', () => {
       it('should not call props.fetchSignIn when password is empty', async () => {
-        const { queryByTestId } = setup('password');
+        const { queryByTestId } = setupIncompleteForm('password');
 
         const submitButton = queryByTestId('submitButton');
         fireEvent.submit(submitButton);
@@ -203,7 +205,7 @@ describe('Login', () => {
       });
 
       it('should display "Please input your password"', async () => {
-        const { queryByText, queryByTestId } = setup('password');
+        const { queryByText, queryByTestId } = setupIncompleteForm('password');
         const submitButton = queryByTestId('submitButton');
         fireEvent.submit(submitButton);
 
@@ -215,7 +217,7 @@ describe('Login', () => {
 
     describe('When email field is empty', () => {
       it('should not call props.fetchSignIn', async () => {
-        const { queryByTestId } = setup('email');
+        const { queryByTestId } = setupIncompleteForm('email');
 
         const submitButton = queryByTestId('submitButton');
         fireEvent.submit(submitButton);
@@ -223,7 +225,7 @@ describe('Login', () => {
       });
 
       it('should display "Please input your email"', async () => {
-        const { queryByText, queryByTestId } = setup('email');
+        const { queryByText, queryByTestId } = setupIncompleteForm('email');
         const submitButton = queryByTestId('submitButton');
         fireEvent.submit(submitButton);
 
