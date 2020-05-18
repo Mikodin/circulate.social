@@ -26,7 +26,7 @@
     "@js-joda/core": "^2.0.0",
     "@js-joda/timezone": "^2.2.0",
     "aws-lambda": "^1.0.6",
-    "aws-sdk": "^2.668.0",
+    "aws-sdk": "^2.678.0",
     "lambda-log": "^2.3.1",
     "source-map-support": "^0.5.16",
     "uuid": "^8.0.0"
