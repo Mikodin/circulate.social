@@ -153,7 +153,9 @@ class AuthContainer extends PureComponent<Props, State> {
         {formToShow === AUTH_FORMS.forgotPassword && (
           <Fragment>
             <ForgotPassword
-              seedEmailAddress={seedEmail}
+              fetchInitForgotPassword={this.context.forgotPasswordInit}
+              fetchFinalizeForgotPassword={this.context.forgotPasswordSubmit}
+              seedEmail={seedEmail}
               onSuccess={(): void => this.showForm(AUTH_FORMS.login)}
             />
             <p onClick={(): void => this.showForm(AUTH_FORMS.register)}>
