@@ -3,6 +3,6 @@
   "main": "index.ts",
   "version": "1.0.0",
   "dependencies": {
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.2"
   }
 }
