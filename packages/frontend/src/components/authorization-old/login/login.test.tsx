@@ -4,8 +4,8 @@ import {
   RenderResult,
   fireEvent,
   waitFor,
+  act,
 } from '@testing-library/react';
-// import UserContext from '../../state-management/UserContext';
 
 import Login, { Props } from './Login';
 
@@ -144,6 +144,93 @@ describe('Login', () => {
 
       fireEvent.submit(submitButton);
       await waitFor(() => expect(queryByText(/Logging in/i)).toBeTruthy());
+    });
+  });
+
+  describe('On an incomplete form', () => {
+    const fetchSignInPromise = Promise.resolve({
+      email: 'test@circulate.social',
+      firstName: 'Mike',
+      lastName: 'A',
+    });
+    const fetchSignInSpy = jest.fn(() => fetchSignInPromise);
+
+    beforeEach(() => {
+      fetchSignInSpy.mockClear();
+    });
+
+    const setup = (fieldToUpdate: 'email' | 'password'): RenderResult => {
+      const container = renderLogin({
+        fetchSignIn: fetchSignInSpy,
+      });
+
+      const { queryByPlaceholderText } = container;
+
+      // Fill the opposite field for the test setup
+      const textToQueryFor =
+        fieldToUpdate === 'email' ? 'password' : 'joedoe@gmail.com';
+      const input = queryByPlaceholderText(textToQueryFor);
+
+      act(() => {
+        fireEvent.change(input, {
+          target: { value: 'mike@circulate.social' },
+        });
+      });
+
+      return container;
+    };
+
+    it('should not call props.fetchSignIn when email and password is empty', async () => {
+      const { queryByTestId } = renderLogin({
+        fetchSignIn: fetchSignInSpy,
+      });
+
+      const submitButton = queryByTestId('submitButton');
+
+      act(() => {
+        fireEvent.submit(submitButton);
+      });
+      await waitFor(() => expect(fetchSignInSpy).not.toHaveBeenCalled());
+    });
+
+    describe('When password field is empty', () => {
+      it('should not call props.fetchSignIn when password is empty', async () => {
+        const { queryByTestId } = setup('password');
+
+        const submitButton = queryByTestId('submitButton');
+        fireEvent.submit(submitButton);
+        await waitFor(() => expect(fetchSignInSpy).not.toHaveBeenCalled());
+      });
+
+      it('should display "Please input your password"', async () => {
+        const { queryByText, queryByTestId } = setup('password');
+        const submitButton = queryByTestId('submitButton');
+        fireEvent.submit(submitButton);
+
+        await waitFor(() =>
+          expect(queryByText(/Please input your password/i)).toBeTruthy()
+        );
+      });
+    });
+
+    describe('When email field is empty', () => {
+      it('should not call props.fetchSignIn', async () => {
+        const { queryByTestId } = setup('email');
+
+        const submitButton = queryByTestId('submitButton');
+        fireEvent.submit(submitButton);
+        await waitFor(() => expect(fetchSignInSpy).not.toHaveBeenCalled());
+      });
+
+      it('should display "Please input your email"', async () => {
+        const { queryByText, queryByTestId } = setup('email');
+        const submitButton = queryByTestId('submitButton');
+        fireEvent.submit(submitButton);
+
+        await waitFor(() =>
+          expect(queryByText(/Please input your email/i)).toBeTruthy()
+        );
+      });
     });
   });
 });
