@@ -106,6 +106,7 @@ class AuthContainer extends PureComponent<Props, State> {
         {formToShow === AUTH_FORMS.register && (
           <Fragment>
             <Register
+              fetchRegister={this.context.register}
               redirectTo={onRegisterRedirectTo}
               onSuccess={(vals): void => {
                 if (vals && vals.email) {
