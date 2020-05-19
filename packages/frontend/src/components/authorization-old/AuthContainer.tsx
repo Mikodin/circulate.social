@@ -125,7 +125,9 @@ class AuthContainer extends PureComponent<Props, State> {
             <ConfirmEmail
               redirectTo={onConfirmEmailRedirectTo}
               onSuccess={(): void => this.showForm(AUTH_FORMS.login)}
-              seedEmailAddress={seedEmail}
+              seedEmail={seedEmail}
+              fetchConfirmEmail={this.context.confirmEmail}
+              fetchResendConfirmEmail={this.context.resendRegisterCode}
             />
             <p onClick={(): void => this.showForm(AUTH_FORMS.login)}>
               Already a member? Sign in
