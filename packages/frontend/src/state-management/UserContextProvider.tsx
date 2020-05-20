@@ -93,7 +93,7 @@ class UserContextProvider extends Component<Props, State> {
       if (error.code !== 'CodeMismatchException') {
         alert(`confirmEmail: ${error.message}`);
       }
-      return error;
+      throw error;
     }
   };
 

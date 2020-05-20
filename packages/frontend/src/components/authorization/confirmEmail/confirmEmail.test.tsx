@@ -198,4 +198,64 @@ describe('ConfirmEmail', () => {
       });
     });
   });
+
+  describe('When "fetchConfirmEmail" returns an error', () => {
+    describe('Returning any error', () => {
+      const fetchConfirmEmailPromise = Promise.resolve('SUCCESS') as Promise<
+        ConfirmSignUp
+      >;
+      const fetchConfirmEmailSpy = jest.fn(() => fetchConfirmEmailPromise);
+      const fetchResendConfirmEmailPromise = Promise.resolve(true);
+      const fetchResendConfirmEmailSpy = jest.fn(
+        () => fetchResendConfirmEmailPromise
+      );
+      const setupFormAfterSubmit = async (
+        fetchConfirmEmailSpyOverride?: jest.Mock<Promise<ConfirmSignUp>>
+      ): Promise<RenderResult> => {
+        const container = renderConfirmEmail({
+          seedEmail: '',
+          fetchConfirmEmail:
+            fetchConfirmEmailSpyOverride || fetchConfirmEmailSpy,
+          fetchResendConfirmEmail: fetchResendConfirmEmailSpy,
+        });
+
+        const { queryByPlaceholderText, queryByTestId } = container;
+
+        await act(() => {
+          const emailInput = queryByPlaceholderText('joedoe@gmail.com');
+          const confirmationCodeInput = queryByPlaceholderText('123456');
+
+          fireEvent.change(emailInput, {
+            target: { value: 'SomeValueThatDoesntMatter' },
+          });
+          fireEvent.change(confirmationCodeInput, {
+            target: { value: '123' },
+          });
+
+          const submitButton = queryByTestId('submitButton');
+          fireEvent.submit(submitButton);
+        });
+
+        return container;
+      };
+
+      beforeEach(() => {
+        fetchConfirmEmailSpy.mockClear();
+      });
+
+      it('Should display an Alert telling the user that the code used is incorrect', async () => {
+        const { queryByText } = await setupFormAfterSubmit(
+          jest.fn(() => Promise.reject({ code: 'error' }))
+        );
+
+        await waitFor(() => {
+          expect(
+            queryByText(
+              /Invalid verification code provided, please try again./i
+            )
+          ).toBeTruthy();
+        });
+      });
+    });
+  });
 });

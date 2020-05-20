@@ -57,6 +57,7 @@ const ConfirmEmail = (props: Props): JSX.Element => {
       setIsLoginInFlight(false);
     } catch (error) {
       console.error(error);
+      console.log('We here boii');
       setIsLoginInFlight(false);
       if (error.code) {
         setIsInvalidCredentials(true);

@@ -106,6 +106,7 @@ class AuthContainer extends PureComponent<Props, State> {
         {formToShow === AUTH_FORMS.register && (
           <Fragment>
             <Register
+              updateSeedValues={this.updateSeedValues}
               fetchRegister={this.context.register}
               redirectTo={onRegisterRedirectTo}
               onSuccess={(vals): void => {
@@ -125,6 +126,7 @@ class AuthContainer extends PureComponent<Props, State> {
             <ConfirmEmail
               redirectTo={onConfirmEmailRedirectTo}
               onSuccess={(): void => this.showForm(AUTH_FORMS.login)}
+              updateSeedValues={this.updateSeedValues}
               seedEmail={seedEmail}
               fetchConfirmEmail={this.context.confirmEmail}
               fetchResendConfirmEmail={this.context.resendRegisterCode}
@@ -158,6 +160,7 @@ class AuthContainer extends PureComponent<Props, State> {
               fetchInitForgotPassword={this.context.forgotPasswordInit}
               fetchFinalizeForgotPassword={this.context.forgotPasswordSubmit}
               seedEmail={seedEmail}
+              updateSeedValues={this.updateSeedValues}
               onSuccess={(): void => this.showForm(AUTH_FORMS.login)}
             />
             <p onClick={(): void => this.showForm(AUTH_FORMS.register)}>
