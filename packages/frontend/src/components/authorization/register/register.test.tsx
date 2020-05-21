@@ -185,7 +185,7 @@ describe('Register', () => {
               textToQueryFor = 'joedoe@gmail.com';
               break;
             case 'password':
-              textToQueryFor = 'password';
+              textToQueryFor = 'Password';
               break;
             case 'firstName':
               textToQueryFor = 'John';

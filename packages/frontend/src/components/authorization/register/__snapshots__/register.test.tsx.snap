@@ -249,7 +249,7 @@ exports[`Register should render 1`] = `
                 autocomplete="new-password"
                 class="ant-input"
                 id="horizontal_login_password"
-                placeholder="password"
+                placeholder="Password"
                 type="password"
                 value=""
               />
