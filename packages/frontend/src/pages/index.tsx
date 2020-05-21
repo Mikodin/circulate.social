@@ -16,9 +16,12 @@ const Home = (): JSX.Element => {
     <Layout>
       <div className={styles.container}>
         <div className={styles.infoContainer}>
-          <h1>What is Circulating in your world?</h1>
-          <h2>Take it up a notch</h2>
-          <h2>Curated content created by and for your Circle</h2>
+          <h1>A collaborative newsletter platform.</h1>
+          <h2>
+            Designed to empower communities of all sizes to quickly collect and
+            share curated content.
+          </h2>
+          <h2>All delivered as one relevant email digest.</h2>
         </div>
         {!getIsUserLoggedIn() && (
           <div className={styles.loginContainer}>
