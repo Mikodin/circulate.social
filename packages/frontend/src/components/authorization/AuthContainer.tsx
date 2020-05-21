@@ -93,7 +93,7 @@ class AuthContainer extends PureComponent<Props, State> {
   };
 
   render(): JSX.Element {
-    const { seedEmail, formToShow } = this.state;
+    const { seedEmail, seedPassword, formToShow } = this.state;
     const {
       onLoginRedirectTo,
       onLoginSuccess,
@@ -106,6 +106,8 @@ class AuthContainer extends PureComponent<Props, State> {
         {formToShow === AUTH_FORMS.register && (
           <Fragment>
             <Register
+              seedEmail={seedEmail}
+              seedPassword={seedPassword}
               updateSeedValues={this.updateSeedValues}
               fetchRegister={this.context.register}
               redirectTo={onRegisterRedirectTo}
@@ -140,6 +142,7 @@ class AuthContainer extends PureComponent<Props, State> {
           <Fragment>
             <Login
               seedEmail={seedEmail}
+              seedPassword={seedPassword}
               redirectTo={onLoginRedirectTo}
               updateSeedValues={this.updateSeedValues}
               onSuccess={onLoginSuccess}

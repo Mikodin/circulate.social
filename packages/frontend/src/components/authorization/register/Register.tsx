@@ -129,7 +129,7 @@ const Register = (props: Props): JSX.Element => {
             prefix={<LockOutlined className="site-form-item-icon" />}
             autoComplete="new-password"
             type="password"
-            placeholder="password"
+            placeholder="Password"
           />
         </Form.Item>
 

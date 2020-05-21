@@ -73,7 +73,7 @@ describe('Register', () => {
     describe('When password is inputted', () => {
       it('should call updateSeedValues with the inputted password', () => {
         const { queryByPlaceholderText } = renderRegister();
-        const input = queryByPlaceholderText('password');
+        const input = queryByPlaceholderText('Password');
 
         const inputtedPassword = 'Password1!';
         fireEvent.change(input, { target: { value: inputtedPassword } });
@@ -104,7 +104,7 @@ describe('Register', () => {
         fetchRegister: fetchRegisterSpy,
       });
       const emailInput = queryByPlaceholderText('joedoe@gmail.com');
-      const passwordInput = queryByPlaceholderText('password');
+      const passwordInput = queryByPlaceholderText('Password');
       const firstNameInput = queryByPlaceholderText('John');
       const lastNameInput = queryByPlaceholderText('Doe');
 

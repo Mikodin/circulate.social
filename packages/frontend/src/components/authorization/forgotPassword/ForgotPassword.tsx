@@ -16,7 +16,10 @@ export interface Props {
   // eslint-disable-next-line
   onSuccess?: (result?: any) => void;
   showForm?: (form: AUTH_FORMS) => void;
-  updateSeedValues?: (userValues: { email?: string }) => void;
+  updateSeedValues?: (userValues: {
+    email?: string;
+    password?: string;
+  }) => void;
   seedEmail?: string;
   redirectTo?: string;
 }
@@ -96,7 +99,9 @@ const ForgotPassword = (props: Props): JSX.Element => {
           newPassword: undefined,
           confirmationCode: undefined,
         }}
-        onValuesChange={({ email }): void => props.updateSeedValues({ email })}
+        onValuesChange={({ email, newPassword }): void =>
+          props.updateSeedValues({ email, password: newPassword })
+        }
       >
         <Form.Item
           name="email"
