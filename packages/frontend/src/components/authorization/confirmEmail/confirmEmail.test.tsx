@@ -258,4 +258,37 @@ describe('ConfirmEmail', () => {
       });
     });
   });
+
+  describe('When the user wants to resend their confirmation code', () => {
+    describe('When email address is filled out and the user clicks', () => {
+      it('should make the request to "fetchResendConfirmEmailSpy" and enter loading state', async () => {
+        const fetchResendConfirmEmailSpy = jest.fn(() => Promise.resolve(true));
+        const { queryByText, queryByPlaceholderText } = renderConfirmEmail({
+          fetchConfirmEmail: jest.fn(),
+          fetchResendConfirmEmail: fetchResendConfirmEmailSpy,
+        });
+
+        const emailInput = queryByPlaceholderText('joedoe@gmail.com');
+        const resendAnchorText = queryByText(
+          /Didn't receive the code\? Resend it/i
+        );
+
+        act(() => {
+          fireEvent.input(emailInput, {
+            target: { value: 'someEmail@gmail.com' },
+          });
+
+          fireEvent.click(resendAnchorText);
+        });
+
+        await waitFor(() => {
+          expect(fetchResendConfirmEmailSpy).toBeCalledWith(
+            'someEmail@gmail.com'
+          );
+
+          expect(queryByText(/Resending code.../i)).toBeTruthy();
+        });
+      });
+    });
+  });
 });

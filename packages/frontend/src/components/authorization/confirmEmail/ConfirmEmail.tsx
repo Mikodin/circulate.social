@@ -26,24 +26,35 @@ const ConfirmEmail = (props: Props): JSX.Element => {
   const router = useRouter();
   const [form] = Form.useForm();
 
-  const {
-    redirectTo,
-    onSuccess,
-    seedEmail,
-    fetchConfirmEmail,
-    fetchResendConfirmEmail,
-  } = props;
+  const { redirectTo, onSuccess, seedEmail, fetchConfirmEmail } = props;
   const [isInvalidCredentials, setIsInvalidCredentials] = useState(false);
-  const [isLoginInFlight, setIsLoginInFlight] = useState(false);
+  const [IsConfirmEmailInFlight, setIsConfirmEmailInFlight] = useState(false);
+  const [
+    isResendConfirmEmailinFlight,
+    setIsResendConfirmEmailinFlight,
+  ] = useState(false);
 
   interface FormValues {
     email: string;
     confirmationCode: string;
   }
+
+  const onResendEmailClick = async (email: string): Promise<void> => {
+    const { fetchResendConfirmEmail } = props;
+    try {
+      setIsResendConfirmEmailinFlight(true);
+      await fetchResendConfirmEmail(email);
+      setIsResendConfirmEmailinFlight(false);
+    } catch (error) {
+      console.error(error);
+      setIsResendConfirmEmailinFlight(false);
+    }
+  };
+
   const onFinish = async (values: FormValues): Promise<void> => {
     const { email, confirmationCode } = values;
     try {
-      setIsLoginInFlight(true);
+      setIsConfirmEmailInFlight(true);
       const result = await fetchConfirmEmail(email, confirmationCode);
       if (onSuccess) {
         onSuccess(result);
@@ -54,11 +65,10 @@ const ConfirmEmail = (props: Props): JSX.Element => {
         return;
       }
 
-      setIsLoginInFlight(false);
+      setIsConfirmEmailInFlight(false);
     } catch (error) {
       console.error(error);
-      console.log('We here boii');
-      setIsLoginInFlight(false);
+      setIsConfirmEmailInFlight(false);
       if (error.code) {
         setIsInvalidCredentials(true);
       }
@@ -117,10 +127,15 @@ const ConfirmEmail = (props: Props): JSX.Element => {
         )}
         <a
           onClick={(): void => {
-            fetchResendConfirmEmail(form.getFieldValue('email'));
+            const email = form.getFieldValue('email');
+            if (email && !isResendConfirmEmailinFlight) {
+              onResendEmailClick(email);
+            }
           }}
         >
-          {"Didn't receive the code? Resend it"}
+          {isResendConfirmEmailinFlight
+            ? 'Resending code...'
+            : "Didn't receive the code? Resend it"}
         </a>
         <Form.Item shouldUpdate={true}>
           {(): JSX.Element => {
@@ -134,7 +149,7 @@ const ConfirmEmail = (props: Props): JSX.Element => {
             return (
               <Button
                 data-testid="submitButton"
-                loading={isLoginInFlight}
+                loading={IsConfirmEmailInFlight}
                 type="primary"
                 htmlType="submit"
                 size="large"
@@ -145,7 +160,7 @@ const ConfirmEmail = (props: Props): JSX.Element => {
                       .length
                 )}
               >
-                {isLoginInFlight ? 'Confirming' : 'Confirm Email'}
+                {IsConfirmEmailInFlight ? 'Confirming' : 'Confirm Email'}
               </Button>
             );
           }}
