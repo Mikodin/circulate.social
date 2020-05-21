@@ -73,7 +73,7 @@ class UserContextProvider extends Component<Props, State> {
         alert(`register: A user with this email already exists`);
       }
 
-      return error;
+      throw error;
     }
   };
 

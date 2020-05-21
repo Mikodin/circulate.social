@@ -65,6 +65,7 @@ const ConfirmEmail = (props: Props): JSX.Element => {
         return;
       }
 
+      setIsInvalidCredentials(false);
       setIsConfirmEmailInFlight(false);
     } catch (error) {
       console.error(error);

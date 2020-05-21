@@ -41,6 +41,8 @@ const Login = (props: Props): JSX.Element => {
     setIsLoginInFlight(true);
     try {
       const result = await props.fetchSignIn(email, password);
+
+      setIsInvalidCredentials(false);
       setIsLoginInFlight(false);
       return result;
     } catch (error) {

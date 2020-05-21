@@ -69,12 +69,14 @@ const ForgotPassword = (props: Props): JSX.Element => {
         setShowConfirmationCode(true);
       }
 
+      setIsInvalidCredentials(false);
       setIsLoginInFlight(false);
     } catch (error) {
       if (error && error.code === 'LimitExceededException') {
         setShowLimitError(true);
       }
       if (error && error.code === 'ExpiredCodeException') {
+        // TODO show expired code exception message
         setIsInvalidCredentials(true);
       }
       if (error && error.code === 'CodeMismatchException') {

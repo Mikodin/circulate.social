@@ -36,8 +36,11 @@ const Register = (props: Props): JSX.Element => {
     seedEmail,
     seedPassword,
   } = props;
-  const [isInvalidCredentials] = useState(false);
   const [isRegisterInFlight, setIsRegisterInFlight] = useState(false);
+  const [isUserAlreadyExistsError, setIsUserAlreadyExistsError] = useState(
+    false
+  );
+  const [isPasswordTooWeakError, setIsPasswordTooWeakError] = useState(false);
 
   interface FormValues {
     email: string;
@@ -61,9 +64,16 @@ const Register = (props: Props): JSX.Element => {
         return;
       }
 
+      setIsUserAlreadyExistsError(false);
       setIsRegisterInFlight(false);
     } catch (error) {
       console.error(error);
+      if (error.code === 'UsernameExistsException') {
+        setIsUserAlreadyExistsError(true);
+      }
+      if (error.code === 'InvalidParameterException') {
+        setIsPasswordTooWeakError(true);
+      }
       setIsRegisterInFlight(false);
     }
   };
@@ -133,8 +143,20 @@ const Register = (props: Props): JSX.Element => {
           />
         </Form.Item>
 
-        {isInvalidCredentials && (
-          <Alert message="Invalid username or password" type="error" showIcon />
+        {/* TODO Add more errors for different password issues */}
+        {isPasswordTooWeakError && (
+          <Alert
+            message="Value at 'password' failed to satisfy constraint: Member must have length greater than or equal to 6; Value at 'password' failed to satisfy constraint: Member must satisfy regular expression pattern: ^[\\S]+.*[\\S]+$"
+            type="error"
+            showIcon
+          />
+        )}
+        {isUserAlreadyExistsError && (
+          <Alert
+            message="Sorry, a user with this email already exists."
+            type="error"
+            showIcon
+          />
         )}
         <Form.Item shouldUpdate={true}>
           {(): JSX.Element => {

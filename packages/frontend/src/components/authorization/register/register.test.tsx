@@ -332,4 +332,64 @@ describe('Register', () => {
       });
     });
   });
+
+  describe('When register returns an error', () => {
+    const setupFormForErrorState = (
+      fetchRegisterMock: jest.Mock<Promise<never>, []>
+    ): RenderResult => {
+      const container = renderRegister({
+        seedEmail: 'aasdf',
+        seedPassword: 'asdf',
+        fetchRegister: fetchRegisterMock,
+      });
+      const { queryByTestId, queryByPlaceholderText } = container;
+
+      const emailInput = queryByPlaceholderText('joedoe@gmail.com');
+      const passwordInput = queryByPlaceholderText('Password');
+      const firstNameInput = queryByPlaceholderText('John');
+      const lastNameInput = queryByPlaceholderText('Doe');
+
+      const submitButton = queryByTestId('submitButton');
+
+      act(() => {
+        fireEvent.change(emailInput, {
+          target: { value: 'mike@circulate.social' },
+        });
+        fireEvent.change(passwordInput, { target: { value: 'Password1!' } });
+        fireEvent.change(firstNameInput, { target: { value: 'Bill' } });
+        fireEvent.change(lastNameInput, { target: { value: 'Nye' } });
+        fireEvent.submit(submitButton);
+      });
+
+      return container;
+    };
+    describe('When a user with that email exists already', () => {
+      it('should show a message to the user telling them that the user already exists', async () => {
+        const { queryByText } = setupFormForErrorState(
+          jest.fn(() => Promise.reject({ code: 'UsernameExistsException' }))
+        );
+
+        await waitFor(() => {
+          const alertMessage = queryByText(
+            'Sorry, a user with this email already exists.'
+          );
+          expect(alertMessage).toBeTruthy();
+        });
+      });
+    });
+    describe('When the password is too "weak"', () => {
+      it('should show a message to the user telling that the password is weak', async () => {
+        const { queryByText } = setupFormForErrorState(
+          jest.fn(() => Promise.reject({ code: 'InvalidParameterException' }))
+        );
+
+        await waitFor(() => {
+          const alertMessage = queryByText(
+            /Value at 'Password' failed to satisfy constraint: Password must have length greater than or equal to 6; Value at 'password' failed to satisfy constraint: Member must satisfy regular expression pattern:/i
+          );
+          expect(alertMessage).toBeTruthy();
+        });
+      });
+    });
+  });
 });
