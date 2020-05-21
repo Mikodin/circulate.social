@@ -139,7 +139,7 @@ const ForgotPassword = (props: Props): JSX.Element => {
               <Input
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 autoComplete="one-time-code"
-                placeholder="Password"
+                placeholder="123456"
               />
             </Form.Item>
             <a

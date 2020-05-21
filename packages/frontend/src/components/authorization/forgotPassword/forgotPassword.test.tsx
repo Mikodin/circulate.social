@@ -108,68 +108,137 @@ describe('ForgotPassword', () => {
         expect(queryByText(/Setting New Password/i)).toBeTruthy()
       );
     });
-  });
 
-  describe('On an incomplete form', () => {
-    const fetchInitForgotPasswordPromise = Promise.resolve(true);
-    const fetchInitForgotPasswordSpy = jest.fn(
-      () => fetchInitForgotPasswordPromise
-    );
+    describe('On step 2 confirming code and setting new password', () => {
+      const emailInputValue = 'mike@circulate.social';
+      const fetchFinalizeForgotPasswordPromise = Promise.resolve(true);
+      const fetchFinalizeForgotPasswordSpy = jest.fn(
+        () => fetchFinalizeForgotPasswordPromise
+      );
 
-    beforeEach(() => {
-      fetchInitForgotPasswordSpy.mockClear();
-    });
+      const setupForm = async (): Promise<RenderResult> => {
+        const container = renderForgotPassword({
+          fetchInitForgotPassword: fetchInitForgotPasswordSpy,
+          fetchFinalizeForgotPassword: fetchFinalizeForgotPasswordSpy,
+        });
+        const { queryByTestId, queryByPlaceholderText } = container;
+        const emailInput = queryByPlaceholderText('joedoe@gmail.com');
 
-    const setupIncompleteForm = (fieldsToUpdate: 'email'[]): RenderResult => {
-      const container = renderForgotPassword({
-        seedEmail: '',
-        fetchInitForgotPassword: fetchInitForgotPasswordSpy,
-      });
+        const submitButton = queryByTestId('submitButton');
 
-      const { queryByPlaceholderText } = container;
-
-      act(() => {
-        fieldsToUpdate.forEach((fieldName) => {
-          let textToQueryFor;
-
-          switch (fieldName) {
-            case 'email':
-              textToQueryFor = 'joedoe@gmail.com';
-              break;
-            default:
-              break;
-          }
-          const input = queryByPlaceholderText(textToQueryFor);
-
-          fireEvent.change(input, {
-            target: { value: 'SomeValueThatDoesntMatter' },
+        await act(async () => {
+          fireEvent.change(emailInput, {
+            target: { value: emailInputValue },
           });
+
+          fireEvent.submit(submitButton);
+        });
+
+        return container;
+      };
+
+      it('Should display the new password and confirmation code form with email already filled', async () => {
+        const {
+          queryByPlaceholderText,
+          queryByDisplayValue,
+        } = await setupForm();
+
+        expect(queryByDisplayValue(emailInputValue)).toBeTruthy();
+        expect(queryByPlaceholderText('Password')).toBeTruthy();
+        expect(queryByPlaceholderText('123456')).toBeTruthy();
+      });
+      describe('On submit of a filled new password and confirmation form', () => {
+        it('Should fire fetchFinalizeForgotPassword with the email, new password and confirmation code', async () => {
+          const { queryByTestId, queryByPlaceholderText } = await setupForm();
+          const newPasswordInput = queryByPlaceholderText('Password');
+          const confirmationCodeInput = queryByPlaceholderText('123456');
+          const submitButton = queryByTestId('submitButton');
+
+          const newPasswordValue = 'newPass1!';
+          const confirmationCodeValue = '09876';
+          act(() => {
+            fireEvent.change(newPasswordInput, {
+              target: { value: newPasswordValue },
+            });
+            fireEvent.change(confirmationCodeInput, {
+              target: { value: confirmationCodeValue },
+            });
+
+            fireEvent.submit(submitButton);
+          });
+
+          await waitFor(() =>
+            expect(fetchFinalizeForgotPasswordSpy).toHaveBeenCalledWith(
+              emailInputValue,
+              confirmationCodeValue,
+              newPasswordValue
+            )
+          );
         });
       });
+    });
+  });
+});
 
-      return container;
-    };
+describe('On an incomplete form', () => {
+  const fetchInitForgotPasswordPromise = Promise.resolve(true);
+  const fetchInitForgotPasswordSpy = jest.fn(
+    () => fetchInitForgotPasswordPromise
+  );
 
-    describe('When email field is empty', () => {
-      it('should not call props.fetchRegister', async () => {
-        const { queryByTestId } = setupIncompleteForm([]);
+  beforeEach(() => {
+    fetchInitForgotPasswordSpy.mockClear();
+  });
 
-        const submitButton = queryByTestId('submitButton');
-        fireEvent.submit(submitButton);
-        await waitFor(() =>
-          expect(fetchInitForgotPasswordSpy).not.toHaveBeenCalled()
-        );
+  const setupIncompleteForm = (fieldsToUpdate: 'email'[]): RenderResult => {
+    const container = renderForgotPassword({
+      seedEmail: '',
+      fetchInitForgotPassword: fetchInitForgotPasswordSpy,
+    });
+
+    const { queryByPlaceholderText } = container;
+
+    act(() => {
+      fieldsToUpdate.forEach((fieldName) => {
+        let textToQueryFor;
+
+        switch (fieldName) {
+          case 'email':
+            textToQueryFor = 'joedoe@gmail.com';
+            break;
+          default:
+            break;
+        }
+        const input = queryByPlaceholderText(textToQueryFor);
+
+        fireEvent.change(input, {
+          target: { value: 'SomeValueThatDoesntMatter' },
+        });
       });
+    });
 
-      it('should display "Please input your email"', async () => {
-        const { queryByText, queryByTestId } = setupIncompleteForm([]);
-        const submitButton = queryByTestId('submitButton');
-        fireEvent.submit(submitButton);
+    return container;
+  };
 
-        await waitFor(() =>
-          expect(queryByText(/Please input your email/i)).toBeTruthy()
-        );
-      });
+  describe('When email field is empty', () => {
+    it('should not call props.fetchRegister', async () => {
+      const { queryByTestId } = setupIncompleteForm([]);
+
+      const submitButton = queryByTestId('submitButton');
+      fireEvent.submit(submitButton);
+      await waitFor(() =>
+        expect(fetchInitForgotPasswordSpy).not.toHaveBeenCalled()
+      );
+    });
+
+    it('should display "Please input your email"', async () => {
+      const { queryByText, queryByTestId } = setupIncompleteForm([]);
+      const submitButton = queryByTestId('submitButton');
+      fireEvent.submit(submitButton);
+
+      await waitFor(() =>
+        expect(queryByText(/Please input your email/i)).toBeTruthy()
+      );
     });
   });
 });
