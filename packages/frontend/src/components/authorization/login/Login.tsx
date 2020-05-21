@@ -44,6 +44,7 @@ const Login = (props: Props): JSX.Element => {
       setIsLoginInFlight(false);
       return result;
     } catch (error) {
+      console.error(error);
       setIsLoginInFlight(false);
       if (error && error.code === 'NotAuthorizedException') {
         setIsInvalidCredentials(true);
@@ -52,7 +53,7 @@ const Login = (props: Props): JSX.Element => {
       if (error && error.code === 'UserNotConfirmedException' && showForm) {
         showForm(AUTH_FORMS.confirmEmail);
       }
-      throw error;
+      return error;
     }
   };
 
@@ -105,13 +106,14 @@ const Login = (props: Props): JSX.Element => {
             autoComplete="current-password"
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
-            placeholder="password"
+            placeholder="Password"
           />
         </Form.Item>
 
         {isInvalidCredentials && (
           <Alert message="Invalid username or password" type="error" showIcon />
         )}
+
         <Form.Item shouldUpdate={true}>
           {(): JSX.Element => {
             const isEmailTouched =

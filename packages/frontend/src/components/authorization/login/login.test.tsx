@@ -8,6 +8,7 @@ import {
 } from '@testing-library/react';
 
 import Login, { Props } from './Login';
+import { AUTH_FORMS } from '../AuthContainer';
 
 const defaultProps = {
   seedEmail: '',
@@ -67,7 +68,7 @@ describe('Login', () => {
     describe('When password is inputted', () => {
       it('should call updateSeedValues with the inputted password', () => {
         const { queryByPlaceholderText } = renderLogin();
-        const input = queryByPlaceholderText('password');
+        const input = queryByPlaceholderText('Password');
 
         const inputtedPassword = 'Password1!';
         fireEvent.change(input, { target: { value: inputtedPassword } });
@@ -98,7 +99,7 @@ describe('Login', () => {
         fetchSignIn: fetchSignInSpy,
       });
       const emailInput = queryByPlaceholderText('joedoe@gmail.com');
-      const passwordInput = queryByPlaceholderText('password');
+      const passwordInput = queryByPlaceholderText('Password');
       const submitButton = queryByTestId('submitButton');
 
       fireEvent.change(emailInput, {
@@ -170,7 +171,7 @@ describe('Login', () => {
 
       // Fill the opposite field for the test setup
       const textToQueryFor =
-        fieldToUpdate === 'email' ? 'password' : 'joedoe@gmail.com';
+        fieldToUpdate === 'email' ? 'Password' : 'joedoe@gmail.com';
       const input = queryByPlaceholderText(textToQueryFor);
 
       act(() => {
@@ -232,6 +233,82 @@ describe('Login', () => {
         await waitFor(() =>
           expect(queryByText(/Please input your email/i)).toBeTruthy()
         );
+      });
+    });
+  });
+
+  describe('Login returning any error', () => {
+    const fetchSignInPromise = Promise.resolve({
+      email: 'test@circulate.social',
+      firstName: 'Mike',
+      lastName: 'A',
+    });
+    const fetchSignInSpy = jest.fn(() => fetchSignInPromise);
+
+    const setupFormAfterSubmit = async (
+      fetchSignInSpyOverride?: typeof fetchSignInSpy,
+      showFormOverride?: jest.Mock<Props['showForm']>
+    ): Promise<RenderResult> => {
+      const container = renderLogin({
+        fetchSignIn: fetchSignInSpyOverride || fetchSignInSpy,
+        showForm: showFormOverride,
+      });
+
+      const { queryByPlaceholderText, queryByTestId } = container;
+
+      act(() => {
+        const emailInput = queryByPlaceholderText('joedoe@gmail.com');
+        const passwordInput = queryByPlaceholderText('Password');
+
+        fireEvent.change(emailInput, {
+          target: { value: 'email@email.com' },
+        });
+        fireEvent.change(passwordInput, {
+          target: { value: 'Password1!' },
+        });
+
+        const submitButton = queryByTestId('submitButton');
+        fireEvent.submit(submitButton);
+      });
+
+      return container;
+    };
+
+    beforeEach(() => {
+      fetchSignInSpy.mockClear();
+    });
+
+    describe('When username or password is incorrect', () => {
+      const fetchSignInInvalidPasswordMock = jest.fn(() =>
+        Promise.reject({ code: 'NotAuthorizedException' })
+      );
+      it('Should display an Alert telling the user that the username or password is incorrect', async () => {
+        const { queryByText } = await setupFormAfterSubmit(
+          fetchSignInInvalidPasswordMock
+        );
+
+        await waitFor(() => {
+          expect(queryByText(/Invalid username or password/i)).toBeTruthy();
+        });
+      });
+    });
+
+    describe('When user has not verified their account', () => {
+      const fetchSignInUserNotConfirmedMock = jest.fn(() =>
+        Promise.reject({ code: 'UserNotConfirmedException' })
+      );
+
+      const showFormMock = jest.fn();
+
+      it('Should call props.showForm(AUTH_FORMS.confirmEmail)', async () => {
+        await setupFormAfterSubmit(
+          fetchSignInUserNotConfirmedMock,
+          showFormMock
+        );
+
+        await waitFor(() => {
+          expect(showFormMock).toHaveBeenCalledWith(AUTH_FORMS.confirmEmail);
+        });
       });
     });
   });
