@@ -385,7 +385,7 @@ describe('Register', () => {
 
         await waitFor(() => {
           const alertMessage = queryByText(
-            /Value at 'Password' failed to satisfy constraint: Password must have length greater than or equal to 6; Value at 'password' failed to satisfy constraint: Member must satisfy regular expression pattern:/i
+            /Value at 'password' failed to satisfy constraint/i
           );
           expect(alertMessage).toBeTruthy();
         });

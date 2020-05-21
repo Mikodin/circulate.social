@@ -72,6 +72,7 @@ const ForgotPassword = (props: Props): JSX.Element => {
       setIsInvalidCredentials(false);
       setIsLoginInFlight(false);
     } catch (error) {
+      console.error(error);
       if (error && error.code === 'LimitExceededException') {
         setShowLimitError(true);
       }
@@ -82,8 +83,6 @@ const ForgotPassword = (props: Props): JSX.Element => {
       if (error && error.code === 'CodeMismatchException') {
         setIsInvalidCredentials(true);
       }
-
-      throw error;
     }
   };
 

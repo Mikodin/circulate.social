@@ -291,4 +291,11 @@ describe('ConfirmEmail', () => {
       });
     });
   });
+
+  // TODO Fill these in
+  describe.skip('When fetch requests return an error', () => {
+    it('Should display an error', () => {
+      expect(true).toBe(false);
+    });
+  });
 });

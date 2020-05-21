@@ -147,6 +147,7 @@ describe('ForgotPassword', () => {
         expect(queryByPlaceholderText('Password')).toBeTruthy();
         expect(queryByPlaceholderText('123456')).toBeTruthy();
       });
+
       describe('On submit of a filled new password and confirmation form', () => {
         it('Should fire fetchFinalizeForgotPassword with the email, new password and confirmation code', async () => {
           const { queryByTestId, queryByPlaceholderText } = await setupForm();
@@ -178,67 +179,113 @@ describe('ForgotPassword', () => {
       });
     });
   });
-});
 
-describe('On an incomplete form', () => {
-  const fetchInitForgotPasswordPromise = Promise.resolve(true);
-  const fetchInitForgotPasswordSpy = jest.fn(
-    () => fetchInitForgotPasswordPromise
-  );
+  describe('On an incomplete form', () => {
+    const fetchInitForgotPasswordPromise = Promise.resolve(true);
+    const fetchInitForgotPasswordSpy = jest.fn(
+      () => fetchInitForgotPasswordPromise
+    );
 
-  beforeEach(() => {
-    fetchInitForgotPasswordSpy.mockClear();
-  });
-
-  const setupIncompleteForm = (fieldsToUpdate: 'email'[]): RenderResult => {
-    const container = renderForgotPassword({
-      seedEmail: '',
-      fetchInitForgotPassword: fetchInitForgotPasswordSpy,
+    beforeEach(() => {
+      fetchInitForgotPasswordSpy.mockClear();
     });
 
-    const { queryByPlaceholderText } = container;
+    const setupIncompleteForm = (fieldsToUpdate: 'email'[]): RenderResult => {
+      const container = renderForgotPassword({
+        seedEmail: '',
+        fetchInitForgotPassword: fetchInitForgotPasswordSpy,
+      });
 
-    act(() => {
-      fieldsToUpdate.forEach((fieldName) => {
-        let textToQueryFor;
+      const { queryByPlaceholderText } = container;
 
-        switch (fieldName) {
-          case 'email':
-            textToQueryFor = 'joedoe@gmail.com';
-            break;
-          default:
-            break;
-        }
-        const input = queryByPlaceholderText(textToQueryFor);
+      act(() => {
+        fieldsToUpdate.forEach((fieldName) => {
+          let textToQueryFor;
 
-        fireEvent.change(input, {
-          target: { value: 'SomeValueThatDoesntMatter' },
+          switch (fieldName) {
+            case 'email':
+              textToQueryFor = 'joedoe@gmail.com';
+              break;
+            default:
+              break;
+          }
+          const input = queryByPlaceholderText(textToQueryFor);
+
+          fireEvent.change(input, {
+            target: { value: 'SomeValueThatDoesntMatter' },
+          });
         });
       });
+
+      return container;
+    };
+
+    describe('When email field is empty', () => {
+      it('should not call props.fetchRegister', async () => {
+        const { queryByTestId } = setupIncompleteForm([]);
+
+        const submitButton = queryByTestId('submitButton');
+        fireEvent.submit(submitButton);
+        await waitFor(() =>
+          expect(fetchInitForgotPasswordSpy).not.toHaveBeenCalled()
+        );
+      });
+
+      it('should display "Please input your email"', async () => {
+        const { queryByText, queryByTestId } = setupIncompleteForm([]);
+        const submitButton = queryByTestId('submitButton');
+        fireEvent.submit(submitButton);
+
+        await waitFor(() =>
+          expect(queryByText(/Please input your email/i)).toBeTruthy()
+        );
+      });
     });
+  });
 
-    return container;
-  };
-
-  describe('When email field is empty', () => {
-    it('should not call props.fetchRegister', async () => {
-      const { queryByTestId } = setupIncompleteForm([]);
+  // TODO Return to this
+  describe.skip('When API requests go wrong', () => {
+    const setupFormAfterFirstSubmit = async (
+      fetchInitForgotPasswordMockOverride?: jest.Mock<Promise<boolean>, []>
+    ): Promise<RenderResult> => {
+      const fetchInitForgotPasswordMock = jest.fn(() => Promise.resolve(true));
+      const container = renderForgotPassword({
+        seedEmail: 'aasdf',
+        fetchInitForgotPassword:
+          fetchInitForgotPasswordMock || fetchInitForgotPasswordMockOverride,
+      });
+      const { queryByTestId, queryByPlaceholderText } = container;
+      const emailInput = queryByPlaceholderText('joedoe@gmail.com');
 
       const submitButton = queryByTestId('submitButton');
-      fireEvent.submit(submitButton);
-      await waitFor(() =>
-        expect(fetchInitForgotPasswordSpy).not.toHaveBeenCalled()
-      );
-    });
 
-    it('should display "Please input your email"', async () => {
-      const { queryByText, queryByTestId } = setupIncompleteForm([]);
-      const submitButton = queryByTestId('submitButton');
-      fireEvent.submit(submitButton);
+      act(() => {
+        fireEvent.change(emailInput, {
+          target: { value: 'mike@circulate.social' },
+        });
 
-      await waitFor(() =>
-        expect(queryByText(/Please input your email/i)).toBeTruthy()
-      );
+        fireEvent.submit(submitButton);
+      });
+
+      return container;
+    };
+
+    describe('When the user tries to forgotPassword too many times', () => {
+      it('Should display a limit error to the use', async () => {
+        const limitExceededExceptionMock = jest.fn(() =>
+          Promise.reject({ code: 'LimitExceededException' })
+        );
+        const { queryByText } = await setupFormAfterFirstSubmit(
+          limitExceededExceptionMock
+        );
+
+        await waitFor(() => {
+          expect(limitExceededExceptionMock).toBeCalledWith('as');
+          expect(
+            queryByText(/Attempt limit exceeded, please try after some time./)
+          ).toBeTruthy();
+        });
+      });
     });
   });
 });
