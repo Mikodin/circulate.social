@@ -13,6 +13,10 @@ interface Props {
   router: NextRouter;
 }
 class StartACircle extends PureComponent<Props, {}> {
+  static contextType = UserContext;
+
+  context: React.ContextType<typeof UserContext>;
+
   render(): JSX.Element {
     const { getIsUserLoggedIn } = this.context;
     return (
@@ -32,7 +36,5 @@ class StartACircle extends PureComponent<Props, {}> {
     );
   }
 }
-
-StartACircle.contextType = UserContext;
 
 export default withRouter(StartACircle);

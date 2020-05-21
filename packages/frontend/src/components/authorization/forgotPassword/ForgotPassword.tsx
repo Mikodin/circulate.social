@@ -1,29 +1,44 @@
-import { useState, Fragment, useContext } from 'react';
+import { useState, Fragment } from 'react';
 import { useRouter } from 'next/router';
 import { Form, Input, Button, Alert } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
 import { AUTH_FORMS } from '../AuthContainer';
-import UserContext from '../../../state-management/UserContext';
 import css from './ForgotPassword.module.scss';
 
-interface Props {
-  seedEmailAddress?: string;
-  redirectTo?: string;
+export interface Props {
+  fetchInitForgotPassword: (username: string) => Promise<boolean>;
+  fetchFinalizeForgotPassword: (
+    username: string,
+    newPassword: string,
+    code: string
+  ) => Promise<boolean>;
   // eslint-disable-next-line
   onSuccess?: (result?: any) => void;
   showForm?: (form: AUTH_FORMS) => void;
+  updateSeedValues?: (userValues: {
+    email?: string;
+    password?: string;
+  }) => void;
+  seedEmail?: string;
+  redirectTo?: string;
 }
+
 const ForgotPassword = (props: Props): JSX.Element => {
   const router = useRouter();
-  const { forgotPasswordInit, forgotPasswordSubmit } = useContext(UserContext);
   const [form] = Form.useForm();
 
-  const { redirectTo, onSuccess, seedEmailAddress } = props;
+  const {
+    fetchInitForgotPassword,
+    fetchFinalizeForgotPassword,
+    redirectTo,
+    onSuccess,
+    seedEmail,
+  } = props;
   const [isInvalidCredentials, setIsInvalidCredentials] = useState(false);
   const [showConfirmationCode, setShowConfirmationCode] = useState(false);
   const [showLimitError, setShowLimitError] = useState(false);
-  const [isLoginInFlight] = useState(false);
+  const [isLoginInFlight, setIsLoginInFlight] = useState(false);
 
   interface FormValues {
     email: string;
@@ -34,8 +49,9 @@ const ForgotPassword = (props: Props): JSX.Element => {
     const { email, newPassword, confirmationCode } = values;
     try {
       let result;
+      setIsLoginInFlight(true);
       if (showConfirmationCode) {
-        result = await forgotPasswordSubmit(
+        result = await fetchFinalizeForgotPassword(
           email,
           confirmationCode,
           newPassword
@@ -49,21 +65,24 @@ const ForgotPassword = (props: Props): JSX.Element => {
           onSuccess(result);
         }
       } else {
-        result = await forgotPasswordInit(email);
+        result = await fetchInitForgotPassword(email);
         setShowConfirmationCode(true);
       }
+
+      setIsInvalidCredentials(false);
+      setIsLoginInFlight(false);
     } catch (error) {
+      console.error(error);
       if (error && error.code === 'LimitExceededException') {
         setShowLimitError(true);
       }
       if (error && error.code === 'ExpiredCodeException') {
+        // TODO show expired code exception message
         setIsInvalidCredentials(true);
       }
       if (error && error.code === 'CodeMismatchException') {
         setIsInvalidCredentials(true);
       }
-
-      throw error;
     }
   };
 
@@ -76,11 +95,14 @@ const ForgotPassword = (props: Props): JSX.Element => {
         layout="vertical"
         onFinish={onFinish}
         initialValues={{
-          email: seedEmailAddress || undefined,
+          email: seedEmail || undefined,
+          password: undefined,
           newPassword: undefined,
           confirmationCode: undefined,
-          password: undefined,
         }}
+        onValuesChange={({ email, newPassword }): void =>
+          props.updateSeedValues({ email, password: newPassword })
+        }
       >
         <Form.Item
           name="email"
@@ -90,7 +112,7 @@ const ForgotPassword = (props: Props): JSX.Element => {
           <Input
             prefix={<MailOutlined className="site-form-item-icon" />}
             autoComplete="email"
-            placeholder="johndoe@gmail.com"
+            placeholder="joedoe@gmail.com"
             type="email"
           />
         </Form.Item>
@@ -123,12 +145,12 @@ const ForgotPassword = (props: Props): JSX.Element => {
               <Input
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 autoComplete="one-time-code"
-                placeholder="Password"
+                placeholder="123456"
               />
             </Form.Item>
             <a
               onClick={(): void => {
-                forgotPasswordInit(form.getFieldValue('email'));
+                fetchInitForgotPassword(form.getFieldValue('email'));
               }}
             >
               {"Didn't receive the code? Resend it"}
@@ -159,6 +181,7 @@ const ForgotPassword = (props: Props): JSX.Element => {
             const isFormTouched = isEmailTouched;
             return (
               <Button
+                data-testid="submitButton"
                 loading={isLoginInFlight}
                 type="primary"
                 htmlType="submit"

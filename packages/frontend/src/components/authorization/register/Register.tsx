@@ -1,27 +1,46 @@
-import { useState, Fragment, useContext } from 'react';
+import { useState, Fragment } from 'react';
 import { useRouter } from 'next/router';
 import { Form, Input, Button, Alert } from 'antd';
 import { UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
 
 import { AUTH_FORMS } from '../AuthContainer';
-import UserContext from '../../../state-management/UserContext';
+import type { UserContextType } from '../../../state-management/UserContext';
 import css from './Register.module.scss';
 
-interface Props {
-  seedEmailAddress?: string;
+export interface Props {
+  fetchRegister: (
+    username: string,
+    password: string,
+    firstName: string,
+    lastName: string
+  ) => Promise<UserContextType['user']>;
+  seedEmail?: string;
+  seedPassword?: string;
   redirectTo?: string;
+  updateSeedValues?: (userValues: {
+    email?: string;
+    password?: string;
+  }) => void;
   // eslint-disable-next-line
   onSuccess?: (result?: any) => void;
   showForm?: (form: AUTH_FORMS) => void;
 }
 const Register = (props: Props): JSX.Element => {
   const router = useRouter();
-  const { register } = useContext(UserContext);
   const [form] = Form.useForm();
 
-  const { redirectTo, onSuccess, seedEmailAddress } = props;
-  const [isInvalidCredentials] = useState(false);
+  const {
+    fetchRegister,
+    redirectTo,
+    onSuccess,
+    seedEmail,
+    seedPassword,
+  } = props;
   const [isRegisterInFlight, setIsRegisterInFlight] = useState(false);
+  const [isUserAlreadyExistsError, setIsUserAlreadyExistsError] = useState(
+    false
+  );
+  const [isPasswordTooWeakError, setIsPasswordTooWeakError] = useState(false);
 
   interface FormValues {
     email: string;
@@ -33,7 +52,9 @@ const Register = (props: Props): JSX.Element => {
     const { email, password, firstName, lastName } = values;
     try {
       setIsRegisterInFlight(true);
-      const result = await register(email, password, firstName, lastName);
+
+      const result = await fetchRegister(email, password, firstName, lastName);
+
       if (onSuccess) {
         onSuccess({ ...result, email: result.email });
       }
@@ -43,9 +64,16 @@ const Register = (props: Props): JSX.Element => {
         return;
       }
 
+      setIsUserAlreadyExistsError(false);
       setIsRegisterInFlight(false);
     } catch (error) {
       console.error(error);
+      if (error.code === 'UsernameExistsException') {
+        setIsUserAlreadyExistsError(true);
+      }
+      if (error.code === 'InvalidParameterException') {
+        setIsPasswordTooWeakError(true);
+      }
       setIsRegisterInFlight(false);
     }
   };
@@ -61,9 +89,12 @@ const Register = (props: Props): JSX.Element => {
         initialValues={{
           firstName: undefined,
           lastName: undefined,
-          email: seedEmailAddress || undefined,
-          password: undefined,
+          email: seedEmail || undefined,
+          password: seedPassword || undefined,
         }}
+        onValuesChange={({ email, password }): void =>
+          props.updateSeedValues({ email, password })
+        }
       >
         <Form.Item
           name="firstName"
@@ -95,7 +126,7 @@ const Register = (props: Props): JSX.Element => {
           <Input
             autoComplete="email"
             prefix={<MailOutlined className="site-form-item-icon" />}
-            placeholder="johndoe@gmail.com"
+            placeholder="joedoe@gmail.com"
             type="email"
           />
         </Form.Item>
@@ -112,8 +143,21 @@ const Register = (props: Props): JSX.Element => {
           />
         </Form.Item>
 
-        {isInvalidCredentials && (
-          <Alert message="Invalid username or password" type="error" showIcon />
+        {/* TODO Add more errors for different password issues */}
+        {isPasswordTooWeakError && (
+          <Alert
+            message="Value at 'password' failed to satisfy constraint: Member must have length greater than or equal to 6; Value at 'password' failed to satisfy constraint: Member must satisfy regular expression pattern: ^[\\S]+.*[\\S]+$"
+            // message="Value at"
+            type="error"
+            showIcon
+          />
+        )}
+        {isUserAlreadyExistsError && (
+          <Alert
+            message="Sorry, a user with this email already exists."
+            type="error"
+            showIcon
+          />
         )}
         <Form.Item shouldUpdate={true}>
           {(): JSX.Element => {
@@ -130,6 +174,7 @@ const Register = (props: Props): JSX.Element => {
               isEmailTouched;
             return (
               <Button
+                data-testid="submitButton"
                 loading={isRegisterInFlight}
                 type="primary"
                 htmlType="submit"

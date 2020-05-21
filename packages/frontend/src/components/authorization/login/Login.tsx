@@ -1,25 +1,31 @@
-import { useState, Fragment, useContext } from 'react';
+import { useState, Fragment } from 'react';
 import { useRouter } from 'next/router';
 import { Form, Input, Button, Alert } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
 import { AUTH_FORMS } from '../AuthContainer';
-import UserContext from '../../../state-management/UserContext';
+import { UserContextType } from '../../../state-management/UserContext';
 import css from './Login.module.scss';
 
-interface Props {
-  seedEmailAddress?: string;
+export interface Props {
+  seedEmail?: string;
+  seedPassword?: string;
   redirectTo?: string;
   // eslint-disable-next-line
   onSuccess?: (result?: any) => void;
   showForm?: (form: AUTH_FORMS) => void;
+  fetchSignIn?: UserContextType['signIn'];
+  updateSeedValues?: (userValues: {
+    email?: string;
+    password?: string;
+  }) => void;
 }
 const Login = (props: Props): JSX.Element => {
+  const { redirectTo, onSuccess, seedEmail, seedPassword, showForm } = props;
+
   const router = useRouter();
-  const { signIn } = useContext(UserContext);
   const [form] = Form.useForm();
 
-  const { redirectTo, onSuccess, seedEmailAddress, showForm } = props;
   const [isInvalidCredentials, setIsInvalidCredentials] = useState(false);
   const [isLoginInFlight, setIsLoginInFlight] = useState(false);
 
@@ -27,21 +33,20 @@ const Login = (props: Props): JSX.Element => {
     email: string;
     password: string;
   }
-  const onFinish = async (values: FormValues): Promise<void> => {
-    const { email, password } = values;
-    try {
-      setIsLoginInFlight(true);
-      const result = await signIn(email, password);
 
-      if (onSuccess) {
-        onSuccess(result);
-      }
-      if (redirectTo) {
-        router.push(redirectTo);
-        return;
-      }
+  const handleSignIn = async (
+    email: string,
+    password: string
+  ): Promise<UserContextType['user']> => {
+    setIsLoginInFlight(true);
+    try {
+      const result = await props.fetchSignIn(email, password);
+
+      setIsInvalidCredentials(false);
       setIsLoginInFlight(false);
+      return result;
     } catch (error) {
+      console.error(error);
       setIsLoginInFlight(false);
       if (error && error.code === 'NotAuthorizedException') {
         setIsInvalidCredentials(true);
@@ -50,7 +55,19 @@ const Login = (props: Props): JSX.Element => {
       if (error && error.code === 'UserNotConfirmedException' && showForm) {
         showForm(AUTH_FORMS.confirmEmail);
       }
-      throw error;
+      return error;
+    }
+  };
+
+  const onFormFinish = async (values: FormValues): Promise<void> => {
+    const { email, password } = values;
+    const signInResult = await handleSignIn(email, password);
+
+    if (onSuccess) {
+      onSuccess(signInResult);
+    }
+    if (redirectTo) {
+      router.push(redirectTo);
     }
   };
 
@@ -61,11 +78,14 @@ const Login = (props: Props): JSX.Element => {
         form={form}
         name="horizontal_login"
         layout="vertical"
-        onFinish={onFinish}
+        onFinish={onFormFinish}
         initialValues={{
-          email: seedEmailAddress || undefined,
-          password: undefined,
+          email: seedEmail || undefined,
+          password: seedPassword || undefined,
         }}
+        onValuesChange={({ email, password }): void =>
+          props.updateSeedValues({ email, password })
+        }
       >
         <Form.Item
           name="email"
@@ -95,6 +115,7 @@ const Login = (props: Props): JSX.Element => {
         {isInvalidCredentials && (
           <Alert message="Invalid username or password" type="error" showIcon />
         )}
+
         <Form.Item shouldUpdate={true}>
           {(): JSX.Element => {
             const isEmailTouched =
@@ -103,6 +124,7 @@ const Login = (props: Props): JSX.Element => {
             const isPasswordTouched = form.isFieldTouched('password');
             return (
               <Button
+                data-testid="submitButton"
                 loading={isLoginInFlight}
                 type="primary"
                 htmlType="submit"

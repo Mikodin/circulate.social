@@ -11,6 +11,10 @@ interface Props {
   router: NextRouter;
 }
 class SubmitEvent extends PureComponent<Props, {}> {
+  static contextType = UserContext;
+
+  context: React.ContextType<typeof UserContext>;
+
   componentDidMount(): void {
     if (!this.context.getIsUserLoggedIn) {
       this.props.router.push('/');
@@ -38,6 +42,5 @@ export const getServerSideProps: GetServerSideProps = async () => {
     props: {}, // will be passed to the page component as props
   };
 };
-SubmitEvent.contextType = UserContext;
 
 export default withRouter(SubmitEvent);
