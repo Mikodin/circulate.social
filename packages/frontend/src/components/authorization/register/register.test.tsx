@@ -17,9 +17,10 @@ const defaultProps = {
   showForm: jest.fn(),
   fetchRegister: jest.fn(),
   updateSeedValues: jest.fn(),
+  onFormCompletionCallback: jest.fn(),
 };
 
-function renderRegister(props?: Props): RenderResult {
+function renderRegister(props?: Partial<Props>): RenderResult {
   return render(<Register {...defaultProps} {...props} />);
 }
 
@@ -86,23 +87,34 @@ describe('Register', () => {
   });
 
   describe('On submit of a complete form', () => {
-    const fetchRegisterPromise = Promise.resolve({
-      email: 'test@circulate.social',
-      firstName: 'Mike',
-      lastName: 'A',
-    });
-    const fetchRegisterSpy = jest.fn(() => fetchRegisterPromise);
+    const inputtedValues = {
+      email: 'mike@circulate.social',
+      password: 'Password1!',
+      firstName: 'Bill',
+      lastName: 'Nye',
+    };
+    const fetchRegisterSpy = jest.fn(() =>
+      Promise.resolve({
+        email: 'test@circulate.social',
+        firstName: 'Mike',
+        lastName: 'A',
+      })
+    );
+    const onFormCompletionCallbackSpy = jest.fn(() => Promise.resolve());
 
     beforeEach(() => {
       fetchRegisterSpy.mockClear();
+      onFormCompletionCallbackSpy.mockClear();
     });
 
-    it('should call props.fetchRegisterSpy with the username and password', async () => {
-      const { queryByTestId, queryByPlaceholderText } = renderRegister({
+    const setupCompleteForm = (): RenderResult => {
+      const container = renderRegister({
         seedEmail: 'aasdf',
         seedPassword: 'asdf',
         fetchRegister: fetchRegisterSpy,
+        onFormCompletionCallback: onFormCompletionCallbackSpy,
       });
+      const { queryByTestId, queryByPlaceholderText } = container;
       const emailInput = queryByPlaceholderText('joedoe@gmail.com');
       const passwordInput = queryByPlaceholderText('Password');
       const firstNameInput = queryByPlaceholderText('John');
@@ -110,58 +122,63 @@ describe('Register', () => {
 
       const submitButton = queryByTestId('submitButton');
 
-      fireEvent.change(emailInput, {
-        target: { value: 'mike@circulate.social' },
-      });
-      fireEvent.change(passwordInput, { target: { value: 'Password1!' } });
-      fireEvent.change(firstNameInput, { target: { value: 'Bill' } });
-      fireEvent.change(lastNameInput, { target: { value: 'Nye' } });
+      act(() => {
+        fireEvent.change(emailInput, {
+          target: { value: inputtedValues.email },
+        });
+        fireEvent.change(passwordInput, {
+          target: { value: inputtedValues.password },
+        });
+        fireEvent.change(firstNameInput, {
+          target: { value: inputtedValues.firstName },
+        });
+        fireEvent.change(lastNameInput, {
+          target: { value: inputtedValues.lastName },
+        });
 
-      fireEvent.submit(submitButton);
+        fireEvent.submit(submitButton);
+      });
+
+      return container;
+    };
+
+    it('should call props.fetchRegisterSpy with the username and password', async () => {
+      setupCompleteForm();
       await waitFor(() =>
         expect(fetchRegisterSpy).toHaveBeenCalledWith(
-          'mike@circulate.social',
-          'Password1!',
-          'Bill',
-          'Nye'
+          inputtedValues.email,
+          inputtedValues.password,
+          inputtedValues.firstName,
+          inputtedValues.lastName
         )
       );
     });
 
+    it('should call props.onFormCompletionCallback with the username and password', async () => {
+      setupCompleteForm();
+      await waitFor(() =>
+        expect(onFormCompletionCallbackSpy).toHaveBeenCalledWith({
+          email: inputtedValues.email,
+          password: inputtedValues.password,
+        })
+      );
+    });
+
     it('Should display "Signing up" when the request is in flight', async () => {
-      const seedEmail = 'mike@circulate.social';
-      const seedPassword = 'Password1!';
-
-      const {
-        queryByTestId,
-        queryByText,
-        queryByPlaceholderText,
-      } = renderRegister({
-        seedEmail,
-        seedPassword,
-        fetchRegister: fetchRegisterSpy,
-      });
-
-      const firstNameInput = queryByPlaceholderText('John');
-      const lastNameInput = queryByPlaceholderText('Doe');
-      const submitButton = queryByTestId('submitButton');
-
-      fireEvent.change(firstNameInput, { target: { value: 'Bill' } });
-      fireEvent.change(lastNameInput, { target: { value: 'Nye' } });
-
-      fireEvent.submit(submitButton);
+      const { queryByText } = setupCompleteForm();
       await waitFor(() => expect(queryByText(/Signing up/i)).toBeTruthy());
     });
   });
 
   describe('On an incomplete form', () => {
-    const fetchRegisterPromise = Promise.resolve({
-      email: 'test@circulate.social',
-      password: 'Password1!',
-      firstName: 'Mike',
-      lastName: 'A',
-    });
-    const fetchRegisterSpy = jest.fn(() => fetchRegisterPromise);
+    const fetchRegisterSpy = jest.fn(() =>
+      Promise.resolve({
+        email: 'test@circulate.social',
+        password: 'Password1!',
+        firstName: 'Mike',
+        lastName: 'A',
+      })
+    );
 
     beforeEach(() => {
       fetchRegisterSpy.mockClear();
@@ -174,7 +191,7 @@ describe('Register', () => {
         fetchRegister: fetchRegisterSpy,
       });
 
-      const { queryByPlaceholderText } = container;
+      const { queryByPlaceholderText, queryByTestId } = container;
 
       act(() => {
         fieldsToUpdate.forEach((fieldName) => {
@@ -196,40 +213,30 @@ describe('Register', () => {
             default:
               break;
           }
-          const input = queryByPlaceholderText(textToQueryFor);
 
+          const input = queryByPlaceholderText(textToQueryFor);
           fireEvent.change(input, {
             target: { value: 'SomeValueThatDoesntMatter' },
           });
         });
+
+        const submitButton = queryByTestId('submitButton');
+        fireEvent.submit(submitButton);
       });
 
       return container;
     };
 
     it('should not call props.fetchRegister when email password, firstName and lastName is empty', async () => {
-      const { queryByTestId } = renderRegister({
-        fetchRegister: fetchRegisterSpy,
-      });
+      setupIncompleteForm([]);
 
-      const submitButton = queryByTestId('submitButton');
-
-      act(() => {
-        fireEvent.submit(submitButton);
-      });
       await waitFor(() => expect(fetchRegisterSpy).not.toHaveBeenCalled());
     });
 
     describe('When password field is empty', () => {
       it('should not call props.fetchRegister when password is empty', async () => {
-        const { queryByTestId } = setupIncompleteForm([
-          'email',
-          'firstName',
-          'lastName',
-        ]);
+        setupIncompleteForm(['email', 'firstName', 'lastName']);
 
-        const submitButton = queryByTestId('submitButton');
-        fireEvent.submit(submitButton);
         await waitFor(() => expect(fetchRegisterSpy).not.toHaveBeenCalled());
       });
 
@@ -318,13 +325,11 @@ describe('Register', () => {
       });
 
       it('should display "Please input your last name"', async () => {
-        const { queryByText, queryByTestId } = setupIncompleteForm([
+        const { queryByText } = setupIncompleteForm([
           'email',
           'password',
           'firstName',
         ]);
-        const submitButton = queryByTestId('submitButton');
-        fireEvent.submit(submitButton);
 
         await waitFor(() =>
           expect(queryByText(/Please input your last name/i)).toBeTruthy()

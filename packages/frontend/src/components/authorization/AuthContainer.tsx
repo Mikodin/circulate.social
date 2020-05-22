@@ -1,6 +1,11 @@
 import { Fragment, PureComponent } from 'react';
+import { withRouter } from 'next/router';
+import type { NextRouter } from 'next/router';
+
 import Register from './register/Register';
-import ConfirmEmail from './confirmEmail/ConfirmEmail';
+import ConfirmEmail, {
+  FormValues as ConfirmEmailFormValues,
+} from './confirmEmail/ConfirmEmail';
 import Login from './login/Login';
 import ForgotPassword from './forgotPassword/ForgotPassword';
 import css from './AuthContainer.module.scss';
@@ -18,6 +23,7 @@ interface State {
   formToShow: AUTH_FORMS;
 }
 interface Props {
+  router: NextRouter;
   onLoginRedirectTo?: string;
   // eslint-disable-next-line
   onLoginSuccess?: (result?: any) => void;
@@ -92,13 +98,37 @@ class AuthContainer extends PureComponent<Props, State> {
     });
   };
 
+  onRegisterFormCompletion = async (): Promise<void> => {
+    this.showForm(AUTH_FORMS.confirmEmail);
+  };
+
+  onConfirmEmailFormCompletion = async (
+    formValues: ConfirmEmailFormValues
+  ): Promise<void> => {
+    const { seedPassword } = this.state;
+    const { onConfirmEmailRedirectTo, router } = this.props;
+    if (seedPassword) {
+      try {
+        await this.context.signIn(formValues.email, this.state.seedPassword);
+      } catch (error) {
+        console.error(error);
+        this.showForm(AUTH_FORMS.login);
+      }
+    } else {
+      this.showForm(AUTH_FORMS.login);
+    }
+
+    if (onConfirmEmailRedirectTo) {
+      router.push(onConfirmEmailRedirectTo);
+    }
+  };
+
   render(): JSX.Element {
     const { seedEmail, seedPassword, formToShow } = this.state;
     const {
       onLoginRedirectTo,
       onLoginSuccess,
       onRegisterRedirectTo,
-      onConfirmEmailRedirectTo,
     } = this.props;
 
     return (
@@ -111,12 +141,7 @@ class AuthContainer extends PureComponent<Props, State> {
               updateSeedValues={this.updateSeedValues}
               fetchRegister={this.context.register}
               redirectTo={onRegisterRedirectTo}
-              onSuccess={(vals): void => {
-                if (vals && vals.email) {
-                  this.setState({ seedEmail: vals.email });
-                }
-                this.showForm(AUTH_FORMS.confirmEmail);
-              }}
+              onFormCompletionCallback={this.onRegisterFormCompletion}
             />
             <p onClick={(): void => this.showForm(AUTH_FORMS.login)}>
               Already a member? Sign in!
@@ -126,12 +151,11 @@ class AuthContainer extends PureComponent<Props, State> {
         {formToShow === AUTH_FORMS.confirmEmail && (
           <Fragment>
             <ConfirmEmail
-              redirectTo={onConfirmEmailRedirectTo}
-              onSuccess={(): void => this.showForm(AUTH_FORMS.login)}
-              updateSeedValues={this.updateSeedValues}
               seedEmail={seedEmail}
               fetchConfirmEmail={this.context.confirmEmail}
               fetchResendConfirmEmail={this.context.resendRegisterCode}
+              onFormCompletionCallback={this.onConfirmEmailFormCompletion}
+              updateSeedValues={this.updateSeedValues}
             />
             <p onClick={(): void => this.showForm(AUTH_FORMS.login)}>
               Already a member? Sign in
@@ -179,4 +203,4 @@ class AuthContainer extends PureComponent<Props, State> {
   }
 }
 
-export default AuthContainer;
+export default withRouter(AuthContainer);

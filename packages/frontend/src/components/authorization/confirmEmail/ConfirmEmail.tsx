@@ -1,5 +1,4 @@
 import { useState, Fragment } from 'react';
-import { useRouter } from 'next/router';
 import { Form, Input, Button, Alert } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import type { ConfirmSignUp } from '../../../types/amplify.d';
@@ -7,6 +6,10 @@ import type { ConfirmSignUp } from '../../../types/amplify.d';
 import { AUTH_FORMS } from '../AuthContainer';
 import css from './ConfirmEmail.module.scss';
 
+export interface FormValues {
+  email?: string;
+  confirmationCode?: string;
+}
 export interface Props {
   fetchConfirmEmail: (
     username: string,
@@ -14,30 +17,24 @@ export interface Props {
     routeOnSuccess?: string
   ) => Promise<ConfirmSignUp>;
   fetchResendConfirmEmail: (username: string) => Promise<boolean>;
+  onFormCompletionCallback: (formValues: Partial<FormValues>) => Promise<void>;
   updateSeedValues?: (userValues: { email?: string }) => void;
   // eslint-disable-next-line
   onSuccess?: (result?: any) => void;
   showForm?: (form: AUTH_FORMS) => void;
   seedEmail?: string;
-  redirectTo?: string;
 }
 
 const ConfirmEmail = (props: Props): JSX.Element => {
-  const router = useRouter();
   const [form] = Form.useForm();
 
-  const { redirectTo, onSuccess, seedEmail, fetchConfirmEmail } = props;
+  const { seedEmail, fetchConfirmEmail, onFormCompletionCallback } = props;
   const [isInvalidCredentials, setIsInvalidCredentials] = useState(false);
   const [IsConfirmEmailInFlight, setIsConfirmEmailInFlight] = useState(false);
   const [
     isResendConfirmEmailinFlight,
     setIsResendConfirmEmailinFlight,
   ] = useState(false);
-
-  interface FormValues {
-    email: string;
-    confirmationCode: string;
-  }
 
   const onResendEmailClick = async (email: string): Promise<void> => {
     const { fetchResendConfirmEmail } = props;
@@ -55,18 +52,13 @@ const ConfirmEmail = (props: Props): JSX.Element => {
     const { email, confirmationCode } = values;
     try {
       setIsConfirmEmailInFlight(true);
-      const result = await fetchConfirmEmail(email, confirmationCode);
-      if (onSuccess) {
-        onSuccess(result);
-      }
 
-      if (redirectTo) {
-        router.push(redirectTo);
-        return;
-      }
+      await fetchConfirmEmail(email, confirmationCode);
 
       setIsInvalidCredentials(false);
       setIsConfirmEmailInFlight(false);
+
+      await onFormCompletionCallback({ email });
     } catch (error) {
       console.error(error);
       setIsConfirmEmailInFlight(false);
@@ -86,7 +78,7 @@ const ConfirmEmail = (props: Props): JSX.Element => {
         onFinish={onFinish}
         initialValues={{
           email: seedEmail || undefined,
-          password: undefined,
+          confirmationCode: undefined,
         }}
         onValuesChange={({ email }): void => props.updateSeedValues({ email })}
       >

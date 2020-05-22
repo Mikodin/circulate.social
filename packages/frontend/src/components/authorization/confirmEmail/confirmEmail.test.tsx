@@ -42,6 +42,7 @@ describe('ConfirmEmail', () => {
           seedEmail,
           fetchConfirmEmail: jest.fn(),
           fetchResendConfirmEmail: jest.fn(),
+          onFormCompletionCallback: jest.fn(),
         });
         const input = queryByDisplayValue(seedEmail);
         expect(input).toBeTruthy();
@@ -66,24 +67,28 @@ describe('ConfirmEmail', () => {
   });
 
   describe('On submit of a complete form', () => {
-    const fetchConfirmEmailPromise = Promise.resolve('SUCCESS') as Promise<
-      ConfirmSignUp
-    >;
-    const fetchConfirmEmailSpy = jest.fn(() => fetchConfirmEmailPromise);
+    const inputtedEmail = 'mike@circulate.social';
+    const inputtedConfirmationCode = '0987';
+
+    const fetchConfirmEmailSpy = jest.fn(
+      () => Promise.resolve('SUCCESS') as Promise<ConfirmSignUp>
+    );
+    const onFormCompletionCallbackSpy = jest.fn(() => Promise.resolve());
 
     beforeEach(() => {
       fetchConfirmEmailSpy.mockClear();
+      onFormCompletionCallbackSpy.mockClear();
     });
 
-    it('should call props.fetchConfirmEmailSpy with the email', async () => {
-      const { queryByTestId, queryByPlaceholderText } = renderConfirmEmail({
+    const setupCompleteForm = (): RenderResult => {
+      const container = renderConfirmEmail({
         fetchConfirmEmail: fetchConfirmEmailSpy,
         fetchResendConfirmEmail: jest.fn(),
+        onFormCompletionCallback: onFormCompletionCallbackSpy,
       });
+      const { queryByTestId, queryByPlaceholderText } = container;
       const emailInput = queryByPlaceholderText('joedoe@gmail.com');
       const confirmationCodeInput = queryByPlaceholderText('123456');
-      const inputtedConfirmationCode = '0987';
-      const inputtedEmail = '0987';
 
       fireEvent.change(emailInput, {
         target: { value: inputtedEmail },
@@ -95,38 +100,30 @@ describe('ConfirmEmail', () => {
       const submitButton = queryByTestId('submitButton');
       fireEvent.submit(submitButton);
 
-      await waitFor(() =>
+      return container;
+    };
+
+    it('should call props.fetchConfirmEmail with the email', async () => {
+      setupCompleteForm();
+      await waitFor(() => {
         expect(fetchConfirmEmailSpy).toHaveBeenCalledWith(
           inputtedEmail,
           inputtedConfirmationCode
-        )
-      );
+        );
+      });
+    });
+
+    it('should call props.onFormCompletionCallback with the email', async () => {
+      setupCompleteForm();
+      await waitFor(() => {
+        expect(onFormCompletionCallbackSpy).toHaveBeenCalledWith({
+          email: inputtedEmail,
+        });
+      });
     });
 
     it('Should display "Confirming" when the request is in flight', async () => {
-      const {
-        queryByTestId,
-        queryByPlaceholderText,
-        queryByText,
-      } = renderConfirmEmail({
-        fetchConfirmEmail: fetchConfirmEmailSpy,
-        fetchResendConfirmEmail: jest.fn(),
-      });
-      const emailInput = queryByPlaceholderText('joedoe@gmail.com');
-      const confirmationCodeInput = queryByPlaceholderText('123456');
-      const inputtedConfirmationCode = '0987';
-      const inputtedEmail = '0987';
-
-      fireEvent.change(emailInput, {
-        target: { value: inputtedEmail },
-      });
-      fireEvent.input(confirmationCodeInput, {
-        target: { value: inputtedConfirmationCode },
-      });
-
-      const submitButton = queryByTestId('submitButton');
-      fireEvent.submit(submitButton);
-
+      const { queryByText } = setupCompleteForm();
       await waitFor(() => expect(queryByText(/Confirming/i)).toBeTruthy());
     });
   });
@@ -150,6 +147,7 @@ describe('ConfirmEmail', () => {
         seedEmail: '',
         fetchConfirmEmail: fetchConfirmEmailSpy,
         fetchResendConfirmEmail: fetchResendConfirmEmailSpy,
+        onFormCompletionCallback: jest.fn(),
       });
 
       const { queryByPlaceholderText } = container;
@@ -217,6 +215,7 @@ describe('ConfirmEmail', () => {
           fetchConfirmEmail:
             fetchConfirmEmailSpyOverride || fetchConfirmEmailSpy,
           fetchResendConfirmEmail: fetchResendConfirmEmailSpy,
+          onFormCompletionCallback: jest.fn(),
         });
 
         const { queryByPlaceholderText, queryByTestId } = container;
@@ -266,6 +265,7 @@ describe('ConfirmEmail', () => {
         const { queryByText, queryByPlaceholderText } = renderConfirmEmail({
           fetchConfirmEmail: jest.fn(),
           fetchResendConfirmEmail: fetchResendConfirmEmailSpy,
+          onFormCompletionCallback: jest.fn(),
         });
 
         const emailInput = queryByPlaceholderText('joedoe@gmail.com');

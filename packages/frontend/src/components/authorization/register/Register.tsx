@@ -3,9 +3,15 @@ import { useRouter } from 'next/router';
 import { Form, Input, Button, Alert } from 'antd';
 import { UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
 
-import { AUTH_FORMS } from '../AuthContainer';
 import type { UserContextType } from '../../../state-management/UserContext';
 import css from './Register.module.scss';
+
+export interface FormValues {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+}
 
 export interface Props {
   fetchRegister: (
@@ -14,6 +20,7 @@ export interface Props {
     firstName: string,
     lastName: string
   ) => Promise<UserContextType['user']>;
+  onFormCompletionCallback: (formValues: Partial<FormValues>) => Promise<void>;
   seedEmail?: string;
   seedPassword?: string;
   redirectTo?: string;
@@ -21,10 +28,8 @@ export interface Props {
     email?: string;
     password?: string;
   }) => void;
-  // eslint-disable-next-line
-  onSuccess?: (result?: any) => void;
-  showForm?: (form: AUTH_FORMS) => void;
 }
+
 const Register = (props: Props): JSX.Element => {
   const router = useRouter();
   const [form] = Form.useForm();
@@ -32,9 +37,10 @@ const Register = (props: Props): JSX.Element => {
   const {
     fetchRegister,
     redirectTo,
-    onSuccess,
     seedEmail,
     seedPassword,
+    updateSeedValues,
+    onFormCompletionCallback,
   } = props;
   const [isRegisterInFlight, setIsRegisterInFlight] = useState(false);
   const [isUserAlreadyExistsError, setIsUserAlreadyExistsError] = useState(
@@ -42,30 +48,22 @@ const Register = (props: Props): JSX.Element => {
   );
   const [isPasswordTooWeakError, setIsPasswordTooWeakError] = useState(false);
 
-  interface FormValues {
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-  }
   const onFinish = async (values: FormValues): Promise<void> => {
     const { email, password, firstName, lastName } = values;
     try {
       setIsRegisterInFlight(true);
 
-      const result = await fetchRegister(email, password, firstName, lastName);
+      await fetchRegister(email, password, firstName, lastName);
 
-      if (onSuccess) {
-        onSuccess({ ...result, email: result.email });
-      }
+      setIsUserAlreadyExistsError(false);
+      setIsRegisterInFlight(false);
+
+      await onFormCompletionCallback({ email, password });
 
       if (redirectTo) {
         router.push(redirectTo);
         return;
       }
-
-      setIsUserAlreadyExistsError(false);
-      setIsRegisterInFlight(false);
     } catch (error) {
       console.error(error);
       if (error.code === 'UsernameExistsException') {
@@ -93,7 +91,7 @@ const Register = (props: Props): JSX.Element => {
           password: seedPassword || undefined,
         }}
         onValuesChange={({ email, password }): void =>
-          props.updateSeedValues({ email, password })
+          updateSeedValues({ email, password })
         }
       >
         <Form.Item
