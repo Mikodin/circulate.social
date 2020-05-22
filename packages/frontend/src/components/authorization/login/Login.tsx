@@ -1,5 +1,4 @@
 import { useState, Fragment } from 'react';
-import { useRouter } from 'next/router';
 import { Form, Input, Button, Alert } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
@@ -7,10 +6,13 @@ import { AUTH_FORMS } from '../AuthContainer';
 import { UserContextType } from '../../../state-management/UserContext';
 import css from './Login.module.scss';
 
+export interface FormValues {
+  email: string;
+  password: string;
+}
 export interface Props {
   seedEmail?: string;
   seedPassword?: string;
-  redirectTo?: string;
   // eslint-disable-next-line
   onSuccess?: (result?: any) => void;
   showForm?: (form: AUTH_FORMS) => void;
@@ -19,20 +21,15 @@ export interface Props {
     email?: string;
     password?: string;
   }) => void;
+  onFormCompletionCallback: (formValues: Partial<FormValues>) => Promise<void>;
 }
 const Login = (props: Props): JSX.Element => {
-  const { redirectTo, onSuccess, seedEmail, seedPassword, showForm } = props;
+  const { seedEmail, seedPassword, showForm, onFormCompletionCallback } = props;
 
-  const router = useRouter();
   const [form] = Form.useForm();
 
   const [isInvalidCredentials, setIsInvalidCredentials] = useState(false);
   const [isLoginInFlight, setIsLoginInFlight] = useState(false);
-
-  interface FormValues {
-    email: string;
-    password: string;
-  }
 
   const handleSignIn = async (
     email: string,
@@ -41,17 +38,16 @@ const Login = (props: Props): JSX.Element => {
     setIsLoginInFlight(true);
     try {
       const result = await props.fetchSignIn(email, password);
-
       setIsInvalidCredentials(false);
       setIsLoginInFlight(false);
       return result;
     } catch (error) {
       console.error(error);
       setIsLoginInFlight(false);
+
       if (error && error.code === 'NotAuthorizedException') {
         setIsInvalidCredentials(true);
       }
-
       if (error && error.code === 'UserNotConfirmedException' && showForm) {
         showForm(AUTH_FORMS.confirmEmail);
       }
@@ -61,14 +57,8 @@ const Login = (props: Props): JSX.Element => {
 
   const onFormFinish = async (values: FormValues): Promise<void> => {
     const { email, password } = values;
-    const signInResult = await handleSignIn(email, password);
-
-    if (onSuccess) {
-      onSuccess(signInResult);
-    }
-    if (redirectTo) {
-      router.push(redirectTo);
-    }
+    await handleSignIn(email, password);
+    await onFormCompletionCallback({ email, password });
   };
 
   return (

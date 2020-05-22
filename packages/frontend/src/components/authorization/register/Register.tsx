@@ -1,5 +1,4 @@
 import { useState, Fragment } from 'react';
-import { useRouter } from 'next/router';
 import { Form, Input, Button, Alert } from 'antd';
 import { UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
 
@@ -23,7 +22,6 @@ export interface Props {
   onFormCompletionCallback: (formValues: Partial<FormValues>) => Promise<void>;
   seedEmail?: string;
   seedPassword?: string;
-  redirectTo?: string;
   updateSeedValues?: (userValues: {
     email?: string;
     password?: string;
@@ -31,12 +29,10 @@ export interface Props {
 }
 
 const Register = (props: Props): JSX.Element => {
-  const router = useRouter();
   const [form] = Form.useForm();
 
   const {
     fetchRegister,
-    redirectTo,
     seedEmail,
     seedPassword,
     updateSeedValues,
@@ -59,11 +55,6 @@ const Register = (props: Props): JSX.Element => {
       setIsRegisterInFlight(false);
 
       await onFormCompletionCallback({ email, password });
-
-      if (redirectTo) {
-        router.push(redirectTo);
-        return;
-      }
     } catch (error) {
       console.error(error);
       if (error.code === 'UsernameExistsException') {

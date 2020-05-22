@@ -2,11 +2,13 @@ import { Fragment, PureComponent } from 'react';
 import { withRouter } from 'next/router';
 import type { NextRouter } from 'next/router';
 
-import Register from './register/Register';
+import Register, {
+  FormValues as RegisterFormValues,
+} from './register/Register';
 import ConfirmEmail, {
   FormValues as ConfirmEmailFormValues,
 } from './confirmEmail/ConfirmEmail';
-import Login from './login/Login';
+import Login, { FormValues as LoginFormValues } from './login/Login';
 import ForgotPassword from './forgotPassword/ForgotPassword';
 import css from './AuthContainer.module.scss';
 import UserContext from '../../state-management/UserContext';
@@ -98,8 +100,19 @@ class AuthContainer extends PureComponent<Props, State> {
     });
   };
 
-  onRegisterFormCompletion = async (): Promise<void> => {
+  onRegisterFormCompletion = async (
+    formValues: RegisterFormValues
+  ): Promise<void> => {
+    const { onRegisterRedirectTo, router } = this.props;
+    this.updateSeedValues({
+      email: formValues.email,
+      password: formValues.password,
+    });
     this.showForm(AUTH_FORMS.confirmEmail);
+
+    if (onRegisterRedirectTo) {
+      router.push(onRegisterRedirectTo);
+    }
   };
 
   onConfirmEmailFormCompletion = async (
@@ -109,7 +122,7 @@ class AuthContainer extends PureComponent<Props, State> {
     const { onConfirmEmailRedirectTo, router } = this.props;
     if (seedPassword) {
       try {
-        await this.context.signIn(formValues.email, this.state.seedPassword);
+        await this.context.signIn(formValues.email, seedPassword);
       } catch (error) {
         console.error(error);
         this.showForm(AUTH_FORMS.login);
@@ -123,13 +136,26 @@ class AuthContainer extends PureComponent<Props, State> {
     }
   };
 
+  onLoginFormCompletion = async (
+    formValues: LoginFormValues
+  ): Promise<void> => {
+    const { router, onLoginRedirectTo, onLoginSuccess } = this.props;
+    this.updateSeedValues({
+      email: formValues.email,
+      password: formValues.password,
+    });
+
+    if (onLoginSuccess) {
+      await onLoginSuccess();
+    }
+
+    if (onLoginRedirectTo) {
+      router.push(onLoginRedirectTo);
+    }
+  };
+
   render(): JSX.Element {
     const { seedEmail, seedPassword, formToShow } = this.state;
-    const {
-      onLoginRedirectTo,
-      onLoginSuccess,
-      onRegisterRedirectTo,
-    } = this.props;
 
     return (
       <div className={css.container}>
@@ -140,7 +166,6 @@ class AuthContainer extends PureComponent<Props, State> {
               seedPassword={seedPassword}
               updateSeedValues={this.updateSeedValues}
               fetchRegister={this.context.register}
-              redirectTo={onRegisterRedirectTo}
               onFormCompletionCallback={this.onRegisterFormCompletion}
             />
             <p onClick={(): void => this.showForm(AUTH_FORMS.login)}>
@@ -167,11 +192,10 @@ class AuthContainer extends PureComponent<Props, State> {
             <Login
               seedEmail={seedEmail}
               seedPassword={seedPassword}
-              redirectTo={onLoginRedirectTo}
-              updateSeedValues={this.updateSeedValues}
-              onSuccess={onLoginSuccess}
-              showForm={this.showForm}
               fetchSignIn={this.context.signIn}
+              onFormCompletionCallback={this.onLoginFormCompletion}
+              updateSeedValues={this.updateSeedValues}
+              showForm={this.showForm}
             />
             <p onClick={(): void => this.showForm(AUTH_FORMS.forgotPassword)}>
               Forgot password?
