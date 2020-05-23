@@ -114,11 +114,9 @@ describe('ForgotPassword', () => {
         );
       });
 
-      it('Should display "Setting New Password" when the request is in flight', async () => {
+      it('Should display "Submitting..." when the request is in flight', async () => {
         const { queryByText } = await setupCompleteForm(false);
-        await waitFor(() =>
-          expect(queryByText(/Setting New Password/i)).toBeTruthy()
-        );
+        await waitFor(() => expect(queryByText(/Submitting.../i)).toBeTruthy());
       });
     });
 
@@ -134,7 +132,7 @@ describe('ForgotPassword', () => {
         const confirmationCodeInput = queryByPlaceholderText('123456');
         const submitButton = queryByTestId('submitButton');
 
-        act(() => {
+        await act(async () => {
           fireEvent.change(newPasswordInput, {
             target: { value: newPasswordValue },
           });
@@ -174,7 +172,6 @@ describe('ForgotPassword', () => {
 
       it('Should fire props.onFormCompletionCallback with the email, and new password', async () => {
         await setupCompleteStep2Form();
-
         await waitFor(() =>
           expect(onFormCompletionCallbackSpy).toHaveBeenCalledWith({
             email: emailInputValue,
@@ -279,6 +276,23 @@ describe('ForgotPassword', () => {
       it('Should display a limit error to the use', async () => {
         const limitExceededExceptionMock = jest.fn(() =>
           Promise.reject({ code: 'LimitExceededException' })
+        );
+        const { queryByText } = await setupFormAfterFirstSubmit(
+          limitExceededExceptionMock
+        );
+
+        await waitFor(() => {
+          expect(limitExceededExceptionMock).toBeCalledWith('as');
+          expect(
+            queryByText(/Attempt limit exceeded, please try after some time./)
+          ).toBeTruthy();
+        });
+      });
+    });
+    describe('First form error states', () => {
+      it('Should display a limit error to the use', async () => {
+        const limitExceededExceptionMock = jest.fn(() =>
+          Promise.reject({ code: 'CodeMismatchException' })
         );
         const { queryByText } = await setupFormAfterFirstSubmit(
           limitExceededExceptionMock

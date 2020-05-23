@@ -390,7 +390,7 @@ describe('Register', () => {
 
         await waitFor(() => {
           const alertMessage = queryByText(
-            /Value at 'password' failed to satisfy constraint/i
+            /Your password is too weak. It must have atleast 6 characters, a capital letter, a number, and a symbol./i
           );
           expect(alertMessage).toBeTruthy();
         });

@@ -104,7 +104,7 @@ class UserContextProvider extends Component<Props, State> {
       return Boolean(resendSignUp);
     } catch (error) {
       console.error('resendRegisterCode', error);
-      return error;
+      throw error;
     }
   };
 
@@ -151,7 +151,7 @@ class UserContextProvider extends Component<Props, State> {
       return true;
     } catch (error) {
       console.error('signOut', error);
-      return error;
+      throw error;
     }
   };
 
@@ -199,7 +199,7 @@ class UserContextProvider extends Component<Props, State> {
       return Boolean(sent.CodeDeliveryDetails);
     } catch (error) {
       console.error(error);
-      return error;
+      throw error;
     }
   };
 
@@ -213,7 +213,7 @@ class UserContextProvider extends Component<Props, State> {
       return Boolean(sent);
     } catch (error) {
       console.error(error);
-      return error;
+      throw error;
     }
   };
 

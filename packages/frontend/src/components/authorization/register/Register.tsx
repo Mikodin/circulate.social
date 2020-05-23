@@ -135,7 +135,7 @@ const Register = (props: Props): JSX.Element => {
         {/* TODO Add more errors for different password issues */}
         {isPasswordTooWeakError && (
           <Alert
-            message="Value at 'password' failed to satisfy constraint: Member must have length greater than or equal to 6; Value at 'password' failed to satisfy constraint: Member must satisfy regular expression pattern: ^[\\S]+.*[\\S]+$"
+            message="Your password is too weak. It must have atleast 6 characters, a capital letter, a number, and a symbol."
             // message="Value at"
             type="error"
             showIcon

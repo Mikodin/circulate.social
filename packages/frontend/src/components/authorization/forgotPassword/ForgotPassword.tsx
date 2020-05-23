@@ -36,15 +36,20 @@ const ForgotPassword = (props: Props): JSX.Element => {
     seedEmail,
     onFormCompletionCallback,
   } = props;
-  const [isInvalidCredentials, setIsInvalidCredentials] = useState(false);
-  const [showConfirmationCode, setShowConfirmationCode] = useState(false);
+  const [isCodeMismatchError, setIsCodeMismatchError] = useState(false);
+  const [isExpiredCodeError, setIsExpiredCodeError] = useState(false);
   const [showLimitError, setShowLimitError] = useState(false);
-  const [isLoginInFlight, setIsLoginInFlight] = useState(false);
+  const [isInvalidParameterError, setIsInvalidParameterError] = useState(false);
+
+  const [showConfirmationCode, setShowConfirmationCode] = useState(false);
+  const [isForgotPasswordInFlight, setIsForgotPasswordInFlight] = useState(
+    false
+  );
 
   const onFinish = async (values: FormValues): Promise<void> => {
     const { email, password, confirmationCode } = values;
     try {
-      setIsLoginInFlight(true);
+      setIsForgotPasswordInFlight(true);
 
       if (showConfirmationCode) {
         await fetchFinalizeForgotPassword(email, confirmationCode, password);
@@ -54,19 +59,24 @@ const ForgotPassword = (props: Props): JSX.Element => {
         setShowConfirmationCode(true);
       }
 
-      setIsInvalidCredentials(false);
-      setIsLoginInFlight(false);
+      setShowLimitError(false);
+      setIsInvalidParameterError(false);
+      setIsCodeMismatchError(false);
+      setIsForgotPasswordInFlight(false);
     } catch (error) {
+      setIsForgotPasswordInFlight(false);
       console.error(error);
       if (error && error.code === 'LimitExceededException') {
         setShowLimitError(true);
       }
       if (error && error.code === 'ExpiredCodeException') {
-        // TODO show expired code exception message
-        setIsInvalidCredentials(true);
+        setIsExpiredCodeError(true);
       }
       if (error && error.code === 'CodeMismatchException') {
-        setIsInvalidCredentials(true);
+        setIsCodeMismatchError(true);
+      }
+      if (error && error.code === 'InvalidParameterException') {
+        setIsInvalidParameterError(true);
       }
     }
   };
@@ -84,9 +94,15 @@ const ForgotPassword = (props: Props): JSX.Element => {
           password: undefined,
           confirmationCode: undefined,
         }}
-        onValuesChange={({ email, password }): void =>
-          props.updateSeedValues({ email, password })
-        }
+        onValuesChange={({ email, password, confirmationCode }): void => {
+          if (password) {
+            setIsInvalidParameterError(false);
+          }
+          if (confirmationCode) {
+            setIsCodeMismatchError(false);
+          }
+          props.updateSeedValues({ email, password });
+        }}
       >
         <Form.Item
           name="email"
@@ -137,11 +153,13 @@ const ForgotPassword = (props: Props): JSX.Element => {
                 fetchInitForgotPassword(form.getFieldValue('email'));
               }}
             >
-              {"Didn't receive the code? Resend it"}
+              {isForgotPasswordInFlight
+                ? 'Sending...'
+                : "Didn't receive the code? Resend it"}
             </a>
           </Fragment>
         )}
-        {isInvalidCredentials && (
+        {isCodeMismatchError && (
           <Alert
             message="Invalid verification code provided, please try again."
             type="error"
@@ -155,7 +173,20 @@ const ForgotPassword = (props: Props): JSX.Element => {
             showIcon
           />
         )}
-
+        {isExpiredCodeError && (
+          <Alert
+            message="The code provided has expired.  Please try again."
+            type="error"
+            showIcon
+          />
+        )}
+        {isInvalidParameterError && (
+          <Alert
+            message="Your password is too weak. It must have atleast 6 characters, a capital letter, a number, and a symbol."
+            type="error"
+            showIcon
+          />
+        )}
         <Form.Item shouldUpdate={true}>
           {(): JSX.Element => {
             const isEmailTouched =
@@ -166,7 +197,7 @@ const ForgotPassword = (props: Props): JSX.Element => {
             return (
               <Button
                 data-testid="submitButton"
-                loading={isLoginInFlight}
+                loading={isForgotPasswordInFlight}
                 type="primary"
                 htmlType="submit"
                 size="large"
@@ -177,7 +208,7 @@ const ForgotPassword = (props: Props): JSX.Element => {
                       .length
                 )}
               >
-                {isLoginInFlight ? 'Setting New Password' : 'Set New Password'}
+                {isForgotPasswordInFlight ? 'Submitting...' : 'Submit'}
               </Button>
             );
           }}
