@@ -29,6 +29,7 @@ const Home = (): JSX.Element => {
             <AuthContainer
               onLoginRedirectTo="/circles/home"
               onConfirmEmailRedirectTo="/start-a-circle"
+              onForgotPasswordRedirectTo="/circles/home"
             />
           </div>
         )}

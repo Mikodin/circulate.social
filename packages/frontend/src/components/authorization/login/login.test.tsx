@@ -99,7 +99,7 @@ describe('Login', () => {
       onFormCompletionCallbackSpy.mockClear();
     });
 
-    const setupCompleteForm = () => {
+    const setupCompleteForm = (): RenderResult => {
       const container = renderLogin({
         seedEmail: 'aasdf',
         seedPassword: 'asdf',

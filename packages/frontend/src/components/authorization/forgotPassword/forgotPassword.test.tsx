@@ -17,13 +17,10 @@ const defaultProps = {
   updateSeedValues: jest.fn(),
   fetchInitForgotPassword: jest.fn(),
   fetchFinalizeForgotPassword: jest.fn(),
+  onFormCompletionCallback: jest.fn(),
 };
 
-type DefaultProps = Omit<
-  Props,
-  'fetchInitForgotPassword' | 'fetchFinalizeForgotPassword'
->;
-function renderForgotPassword(props?: DefaultProps | Props): RenderResult {
+function renderForgotPassword(props?: Partial<Props>): RenderResult {
   return render(<ForgotPassword {...defaultProps} {...props} />);
 }
 
@@ -64,84 +61,97 @@ describe('ForgotPassword', () => {
   });
 
   describe('On submit of a complete form', () => {
-    const fetchInitForgotPasswordPromise = Promise.resolve(true);
-    const fetchInitForgotPasswordSpy = jest.fn(
-      () => fetchInitForgotPasswordPromise
-    );
-
+    const fetchInitForgotPasswordSpy = jest.fn(() => Promise.resolve(true));
+    const fetchFinalizeForgotPasswordSpy = jest.fn(() => Promise.resolve(true));
+    const onFormCompletionCallbackSpy = jest.fn();
     beforeEach(() => {
       fetchInitForgotPasswordSpy.mockClear();
+      fetchFinalizeForgotPasswordSpy.mockClear();
     });
 
-    it('should call props.fetchInitForgotPasswordSpy with the email', async () => {
-      const { queryByTestId, queryByPlaceholderText } = renderForgotPassword({
+    const setupCompleteForm = async (
+      waitForFetchInitForgotPasswordToFinish: boolean
+    ): Promise<RenderResult> => {
+      const container = renderForgotPassword({
         seedEmail: 'aasdf',
         fetchInitForgotPassword: fetchInitForgotPasswordSpy,
+        fetchFinalizeForgotPassword: fetchFinalizeForgotPasswordSpy,
+        onFormCompletionCallback: onFormCompletionCallbackSpy,
       });
+      const { queryByTestId, queryByPlaceholderText } = container;
       const emailInput = queryByPlaceholderText('joedoe@gmail.com');
 
       const submitButton = queryByTestId('submitButton');
 
-      fireEvent.change(emailInput, {
-        target: { value: 'mike@circulate.social' },
-      });
-
-      fireEvent.submit(submitButton);
-      await waitFor(() =>
-        expect(fetchInitForgotPasswordSpy).toHaveBeenCalledWith(
-          'mike@circulate.social'
-        )
-      );
-    });
-
-    it('Should display "Setting New Password" when the request is in flight', async () => {
-      const seedEmail = 'mike@circulate.social';
-      const { queryByTestId, queryByText } = renderForgotPassword({
-        seedEmail,
-        fetchInitForgotPassword: fetchInitForgotPasswordSpy,
-      });
-
-      const submitButton = queryByTestId('submitButton');
-
-      fireEvent.submit(submitButton);
-      await waitFor(() =>
-        expect(queryByText(/Setting New Password/i)).toBeTruthy()
-      );
-    });
-
-    describe('On step 2 confirming code and setting new password', () => {
-      const emailInputValue = 'mike@circulate.social';
-      const fetchFinalizeForgotPasswordPromise = Promise.resolve(true);
-      const fetchFinalizeForgotPasswordSpy = jest.fn(
-        () => fetchFinalizeForgotPasswordPromise
-      );
-
-      const setupForm = async (): Promise<RenderResult> => {
-        const container = renderForgotPassword({
-          fetchInitForgotPassword: fetchInitForgotPasswordSpy,
-          fetchFinalizeForgotPassword: fetchFinalizeForgotPasswordSpy,
-        });
-        const { queryByTestId, queryByPlaceholderText } = container;
-        const emailInput = queryByPlaceholderText('joedoe@gmail.com');
-
-        const submitButton = queryByTestId('submitButton');
-
+      if (waitForFetchInitForgotPasswordToFinish) {
         await act(async () => {
           fireEvent.change(emailInput, {
-            target: { value: emailInputValue },
+            target: { value: 'mike@circulate.social' },
           });
 
           fireEvent.submit(submitButton);
         });
+      } else {
+        act(() => {
+          fireEvent.change(emailInput, {
+            target: { value: 'mike@circulate.social' },
+          });
 
-        return container;
+          fireEvent.submit(submitButton);
+        });
+      }
+
+      return container;
+    };
+
+    describe('On submit of first step just email form', () => {
+      it('should call props.fetchInitForgotPasswordSpy with the email', async () => {
+        await setupCompleteForm(false);
+        await waitFor(() =>
+          expect(fetchInitForgotPasswordSpy).toHaveBeenCalledWith(
+            'mike@circulate.social'
+          )
+        );
+      });
+
+      it('Should display "Setting New Password" when the request is in flight', async () => {
+        const { queryByText } = await setupCompleteForm(false);
+        await waitFor(() =>
+          expect(queryByText(/Setting New Password/i)).toBeTruthy()
+        );
+      });
+    });
+
+    describe('On step 2 confirming code and setting new password', () => {
+      const emailInputValue = 'mike@circulate.social';
+      const newPasswordValue = 'newPass1!';
+      const confirmationCodeValue = '09876';
+
+      const setupCompleteStep2Form = async (): Promise<RenderResult> => {
+        const step2FormContainer = await setupCompleteForm(true);
+        const { queryByTestId, queryByPlaceholderText } = step2FormContainer;
+        const newPasswordInput = queryByPlaceholderText('Password');
+        const confirmationCodeInput = queryByPlaceholderText('123456');
+        const submitButton = queryByTestId('submitButton');
+
+        act(() => {
+          fireEvent.change(newPasswordInput, {
+            target: { value: newPasswordValue },
+          });
+          fireEvent.change(confirmationCodeInput, {
+            target: { value: confirmationCodeValue },
+          });
+
+          fireEvent.submit(submitButton);
+        });
+        return step2FormContainer;
       };
 
       it('Should display the new password and confirmation code form with email already filled', async () => {
         const {
           queryByPlaceholderText,
           queryByDisplayValue,
-        } = await setupForm();
+        } = await setupCompleteForm(true);
 
         expect(queryByDisplayValue(emailInputValue)).toBeTruthy();
         expect(queryByPlaceholderText('Password')).toBeTruthy();
@@ -150,23 +160,7 @@ describe('ForgotPassword', () => {
 
       describe('On submit of a filled new password and confirmation form', () => {
         it('Should fire fetchFinalizeForgotPassword with the email, new password and confirmation code', async () => {
-          const { queryByTestId, queryByPlaceholderText } = await setupForm();
-          const newPasswordInput = queryByPlaceholderText('Password');
-          const confirmationCodeInput = queryByPlaceholderText('123456');
-          const submitButton = queryByTestId('submitButton');
-
-          const newPasswordValue = 'newPass1!';
-          const confirmationCodeValue = '09876';
-          act(() => {
-            fireEvent.change(newPasswordInput, {
-              target: { value: newPasswordValue },
-            });
-            fireEvent.change(confirmationCodeInput, {
-              target: { value: confirmationCodeValue },
-            });
-
-            fireEvent.submit(submitButton);
-          });
+          await setupCompleteStep2Form();
 
           await waitFor(() =>
             expect(fetchFinalizeForgotPasswordSpy).toHaveBeenCalledWith(
@@ -176,6 +170,17 @@ describe('ForgotPassword', () => {
             )
           );
         });
+      });
+
+      it('Should fire props.onFormCompletionCallback with the email, and new password', async () => {
+        await setupCompleteStep2Form();
+
+        await waitFor(() =>
+          expect(onFormCompletionCallbackSpy).toHaveBeenCalledWith({
+            email: emailInputValue,
+            password: newPasswordValue,
+          })
+        );
       });
     });
   });

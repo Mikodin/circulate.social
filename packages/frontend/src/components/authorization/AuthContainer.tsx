@@ -9,7 +9,9 @@ import ConfirmEmail, {
   FormValues as ConfirmEmailFormValues,
 } from './confirmEmail/ConfirmEmail';
 import Login, { FormValues as LoginFormValues } from './login/Login';
-import ForgotPassword from './forgotPassword/ForgotPassword';
+import ForgotPassword, {
+  FormValues as ForgotPasswordFormValues,
+} from './forgotPassword/ForgotPassword';
 import css from './AuthContainer.module.scss';
 import UserContext from '../../state-management/UserContext';
 
@@ -37,6 +39,10 @@ interface Props {
   onConfirmEmailRedirectTo?: string;
   // eslint-disable-next-line
   onConfirmEmailSuccess?: (result?: any) => void;
+
+  onForgotPasswordRedirectTo?: string;
+  // eslint-disable-next-line
+  onForgotPasswordSuccess?: (result?: any) => void;
 
   seedForm?: AUTH_FORMS;
 }
@@ -154,6 +160,33 @@ class AuthContainer extends PureComponent<Props, State> {
     }
   };
 
+  onForgotPasswordCompletion = async (
+    formValues: ForgotPasswordFormValues
+  ): Promise<void> => {
+    const {
+      router,
+      onForgotPasswordRedirectTo,
+      onForgotPasswordSuccess,
+    } = this.props;
+    const { email, password } = formValues;
+    this.updateSeedValues({
+      email,
+      password,
+    });
+
+    if (email && password) {
+      await this.context.signIn(email, password);
+    }
+
+    if (onForgotPasswordSuccess) {
+      await onForgotPasswordSuccess();
+    }
+
+    if (onForgotPasswordRedirectTo) {
+      router.push(onForgotPasswordRedirectTo);
+    }
+  };
+
   render(): JSX.Element {
     const { seedEmail, seedPassword, formToShow } = this.state;
 
@@ -212,7 +245,7 @@ class AuthContainer extends PureComponent<Props, State> {
               fetchFinalizeForgotPassword={this.context.forgotPasswordSubmit}
               seedEmail={seedEmail}
               updateSeedValues={this.updateSeedValues}
-              onSuccess={(): void => this.showForm(AUTH_FORMS.login)}
+              onFormCompletionCallback={this.onForgotPasswordCompletion}
             />
             <p onClick={(): void => this.showForm(AUTH_FORMS.register)}>
               Not a member? Sign up!

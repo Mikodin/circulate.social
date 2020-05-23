@@ -1,71 +1,56 @@
 import { useState, Fragment } from 'react';
-import { useRouter } from 'next/router';
 import { Form, Input, Button, Alert } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
 import { AUTH_FORMS } from '../AuthContainer';
 import css from './ForgotPassword.module.scss';
 
+export interface FormValues {
+  email: string;
+  password: string;
+  confirmationCode: string;
+}
 export interface Props {
   fetchInitForgotPassword: (username: string) => Promise<boolean>;
   fetchFinalizeForgotPassword: (
     username: string,
-    newPassword: string,
-    code: string
+    code: string,
+    password: string
   ) => Promise<boolean>;
   // eslint-disable-next-line
-  onSuccess?: (result?: any) => void;
   showForm?: (form: AUTH_FORMS) => void;
   updateSeedValues?: (userValues: {
     email?: string;
     password?: string;
   }) => void;
   seedEmail?: string;
-  redirectTo?: string;
+  onFormCompletionCallback: (formValues: Partial<FormValues>) => Promise<void>;
 }
 
 const ForgotPassword = (props: Props): JSX.Element => {
-  const router = useRouter();
   const [form] = Form.useForm();
 
   const {
     fetchInitForgotPassword,
     fetchFinalizeForgotPassword,
-    redirectTo,
-    onSuccess,
     seedEmail,
+    onFormCompletionCallback,
   } = props;
   const [isInvalidCredentials, setIsInvalidCredentials] = useState(false);
   const [showConfirmationCode, setShowConfirmationCode] = useState(false);
   const [showLimitError, setShowLimitError] = useState(false);
   const [isLoginInFlight, setIsLoginInFlight] = useState(false);
 
-  interface FormValues {
-    email: string;
-    newPassword: string;
-    confirmationCode: string;
-  }
   const onFinish = async (values: FormValues): Promise<void> => {
-    const { email, newPassword, confirmationCode } = values;
+    const { email, password, confirmationCode } = values;
     try {
-      let result;
       setIsLoginInFlight(true);
+
       if (showConfirmationCode) {
-        result = await fetchFinalizeForgotPassword(
-          email,
-          confirmationCode,
-          newPassword
-        );
-
-        if (redirectTo) {
-          router.push(redirectTo);
-        }
-
-        if (onSuccess) {
-          onSuccess(result);
-        }
+        await fetchFinalizeForgotPassword(email, confirmationCode, password);
+        onFormCompletionCallback({ email, password });
       } else {
-        result = await fetchInitForgotPassword(email);
+        await fetchInitForgotPassword(email);
         setShowConfirmationCode(true);
       }
 
@@ -97,11 +82,10 @@ const ForgotPassword = (props: Props): JSX.Element => {
         initialValues={{
           email: seedEmail || undefined,
           password: undefined,
-          newPassword: undefined,
           confirmationCode: undefined,
         }}
-        onValuesChange={({ email, newPassword }): void =>
-          props.updateSeedValues({ email, password: newPassword })
+        onValuesChange={({ email, password }): void =>
+          props.updateSeedValues({ email, password })
         }
       >
         <Form.Item
@@ -119,7 +103,7 @@ const ForgotPassword = (props: Props): JSX.Element => {
         {showConfirmationCode && (
           <Fragment>
             <Form.Item
-              name="newPassword"
+              name="password"
               rules={[
                 { required: true, message: 'Please input a new password' },
               ]}
