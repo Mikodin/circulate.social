@@ -124,11 +124,13 @@ class AuthContainer extends PureComponent<Props, State> {
   onConfirmEmailFormCompletion = async (
     formValues: ConfirmEmailFormValues
   ): Promise<void> => {
+    const { email, firstName, lastName } = formValues;
     const { seedPassword } = this.state;
     const { onConfirmEmailRedirectTo, router } = this.props;
     if (seedPassword) {
       try {
-        await this.context.signIn(formValues.email, seedPassword);
+        await this.context.signIn(email, seedPassword);
+        await this.context.updateUserAttributes(firstName, lastName);
       } catch (error) {
         console.error(error);
         this.showForm(AUTH_FORMS.login);

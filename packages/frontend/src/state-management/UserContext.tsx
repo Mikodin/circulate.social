@@ -1,4 +1,5 @@
 import { createContext } from 'react';
+import type CognitoUser from 'aws-amplify';
 import type { ConfirmSignUp } from '../types/amplify.d';
 
 export type UserContextType = {
@@ -9,12 +10,7 @@ export type UserContextType = {
   };
   userIsLoaded?: boolean;
   jwtToken?: string;
-  register: (
-    username: string,
-    password: string,
-    firstName: string,
-    lastName: string
-  ) => Promise<UserContextType['user']>;
+  register: (username: string, password: string) => Promise<CognitoUser>;
 
   confirmEmail: (
     username: string,
@@ -40,7 +36,13 @@ export type UserContextType = {
   ) => Promise<boolean>;
 
   getIsUserLoggedIn: () => boolean;
+
+  updateUserAttributes: (
+    firstName: string,
+    lastName: string
+  ) => Promise<string>;
 };
+
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export default UserContext;

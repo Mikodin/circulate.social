@@ -1,6 +1,6 @@
 import { useState, Fragment } from 'react';
 import { Form, Input, Button, Alert } from 'antd';
-import { UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
+import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
 import type { UserContextType } from '../../../state-management/UserContext';
 import css from './Register.module.scss';
@@ -8,17 +8,10 @@ import css from './Register.module.scss';
 export interface FormValues {
   email: string;
   password: string;
-  firstName: string;
-  lastName: string;
 }
 
 export interface Props {
-  fetchRegister: (
-    username: string,
-    password: string,
-    firstName: string,
-    lastName: string
-  ) => Promise<UserContextType['user']>;
+  fetchRegister: UserContextType['register'];
   onFormCompletionCallback: (formValues: Partial<FormValues>) => Promise<void>;
   seedEmail?: string;
   seedPassword?: string;
@@ -45,11 +38,11 @@ const Register = (props: Props): JSX.Element => {
   const [isPasswordTooWeakError, setIsPasswordTooWeakError] = useState(false);
 
   const onFinish = async (values: FormValues): Promise<void> => {
-    const { email, password, firstName, lastName } = values;
+    const { email, password } = values;
     try {
       setIsRegisterInFlight(true);
 
-      await fetchRegister(email, password, firstName, lastName);
+      await fetchRegister(email, password);
 
       setIsUserAlreadyExistsError(false);
       setIsRegisterInFlight(false);
@@ -61,6 +54,9 @@ const Register = (props: Props): JSX.Element => {
         setIsUserAlreadyExistsError(true);
       }
       if (error.code === 'InvalidParameterException') {
+        setIsPasswordTooWeakError(true);
+      }
+      if (error.code === 'InvalidPasswordException') {
         setIsPasswordTooWeakError(true);
       }
       setIsRegisterInFlight(false);
@@ -76,8 +72,6 @@ const Register = (props: Props): JSX.Element => {
         layout="vertical"
         onFinish={onFinish}
         initialValues={{
-          firstName: undefined,
-          lastName: undefined,
           email: seedEmail || undefined,
           password: seedPassword || undefined,
         }}
@@ -85,28 +79,6 @@ const Register = (props: Props): JSX.Element => {
           updateSeedValues({ email, password })
         }
       >
-        <Form.Item
-          name="firstName"
-          rules={[{ required: true, message: 'Please input name' }]}
-          label="First name"
-        >
-          <Input
-            prefix={<UserOutlined className="site-form-item-icon" />}
-            autoComplete="given-name"
-            placeholder="John"
-          />
-        </Form.Item>
-        <Form.Item
-          name="lastName"
-          rules={[{ required: true, message: 'Please input your last name' }]}
-          label="Last name"
-        >
-          <Input
-            autoComplete="family-name"
-            prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="Doe"
-          />
-        </Form.Item>
         <Form.Item
           name="email"
           rules={[{ required: true, message: 'Please input your email' }]}
@@ -153,14 +125,8 @@ const Register = (props: Props): JSX.Element => {
             const isEmailTouched =
               form.isFieldTouched('email') ||
               Boolean(form.getFieldValue('email'));
-            const isFirstNameTouched = form.isFieldTouched('firstName');
-            const isLastNameTouched = form.isFieldTouched('lastName');
             const isPasswordTouched = form.isFieldTouched('password');
-            const isFormTouched =
-              isFirstNameTouched &&
-              isLastNameTouched &&
-              isPasswordTouched &&
-              isEmailTouched;
+            const isFormTouched = isPasswordTouched && isEmailTouched;
             return (
               <Button
                 data-testid="submitButton"

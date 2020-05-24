@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Auth } from 'aws-amplify';
+
+import type CognitoUser from 'aws-amplify/lib/Common/types/types';
 import type {
   CurrentAuthenticatedUser,
   ForgotPassword,
@@ -20,6 +22,7 @@ type State = {
     firstName: string;
     lastName: string;
   };
+  cognitoUser?: CognitoUser;
   userIsLoaded?: boolean;
   jwtToken?: string;
 };
@@ -41,38 +44,50 @@ class UserContextProvider extends Component<Props, State> {
     }
   }
 
-  register = async (
-    username: string,
-    password: string,
-    firstName: string,
-    lastName: string
-  ): Promise<UserContextType['user']> => {
+  register = async (username: string, password: string) => {
     try {
-      await Auth.signUp({
+      const results = await Auth.signUp({
         username,
         password,
-        attributes: {
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          given_name: firstName,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          family_name: lastName,
-        },
       });
 
-      const user = {
-        email: username,
-        firstName,
-        lastName,
-      };
-
-      this.setState({ user });
-      return user;
+      this.setState({ cognitoUser: results.user });
+      return results.user;
     } catch (error) {
       console.error('register', error);
       if (error.code === 'UsernameExistsException') {
         alert(`register: A user with this email already exists`);
       }
 
+      throw error;
+    }
+  };
+
+  updateUserAttributes = async (
+    firstName: string,
+    lastName: string
+  ): Promise<string> => {
+    const { cognitoUser } = this.state;
+    try {
+      let resp = '';
+      if (cognitoUser) {
+        resp = await Auth.updateUserAttributes(cognitoUser, {
+          'custom:first_name': firstName,
+          'custom:last_name': lastName,
+        });
+
+        this.setState({
+          user: {
+            ...this.state.user,
+            firstName,
+            lastName,
+          },
+        });
+      }
+
+      return resp;
+    } catch (error) {
+      console.error(error);
       throw error;
     }
   };
@@ -127,6 +142,7 @@ class UserContextProvider extends Component<Props, State> {
       await this.restoreSession();
       this.setState({
         user: userInfo,
+        cognitoUser,
       });
 
       return userInfo;
@@ -238,6 +254,7 @@ class UserContextProvider extends Component<Props, State> {
             forgotPasswordInit: this.forgotPasswordInit,
             forgotPasswordSubmit: this.forgotPasswordSubmit,
             getIsUserLoggedIn: this.getIsUserLoggedIn,
+            updateUserAttributes: this.updateUserAttributes,
           }}
         >
           {this.props.children}

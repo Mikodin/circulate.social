@@ -11,20 +11,22 @@ import type { ConfirmSignUp } from '../../../types/amplify.d';
 import ConfirmEmail, { Props } from './ConfirmEmail';
 
 const defaultProps = {
-  seedEmailAddress: '',
+  seedEmail: '',
   redirectTo: '',
   updateSeedValues: jest.fn(),
   onSuccess: jest.fn(),
   showForm: jest.fn(),
+  onFormCompletionCallback: jest.fn(),
   fetchConfirmEmail: jest.fn(),
   fetchResendConfirmEmail: jest.fn(),
+  fetchUpdateUserAttributes: jest.fn(),
 };
 
 type DefaultProps = Omit<
   Props,
   'fetchInitForgotPassword' | 'fetchFinalizeForgotPassword'
 >;
-function renderConfirmEmail(props?: DefaultProps | Props): RenderResult {
+function renderConfirmEmail(props?: Partial<DefaultProps>): RenderResult {
   return render(<ConfirmEmail {...defaultProps} {...props} />);
 }
 
@@ -69,6 +71,8 @@ describe('ConfirmEmail', () => {
   describe('On submit of a complete form', () => {
     const inputtedEmail = 'mike@circulate.social';
     const inputtedConfirmationCode = '0987';
+    const inputtedFirstName = 'Bill';
+    const inputtedLastName = 'Nye';
 
     const fetchConfirmEmailSpy = jest.fn(
       () => Promise.resolve('SUCCESS') as Promise<ConfirmSignUp>
@@ -89,17 +93,26 @@ describe('ConfirmEmail', () => {
       const { queryByTestId, queryByPlaceholderText } = container;
       const emailInput = queryByPlaceholderText('joedoe@gmail.com');
       const confirmationCodeInput = queryByPlaceholderText('123456');
+      const firstNameInput = queryByPlaceholderText('John');
+      const lastNameInput = queryByPlaceholderText('Doe');
 
-      fireEvent.change(emailInput, {
-        target: { value: inputtedEmail },
+      act(() => {
+        fireEvent.change(emailInput, {
+          target: { value: inputtedEmail },
+        });
+        fireEvent.input(confirmationCodeInput, {
+          target: { value: inputtedConfirmationCode },
+        });
+
+        fireEvent.input(firstNameInput, {
+          target: { value: inputtedFirstName },
+        });
+        fireEvent.input(lastNameInput, {
+          target: { value: inputtedLastName },
+        });
+        const submitButton = queryByTestId('submitButton');
+        fireEvent.submit(submitButton);
       });
-      fireEvent.input(confirmationCodeInput, {
-        target: { value: inputtedConfirmationCode },
-      });
-
-      const submitButton = queryByTestId('submitButton');
-      fireEvent.submit(submitButton);
-
       return container;
     };
 
@@ -113,11 +126,14 @@ describe('ConfirmEmail', () => {
       });
     });
 
-    it('should call props.onFormCompletionCallback with the email', async () => {
+    it('should call props.onFormCompletionCallback with the email, firstName and lastName', async () => {
       setupCompleteForm();
       await waitFor(() => {
         expect(onFormCompletionCallbackSpy).toHaveBeenCalledWith({
           email: inputtedEmail,
+          firstName: inputtedFirstName,
+          lastName: inputtedLastName,
+          confirmationCode: inputtedConfirmationCode,
         });
       });
     });
@@ -220,12 +236,20 @@ describe('ConfirmEmail', () => {
 
         const { queryByPlaceholderText, queryByTestId } = container;
 
-        await act(() => {
+        await act(async () => {
           const emailInput = queryByPlaceholderText('joedoe@gmail.com');
           const confirmationCodeInput = queryByPlaceholderText('123456');
+          const firstNameInput = queryByPlaceholderText('John');
+          const lastNameInput = queryByPlaceholderText('Doe');
 
           fireEvent.change(emailInput, {
             target: { value: 'SomeValueThatDoesntMatter' },
+          });
+          fireEvent.input(firstNameInput, {
+            target: { value: 'Bill' },
+          });
+          fireEvent.input(lastNameInput, {
+            target: { value: 'Nye' },
           });
           fireEvent.change(confirmationCodeInput, {
             target: { value: '123' },

@@ -90,14 +90,10 @@ describe('Register', () => {
     const inputtedValues = {
       email: 'mike@circulate.social',
       password: 'Password1!',
-      firstName: 'Bill',
-      lastName: 'Nye',
     };
     const fetchRegisterSpy = jest.fn(() =>
       Promise.resolve({
         email: 'test@circulate.social',
-        firstName: 'Mike',
-        lastName: 'A',
       })
     );
     const onFormCompletionCallbackSpy = jest.fn(() => Promise.resolve());
@@ -117,8 +113,6 @@ describe('Register', () => {
       const { queryByTestId, queryByPlaceholderText } = container;
       const emailInput = queryByPlaceholderText('joedoe@gmail.com');
       const passwordInput = queryByPlaceholderText('Password');
-      const firstNameInput = queryByPlaceholderText('John');
-      const lastNameInput = queryByPlaceholderText('Doe');
 
       const submitButton = queryByTestId('submitButton');
 
@@ -128,12 +122,6 @@ describe('Register', () => {
         });
         fireEvent.change(passwordInput, {
           target: { value: inputtedValues.password },
-        });
-        fireEvent.change(firstNameInput, {
-          target: { value: inputtedValues.firstName },
-        });
-        fireEvent.change(lastNameInput, {
-          target: { value: inputtedValues.lastName },
         });
 
         fireEvent.submit(submitButton);
@@ -147,9 +135,7 @@ describe('Register', () => {
       await waitFor(() =>
         expect(fetchRegisterSpy).toHaveBeenCalledWith(
           inputtedValues.email,
-          inputtedValues.password,
-          inputtedValues.firstName,
-          inputtedValues.lastName
+          inputtedValues.password
         )
       );
     });
@@ -175,8 +161,6 @@ describe('Register', () => {
       Promise.resolve({
         email: 'test@circulate.social',
         password: 'Password1!',
-        firstName: 'Mike',
-        lastName: 'A',
       })
     );
 
@@ -185,7 +169,7 @@ describe('Register', () => {
     });
 
     const setupIncompleteForm = (
-      fieldsToUpdate: ('email' | 'password' | 'firstName' | 'lastName')[]
+      fieldsToUpdate: ('email' | 'password')[]
     ): RenderResult => {
       const container = renderRegister({
         fetchRegister: fetchRegisterSpy,
@@ -204,12 +188,6 @@ describe('Register', () => {
             case 'password':
               textToQueryFor = 'Password';
               break;
-            case 'firstName':
-              textToQueryFor = 'John';
-              break;
-            case 'lastName':
-              textToQueryFor = 'Doe';
-              break;
             default:
               break;
           }
@@ -227,7 +205,7 @@ describe('Register', () => {
       return container;
     };
 
-    it('should not call props.fetchRegister when email password, firstName and lastName is empty', async () => {
+    it('should not call props.fetchRegister when email password is empty', async () => {
       setupIncompleteForm([]);
 
       await waitFor(() => expect(fetchRegisterSpy).not.toHaveBeenCalled());
@@ -235,17 +213,13 @@ describe('Register', () => {
 
     describe('When password field is empty', () => {
       it('should not call props.fetchRegister when password is empty', async () => {
-        setupIncompleteForm(['email', 'firstName', 'lastName']);
+        setupIncompleteForm(['email']);
 
         await waitFor(() => expect(fetchRegisterSpy).not.toHaveBeenCalled());
       });
 
       it('should display "Please input your password"', async () => {
-        const { queryByText, queryByTestId } = setupIncompleteForm([
-          'email',
-          'firstName',
-          'lastName',
-        ]);
+        const { queryByText, queryByTestId } = setupIncompleteForm(['email']);
         const submitButton = queryByTestId('submitButton');
         fireEvent.submit(submitButton);
 
@@ -257,11 +231,7 @@ describe('Register', () => {
 
     describe('When email field is empty', () => {
       it('should not call props.fetchRegister', async () => {
-        const { queryByTestId } = setupIncompleteForm([
-          'password',
-          'firstName',
-          'lastName',
-        ]);
+        const { queryByTestId } = setupIncompleteForm(['password']);
 
         const submitButton = queryByTestId('submitButton');
         fireEvent.submit(submitButton);
@@ -271,68 +241,12 @@ describe('Register', () => {
       it('should display "Please input your email"', async () => {
         const { queryByText, queryByTestId } = setupIncompleteForm([
           'password',
-          'firstName',
-          'lastName',
         ]);
         const submitButton = queryByTestId('submitButton');
         fireEvent.submit(submitButton);
 
         await waitFor(() =>
           expect(queryByText(/Please input your email/i)).toBeTruthy()
-        );
-      });
-    });
-
-    describe('When firstName field is empty', () => {
-      it('should not call props.fetchRegister', async () => {
-        const { queryByTestId } = setupIncompleteForm([
-          'email',
-          'password',
-          'lastName',
-        ]);
-
-        const submitButton = queryByTestId('submitButton');
-        fireEvent.submit(submitButton);
-        await waitFor(() => expect(fetchRegisterSpy).not.toHaveBeenCalled());
-      });
-
-      it('should display "Please input name"', async () => {
-        const { queryByText, queryByTestId } = setupIncompleteForm([
-          'email',
-          'password',
-          'lastName',
-        ]);
-        const submitButton = queryByTestId('submitButton');
-        fireEvent.submit(submitButton);
-
-        await waitFor(() =>
-          expect(queryByText(/Please input name/i)).toBeTruthy()
-        );
-      });
-    });
-
-    describe('When lastName field is empty', () => {
-      it('should not call props.fetchRegister', async () => {
-        const { queryByTestId } = setupIncompleteForm([
-          'email',
-          'password',
-          'firstName',
-        ]);
-
-        const submitButton = queryByTestId('submitButton');
-        fireEvent.submit(submitButton);
-        await waitFor(() => expect(fetchRegisterSpy).not.toHaveBeenCalled());
-      });
-
-      it('should display "Please input your last name"', async () => {
-        const { queryByText } = setupIncompleteForm([
-          'email',
-          'password',
-          'firstName',
-        ]);
-
-        await waitFor(() =>
-          expect(queryByText(/Please input your last name/i)).toBeTruthy()
         );
       });
     });
@@ -351,8 +265,6 @@ describe('Register', () => {
 
       const emailInput = queryByPlaceholderText('joedoe@gmail.com');
       const passwordInput = queryByPlaceholderText('Password');
-      const firstNameInput = queryByPlaceholderText('John');
-      const lastNameInput = queryByPlaceholderText('Doe');
 
       const submitButton = queryByTestId('submitButton');
 
@@ -361,8 +273,6 @@ describe('Register', () => {
           target: { value: 'mike@circulate.social' },
         });
         fireEvent.change(passwordInput, { target: { value: 'Password1!' } });
-        fireEvent.change(firstNameInput, { target: { value: 'Bill' } });
-        fireEvent.change(lastNameInput, { target: { value: 'Nye' } });
         fireEvent.submit(submitButton);
       });
 
@@ -383,16 +293,33 @@ describe('Register', () => {
       });
     });
     describe('When the password is too "weak"', () => {
-      it('should show a message to the user telling that the password is weak', async () => {
-        const { queryByText } = setupFormForErrorState(
-          jest.fn(() => Promise.reject({ code: 'InvalidParameterException' }))
-        );
-
-        await waitFor(() => {
-          const alertMessage = queryByText(
-            /Your password is too weak. It must have atleast 6 characters, a capital letter, a number, and a symbol./i
+      describe('When the API returns "InvalidParameterException"', () => {
+        it('should show a message to the user telling that the password is weak', async () => {
+          const { queryByText } = setupFormForErrorState(
+            jest.fn(() => Promise.reject({ code: 'InvalidParameterException' }))
           );
-          expect(alertMessage).toBeTruthy();
+
+          await waitFor(() => {
+            const alertMessage = queryByText(
+              /Your password is too weak. It must have atleast 6 characters, a capital letter, a number, and a symbol./i
+            );
+            expect(alertMessage).toBeTruthy();
+          });
+        });
+      });
+
+      describe('When the API returns "InvalidPasswordExceptionnvalidParameterException"', () => {
+        it('should show a message to the user telling that the password is weak', async () => {
+          const { queryByText } = setupFormForErrorState(
+            jest.fn(() => Promise.reject({ code: 'InvalidPasswordException' }))
+          );
+
+          await waitFor(() => {
+            const alertMessage = queryByText(
+              /Your password is too weak. It must have atleast 6 characters, a capital letter, a number, and a symbol./i
+            );
+            expect(alertMessage).toBeTruthy();
+          });
         });
       });
     });

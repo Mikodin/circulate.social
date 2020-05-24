@@ -1,22 +1,20 @@
 import { useState, Fragment } from 'react';
 import { Form, Input, Button, Alert } from 'antd';
-import { MailOutlined, LockOutlined } from '@ant-design/icons';
-import type { ConfirmSignUp } from '../../../types/amplify.d';
+import { MailOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
 
+import type { UserContextType } from '../../../state-management/UserContext';
 import { AUTH_FORMS } from '../AuthContainer';
 import css from './ConfirmEmail.module.scss';
 
 export interface FormValues {
   email?: string;
   confirmationCode?: string;
+  firstName?: string;
+  lastName?: string;
 }
 export interface Props {
-  fetchConfirmEmail: (
-    username: string,
-    code: string,
-    routeOnSuccess?: string
-  ) => Promise<ConfirmSignUp>;
-  fetchResendConfirmEmail: (username: string) => Promise<boolean>;
+  fetchConfirmEmail: UserContextType['confirmEmail'];
+  fetchResendConfirmEmail: UserContextType['resendRegisterCode'];
   onFormCompletionCallback: (formValues: Partial<FormValues>) => Promise<void>;
   updateSeedValues?: (userValues: { email?: string }) => void;
   // eslint-disable-next-line
@@ -54,11 +52,10 @@ const ConfirmEmail = (props: Props): JSX.Element => {
       setIsConfirmEmailInFlight(true);
 
       await fetchConfirmEmail(email, confirmationCode);
+      await onFormCompletionCallback(values);
 
       setIsInvalidCredentials(false);
       setIsConfirmEmailInFlight(false);
-
-      await onFormCompletionCallback({ email });
     } catch (error) {
       console.error(error);
       setIsConfirmEmailInFlight(false);
@@ -78,6 +75,8 @@ const ConfirmEmail = (props: Props): JSX.Element => {
         onFinish={onFinish}
         initialValues={{
           email: seedEmail || undefined,
+          firstName: undefined,
+          lastName: undefined,
           confirmationCode: undefined,
         }}
         onValuesChange={({ email }): void => props.updateSeedValues({ email })}
@@ -92,6 +91,28 @@ const ConfirmEmail = (props: Props): JSX.Element => {
             prefix={<MailOutlined className="site-form-item-icon" />}
             placeholder="joedoe@gmail.com"
             type="email"
+          />
+        </Form.Item>
+        <Form.Item
+          name="firstName"
+          rules={[{ required: true, message: 'Please input name' }]}
+          label="First name"
+        >
+          <Input
+            prefix={<UserOutlined className="site-form-item-icon" />}
+            autoComplete="given-name"
+            placeholder="John"
+          />
+        </Form.Item>
+        <Form.Item
+          name="lastName"
+          rules={[{ required: true, message: 'Please input your last name' }]}
+          label="Last name"
+        >
+          <Input
+            autoComplete="family-name"
+            prefix={<UserOutlined className="site-form-item-icon" />}
+            placeholder="Doe"
           />
         </Form.Item>
         <Form.Item

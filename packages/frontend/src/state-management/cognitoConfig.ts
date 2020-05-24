@@ -2,7 +2,7 @@ import { Auth } from 'aws-amplify';
 
 function initAmplifyAuth(): void {
   const oauth = {
-    domain: '.circulate-test2',
+    domain: 'circulate',
     scope: ['email', 'aws.cognito.signin.user.admin'],
     redirectSignIn: 'http://localhost:3000/',
     redirectSignOut: 'http://localhost:3000/',
@@ -12,8 +12,8 @@ function initAmplifyAuth(): void {
   Auth.configure({
     oauth,
     region: 'us-east-1',
-    userPoolId: 'us-east-1_46TxJWTk9',
-    userPoolWebClientId: '3bj35mgn74erbudvo6cbgd2ni3',
+    userPoolId: 'us-east-1_80QcO55dx',
+    userPoolWebClientId: '456mtbjnog3cvs92dn1ft023q5',
   });
 }
 
