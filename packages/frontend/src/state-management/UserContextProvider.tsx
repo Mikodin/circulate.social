@@ -44,7 +44,10 @@ class UserContextProvider extends Component<Props, State> {
     }
   }
 
-  register = async (username: string, password: string) => {
+  register = async (
+    username: string,
+    password: string
+  ): Promise<CognitoUser> => {
     try {
       const results = await Auth.signUp({
         username,
@@ -55,10 +58,6 @@ class UserContextProvider extends Component<Props, State> {
       return results.user;
     } catch (error) {
       console.error('register', error);
-      if (error.code === 'UsernameExistsException') {
-        alert(`register: A user with this email already exists`);
-      }
-
       throw error;
     }
   };
@@ -148,9 +147,6 @@ class UserContextProvider extends Component<Props, State> {
       return userInfo;
     } catch (error) {
       console.error('signIn', error);
-      if (error.code === 'UserNotConfirmedException') {
-        alert(`signIn: ${error.message}`);
-      }
 
       throw error;
     }

@@ -75,9 +75,15 @@ const Register = (props: Props): JSX.Element => {
           email: seedEmail || undefined,
           password: seedPassword || undefined,
         }}
-        onValuesChange={({ email, password }): void =>
-          updateSeedValues({ email, password })
-        }
+        onValuesChange={({ email, password }): void => {
+          if (email) {
+            setIsUserAlreadyExistsError(false);
+          }
+          if (password) {
+            setIsPasswordTooWeakError(false);
+          }
+          updateSeedValues({ email, password });
+        }}
       >
         <Form.Item
           name="email"

@@ -291,6 +291,31 @@ describe('Register', () => {
           expect(alertMessage).toBeTruthy();
         });
       });
+      it('should make the alert disappear when the email field is updated', async () => {
+        const { queryByText, queryByPlaceholderText } = setupFormForErrorState(
+          jest.fn(() => Promise.reject({ code: 'UsernameExistsException' }))
+        );
+        await waitFor(() => {
+          const alertMessage = queryByText(
+            'Sorry, a user with this email already exists.'
+          );
+          expect(alertMessage).toBeTruthy();
+        });
+
+        act(() => {
+          const emailInput = queryByPlaceholderText('joedoe@gmail.com');
+          fireEvent.change(emailInput, {
+            target: { value: 'joeMomma@gmail.com' },
+          });
+        });
+
+        await waitFor(() => {
+          const alertMessage = queryByText(
+            'Sorry, a user with this email already exists.'
+          );
+          expect(alertMessage).not.toBeTruthy();
+        });
+      });
     });
     describe('When the password is too "weak"', () => {
       describe('When the API returns "InvalidParameterException"', () => {
@@ -306,6 +331,39 @@ describe('Register', () => {
             expect(alertMessage).toBeTruthy();
           });
         });
+        describe('When user types in the password field', () => {
+          it('should clear the alert message', async () => {
+            const {
+              queryByText,
+              queryByPlaceholderText,
+            } = setupFormForErrorState(
+              jest.fn(() =>
+                Promise.reject({ code: 'InvalidParameterException' })
+              )
+            );
+
+            await waitFor(() => {
+              const alertMessage = queryByText(
+                /Your password is too weak. It must have atleast 6 characters, a capital letter, a number, and a symbol./i
+              );
+              expect(alertMessage).toBeTruthy();
+            });
+
+            act(() => {
+              const passwordInput = queryByPlaceholderText('Password');
+              fireEvent.change(passwordInput, {
+                target: { value: '1234' },
+              });
+            });
+
+            await waitFor(() => {
+              const alertMessage = queryByText(
+                /Your password is too weak. It must have atleast 6 characters, a capital letter, a number, and a symbol./i
+              );
+              expect(alertMessage).not.toBeTruthy();
+            });
+          });
+        });
       });
 
       describe('When the API returns "InvalidPasswordExceptionnvalidParameterException"', () => {
@@ -319,6 +377,37 @@ describe('Register', () => {
               /Your password is too weak. It must have atleast 6 characters, a capital letter, a number, and a symbol./i
             );
             expect(alertMessage).toBeTruthy();
+          });
+        });
+        describe('When the user types in the password field', () => {
+          it('should clear the alert message', async () => {
+            const {
+              queryByText,
+              queryByPlaceholderText,
+            } = setupFormForErrorState(
+              jest.fn(() =>
+                Promise.reject({ code: 'InvalidPasswordException' })
+              )
+            );
+
+            await waitFor(() => {
+              const alertMessage = queryByText(
+                /Your password is too weak. It must have atleast 6 characters, a capital letter, a number, and a symbol./i
+              );
+              expect(alertMessage).toBeTruthy();
+            });
+            act(() => {
+              const passwordInput = queryByPlaceholderText('Password');
+              fireEvent.change(passwordInput, {
+                target: { value: '1234' },
+              });
+            });
+            await waitFor(() => {
+              const alertMessage = queryByText(
+                /Your password is too weak. It must have atleast 6 characters, a capital letter, a number, and a symbol./i
+              );
+              expect(alertMessage).not.toBeTruthy();
+            });
           });
         });
       });
