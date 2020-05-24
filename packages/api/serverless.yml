@@ -62,7 +62,7 @@ functions:
           path: circles/create
           cors: true
           authorizer:
-            arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_46TxJWTk9
+            arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_80QcO55dx
   joinCircle:
     name: 'joinCircle-${self:provider.stage}'
     handler: src/endpoints/joinCircle/joinCircle.handler
@@ -72,7 +72,7 @@ functions:
           path: circles/{circleId}/join
           cors: true
           authorizer:
-            arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_46TxJWTk9
+            arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_80QcO55dx
   createEvent:
     name: 'createEvent-${self:provider.stage}'
     handler: src/endpoints/createEvent/createEvent.handler
@@ -82,7 +82,7 @@ functions:
           path: events/create
           cors: true
           authorizer:
-            arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_46TxJWTk9
+            arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_80QcO55dx
   getMyCircles:
     name: 'getMyCircles-${self:provider.stage}'
     handler: src/endpoints/getMyCircles/getMyCircles.handler
@@ -92,7 +92,7 @@ functions:
           path: circles/me
           cors: true
           authorizer:
-            arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_46TxJWTk9
+            arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_80QcO55dx
   getMyEvents:
     name: 'getMyEvents-${self:provider.stage}'
     handler: src/endpoints/getMyEvents/getMyEvents.handler
@@ -102,7 +102,7 @@ functions:
           path: events/me
           cors: true
           authorizer:
-            arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_46TxJWTk9
+            arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_80QcO55dx
   getCircleById:
     name: 'getCircleById-${self:provider.stage}'
     handler: src/endpoints/getCircleById/getCircleById.handler
@@ -112,7 +112,7 @@ functions:
           path: circles/{circleId}/
           cors: true
           authorizer:
-            arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_46TxJWTk9
+            arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_80QcO55dx
   getEventById:
     name: 'getEventById-${self:provider.stage}'
     handler: src/endpoints/getEventById/getEventById.handler
@@ -122,7 +122,7 @@ functions:
           path: events/{eventId}/
           cors: true
           authorizer:
-            arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_46TxJWTk9
+            arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_80QcO55dx
 resources:
   Resources:
     circlesTable:
