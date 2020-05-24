@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Auth } from 'aws-amplify';
 
-import type CognitoUser from 'aws-amplify/lib/Common/types/types';
+import type CognitoUser from 'aws-amplify';
 import type {
   CurrentAuthenticatedUser,
   ForgotPassword,
