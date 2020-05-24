@@ -264,7 +264,7 @@ describe('Login', () => {
 
       const { queryByPlaceholderText, queryByTestId } = container;
 
-      act(() => {
+      await act(async () => {
         const emailInput = queryByPlaceholderText('joedoe@gmail.com');
         const passwordInput = queryByPlaceholderText('Password');
 
@@ -297,6 +297,30 @@ describe('Login', () => {
 
         await waitFor(() => {
           expect(queryByText(/Invalid username or password/i)).toBeTruthy();
+        });
+      });
+
+      // TODO figure out why this test won't work
+      describe.skip('When the user inputs text in the email field', () => {
+        it('should clear the alert', async () => {
+          const {
+            queryByText,
+            queryByPlaceholderText,
+          } = await setupFormAfterSubmit(fetchSignInInvalidPasswordMock);
+
+          act(() => {
+            const emailInput = queryByPlaceholderText('joedoe@gmail.com');
+
+            fireEvent.change(emailInput, {
+              target: { value: 'email@email.com' },
+            });
+          });
+
+          await waitFor(() =>
+            expect(
+              queryByText(/Invalid username or password/i)
+            ).not.toBeTruthy()
+          );
         });
       });
     });

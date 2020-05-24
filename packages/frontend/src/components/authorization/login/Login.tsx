@@ -73,9 +73,12 @@ const Login = (props: Props): JSX.Element => {
           email: seedEmail || undefined,
           password: seedPassword || undefined,
         }}
-        onValuesChange={({ email, password }): void =>
-          props.updateSeedValues({ email, password })
-        }
+        onValuesChange={({ email, password }): void => {
+          if (email || password) {
+            setIsInvalidCredentials(false);
+          }
+          props.updateSeedValues({ email, password });
+        }}
       >
         <Form.Item
           name="email"
