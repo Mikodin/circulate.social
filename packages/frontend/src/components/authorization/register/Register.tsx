@@ -102,7 +102,6 @@ const Register = (props: Props): JSX.Element => {
           rules={[{ required: true, message: 'Please input your password' }]}
           label="Password"
         >
-          {/* TODO Use 8 or more characters with a mix of letters, numbers */}
           <Input
             prefix={<LockOutlined className="site-form-item-icon" />}
             autoComplete="new-password"
@@ -110,12 +109,18 @@ const Register = (props: Props): JSX.Element => {
             placeholder="Password"
           />
         </Form.Item>
-
+        <Alert
+          message="Use 8 or more characters containing a mix of casing, letters, and numbers."
+          type="info"
+          showIcon
+          closable
+          banner
+          style={{ marginBottom: '10px', marginTop: '-10px' }}
+        />
         {/* TODO Add more errors for different password issues */}
         {isPasswordTooWeakError && (
           <Alert
             message="Your password is too weak. It must have atleast 8 characters, a capital letter, a number, and a symbol."
-            // message="Value at"
             type="error"
             showIcon
           />
