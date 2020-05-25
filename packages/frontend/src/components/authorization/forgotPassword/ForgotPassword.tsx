@@ -182,7 +182,7 @@ const ForgotPassword = (props: Props): JSX.Element => {
         )}
         {isInvalidParameterError && (
           <Alert
-            message="Your password is too weak. It must have atleast 6 characters, a capital letter, a number, and a symbol."
+            message="Your password is too weak. It must have atleast 8 characters, a capital letter, a number, and a symbol."
             type="error"
             showIcon
           />
