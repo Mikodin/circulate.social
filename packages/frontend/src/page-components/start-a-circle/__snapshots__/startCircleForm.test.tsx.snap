@@ -1,0 +1,798 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StartCircleForm Should render 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <form
+        class="ant-form ant-form-vertical form"
+        id="horizontal_login"
+      >
+        <div
+          class="ant-row ant-form-item"
+        >
+          <div
+            class="ant-col ant-form-item-label"
+          >
+            <label
+              class="ant-form-item-required"
+              for="horizontal_login_name"
+              title="Name of Circle"
+            >
+              Name of Circle
+            </label>
+          </div>
+          <div
+            class="ant-col ant-form-item-control"
+          >
+            <div
+              class="ant-form-item-control-input"
+            >
+              <div
+                class="ant-form-item-control-input-content"
+              >
+                <input
+                  class="ant-input"
+                  id="horizontal_login_name"
+                  placeholder="Circle name"
+                  type="text"
+                  value=""
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="ant-row ant-form-item"
+        >
+          <div
+            class="ant-col ant-form-item-label"
+          >
+            <label
+              class=""
+              for="horizontal_login_description"
+              title="Circle description"
+            >
+              Circle description
+            </label>
+          </div>
+          <div
+            class="ant-col ant-form-item-control"
+          >
+            <div
+              class="ant-form-item-control-input"
+            >
+              <div
+                class="ant-form-item-control-input-content"
+              >
+                <textarea
+                  class="ant-input"
+                  id="horizontal_login_description"
+                  placeholder="Circle description"
+                  rows="3"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="ant-row ant-form-item"
+        >
+          <div
+            class="ant-col ant-form-item-label"
+          >
+            <label
+              class=""
+              for="horizontal_login_guidelines"
+              title=""
+            >
+              <span>
+                <span
+                  aria-label="info-circle"
+                  class="anticon anticon-info-circle"
+                  role="img"
+                  tabindex="-1"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class=""
+                    data-icon="info-circle"
+                    fill="currentColor"
+                    focusable="false"
+                    height="1em"
+                    viewBox="64 64 896 896"
+                    width="1em"
+                  >
+                    <path
+                      d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
+                    />
+                    <path
+                      d="M464 336a48 48 0 1096 0 48 48 0 10-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z"
+                    />
+                  </svg>
+                </span>
+                 Cirulation guidelines
+              </span>
+            </label>
+          </div>
+          <div
+            class="ant-col ant-form-item-control"
+          >
+            <div
+              class="ant-form-item-control-input"
+            >
+              <div
+                class="ant-form-item-control-input-content"
+              >
+                <input
+                  class="ant-input"
+                  id="horizontal_login_guidelines"
+                  placeholder="Circle guidelines"
+                  type="text"
+                  value=""
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="ant-row ant-form-item"
+        >
+          <div
+            class="ant-col ant-form-item-label"
+          >
+            <label
+              class="ant-form-item-required"
+              for="horizontal_login_frequency"
+              title=""
+            >
+              <span>
+                <span
+                  aria-label="info-circle"
+                  class="anticon anticon-info-circle"
+                  role="img"
+                  tabindex="-1"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class=""
+                    data-icon="info-circle"
+                    fill="currentColor"
+                    focusable="false"
+                    height="1em"
+                    viewBox="64 64 896 896"
+                    width="1em"
+                  >
+                    <path
+                      d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
+                    />
+                    <path
+                      d="M464 336a48 48 0 1096 0 48 48 0 10-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z"
+                    />
+                  </svg>
+                </span>
+                 Cirulation frequency
+              </span>
+            </label>
+          </div>
+          <div
+            class="ant-col ant-form-item-control"
+          >
+            <div
+              class="ant-form-item-control-input"
+            >
+              <div
+                class="ant-form-item-control-input-content"
+              >
+                <div
+                  class="ant-select ant-select-single ant-select-show-arrow"
+                >
+                  <div
+                    class="ant-select-selector"
+                  >
+                    <span
+                      class="ant-select-selection-search"
+                    >
+                      <input
+                        aria-activedescendant="horizontal_login_frequency_list_0"
+                        aria-autocomplete="list"
+                        aria-controls="horizontal_login_frequency_list"
+                        aria-haspopup="listbox"
+                        aria-owns="horizontal_login_frequency_list"
+                        autocomplete="off"
+                        class="ant-select-selection-search-input"
+                        id="horizontal_login_frequency"
+                        readonly=""
+                        role="combobox"
+                        style="opacity: 0;"
+                        unselectable="on"
+                        value=""
+                      />
+                    </span>
+                    <span
+                      class="ant-select-selection-item"
+                    >
+                      Weekly
+                    </span>
+                  </div>
+                  <span
+                    aria-hidden="true"
+                    class="ant-select-arrow"
+                    style="user-select: none;"
+                    unselectable="on"
+                  >
+                    <span
+                      aria-label="down"
+                      class="anticon anticon-down"
+                      role="img"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class=""
+                        data-icon="down"
+                        fill="currentColor"
+                        focusable="false"
+                        height="1em"
+                        viewBox="64 64 896 896"
+                        width="1em"
+                      >
+                        <path
+                          d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"
+                        />
+                      </svg>
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="ant-row ant-form-item"
+        >
+          <div
+            class="ant-col ant-form-item-label"
+          >
+            <label
+              class=""
+              for="horizontal_login_privacy"
+              title=""
+            >
+              <span>
+                <span
+                  aria-label="info-circle"
+                  class="anticon anticon-info-circle"
+                  role="img"
+                  tabindex="-1"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class=""
+                    data-icon="info-circle"
+                    fill="currentColor"
+                    focusable="false"
+                    height="1em"
+                    viewBox="64 64 896 896"
+                    width="1em"
+                  >
+                    <path
+                      d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
+                    />
+                    <path
+                      d="M464 336a48 48 0 1096 0 48 48 0 10-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z"
+                    />
+                  </svg>
+                </span>
+                 Circle Privacy
+              </span>
+            </label>
+          </div>
+          <div
+            class="ant-col ant-form-item-control"
+          >
+            <div
+              class="ant-form-item-control-input"
+            >
+              <div
+                class="ant-form-item-control-input-content"
+              >
+                <div
+                  class="ant-radio-group ant-radio-group-outline"
+                  id="horizontal_login_privacy"
+                >
+                  <label
+                    class="verticalRadioButton ant-radio-wrapper ant-radio-wrapper-checked"
+                  >
+                    <span
+                      class="ant-radio ant-radio-checked"
+                    >
+                      <input
+                        checked=""
+                        class="ant-radio-input"
+                        type="radio"
+                        value="private"
+                      />
+                      <span
+                        class="ant-radio-inner"
+                      />
+                    </span>
+                    <span>
+                      Private
+                    </span>
+                  </label>
+                  <label
+                    class="verticalRadioButton ant-radio-wrapper"
+                  >
+                    <span
+                      class="ant-radio"
+                    >
+                      <input
+                        class="ant-radio-input"
+                        type="radio"
+                        value="public"
+                      />
+                      <span
+                        class="ant-radio-inner"
+                      />
+                    </span>
+                    <span>
+                      Public
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="ant-row ant-form-item"
+        >
+          <div
+            class="ant-col ant-form-item-control"
+          >
+            <div
+              class="ant-form-item-control-input"
+            >
+              <div
+                class="ant-form-item-control-input-content"
+              >
+                <button
+                  class="ant-btn ant-btn-primary ant-btn-lg ant-btn-block"
+                  data-testid="submitButton"
+                  disabled=""
+                  type="submit"
+                >
+                  <span>
+                    Create Circle
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </body>,
+  "container": <div>
+    <form
+      class="ant-form ant-form-vertical form"
+      id="horizontal_login"
+    >
+      <div
+        class="ant-row ant-form-item"
+      >
+        <div
+          class="ant-col ant-form-item-label"
+        >
+          <label
+            class="ant-form-item-required"
+            for="horizontal_login_name"
+            title="Name of Circle"
+          >
+            Name of Circle
+          </label>
+        </div>
+        <div
+          class="ant-col ant-form-item-control"
+        >
+          <div
+            class="ant-form-item-control-input"
+          >
+            <div
+              class="ant-form-item-control-input-content"
+            >
+              <input
+                class="ant-input"
+                id="horizontal_login_name"
+                placeholder="Circle name"
+                type="text"
+                value=""
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="ant-row ant-form-item"
+      >
+        <div
+          class="ant-col ant-form-item-label"
+        >
+          <label
+            class=""
+            for="horizontal_login_description"
+            title="Circle description"
+          >
+            Circle description
+          </label>
+        </div>
+        <div
+          class="ant-col ant-form-item-control"
+        >
+          <div
+            class="ant-form-item-control-input"
+          >
+            <div
+              class="ant-form-item-control-input-content"
+            >
+              <textarea
+                class="ant-input"
+                id="horizontal_login_description"
+                placeholder="Circle description"
+                rows="3"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="ant-row ant-form-item"
+      >
+        <div
+          class="ant-col ant-form-item-label"
+        >
+          <label
+            class=""
+            for="horizontal_login_guidelines"
+            title=""
+          >
+            <span>
+              <span
+                aria-label="info-circle"
+                class="anticon anticon-info-circle"
+                role="img"
+                tabindex="-1"
+              >
+                <svg
+                  aria-hidden="true"
+                  class=""
+                  data-icon="info-circle"
+                  fill="currentColor"
+                  focusable="false"
+                  height="1em"
+                  viewBox="64 64 896 896"
+                  width="1em"
+                >
+                  <path
+                    d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
+                  />
+                  <path
+                    d="M464 336a48 48 0 1096 0 48 48 0 10-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z"
+                  />
+                </svg>
+              </span>
+               Cirulation guidelines
+            </span>
+          </label>
+        </div>
+        <div
+          class="ant-col ant-form-item-control"
+        >
+          <div
+            class="ant-form-item-control-input"
+          >
+            <div
+              class="ant-form-item-control-input-content"
+            >
+              <input
+                class="ant-input"
+                id="horizontal_login_guidelines"
+                placeholder="Circle guidelines"
+                type="text"
+                value=""
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="ant-row ant-form-item"
+      >
+        <div
+          class="ant-col ant-form-item-label"
+        >
+          <label
+            class="ant-form-item-required"
+            for="horizontal_login_frequency"
+            title=""
+          >
+            <span>
+              <span
+                aria-label="info-circle"
+                class="anticon anticon-info-circle"
+                role="img"
+                tabindex="-1"
+              >
+                <svg
+                  aria-hidden="true"
+                  class=""
+                  data-icon="info-circle"
+                  fill="currentColor"
+                  focusable="false"
+                  height="1em"
+                  viewBox="64 64 896 896"
+                  width="1em"
+                >
+                  <path
+                    d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
+                  />
+                  <path
+                    d="M464 336a48 48 0 1096 0 48 48 0 10-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z"
+                  />
+                </svg>
+              </span>
+               Cirulation frequency
+            </span>
+          </label>
+        </div>
+        <div
+          class="ant-col ant-form-item-control"
+        >
+          <div
+            class="ant-form-item-control-input"
+          >
+            <div
+              class="ant-form-item-control-input-content"
+            >
+              <div
+                class="ant-select ant-select-single ant-select-show-arrow"
+              >
+                <div
+                  class="ant-select-selector"
+                >
+                  <span
+                    class="ant-select-selection-search"
+                  >
+                    <input
+                      aria-activedescendant="horizontal_login_frequency_list_0"
+                      aria-autocomplete="list"
+                      aria-controls="horizontal_login_frequency_list"
+                      aria-haspopup="listbox"
+                      aria-owns="horizontal_login_frequency_list"
+                      autocomplete="off"
+                      class="ant-select-selection-search-input"
+                      id="horizontal_login_frequency"
+                      readonly=""
+                      role="combobox"
+                      style="opacity: 0;"
+                      unselectable="on"
+                      value=""
+                    />
+                  </span>
+                  <span
+                    class="ant-select-selection-item"
+                  >
+                    Weekly
+                  </span>
+                </div>
+                <span
+                  aria-hidden="true"
+                  class="ant-select-arrow"
+                  style="user-select: none;"
+                  unselectable="on"
+                >
+                  <span
+                    aria-label="down"
+                    class="anticon anticon-down"
+                    role="img"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class=""
+                      data-icon="down"
+                      fill="currentColor"
+                      focusable="false"
+                      height="1em"
+                      viewBox="64 64 896 896"
+                      width="1em"
+                    >
+                      <path
+                        d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"
+                      />
+                    </svg>
+                  </span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="ant-row ant-form-item"
+      >
+        <div
+          class="ant-col ant-form-item-label"
+        >
+          <label
+            class=""
+            for="horizontal_login_privacy"
+            title=""
+          >
+            <span>
+              <span
+                aria-label="info-circle"
+                class="anticon anticon-info-circle"
+                role="img"
+                tabindex="-1"
+              >
+                <svg
+                  aria-hidden="true"
+                  class=""
+                  data-icon="info-circle"
+                  fill="currentColor"
+                  focusable="false"
+                  height="1em"
+                  viewBox="64 64 896 896"
+                  width="1em"
+                >
+                  <path
+                    d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
+                  />
+                  <path
+                    d="M464 336a48 48 0 1096 0 48 48 0 10-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z"
+                  />
+                </svg>
+              </span>
+               Circle Privacy
+            </span>
+          </label>
+        </div>
+        <div
+          class="ant-col ant-form-item-control"
+        >
+          <div
+            class="ant-form-item-control-input"
+          >
+            <div
+              class="ant-form-item-control-input-content"
+            >
+              <div
+                class="ant-radio-group ant-radio-group-outline"
+                id="horizontal_login_privacy"
+              >
+                <label
+                  class="verticalRadioButton ant-radio-wrapper ant-radio-wrapper-checked"
+                >
+                  <span
+                    class="ant-radio ant-radio-checked"
+                  >
+                    <input
+                      checked=""
+                      class="ant-radio-input"
+                      type="radio"
+                      value="private"
+                    />
+                    <span
+                      class="ant-radio-inner"
+                    />
+                  </span>
+                  <span>
+                    Private
+                  </span>
+                </label>
+                <label
+                  class="verticalRadioButton ant-radio-wrapper"
+                >
+                  <span
+                    class="ant-radio"
+                  >
+                    <input
+                      class="ant-radio-input"
+                      type="radio"
+                      value="public"
+                    />
+                    <span
+                      class="ant-radio-inner"
+                    />
+                  </span>
+                  <span>
+                    Public
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="ant-row ant-form-item"
+      >
+        <div
+          class="ant-col ant-form-item-control"
+        >
+          <div
+            class="ant-form-item-control-input"
+          >
+            <div
+              class="ant-form-item-control-input-content"
+            >
+              <button
+                class="ant-btn ant-btn-primary ant-btn-lg ant-btn-block"
+                data-testid="submitButton"
+                disabled=""
+                type="submit"
+              >
+                <span>
+                  Create Circle
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

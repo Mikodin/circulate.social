@@ -1,6 +1,8 @@
 import React from 'react';
 import { render, RenderResult } from '@testing-library/react';
-import UserContext from '../../state-management/UserContext';
+import UserContext, {
+  UserContextType,
+} from '../../state-management/UserContext';
 
 import Header from './Header';
 
@@ -10,13 +12,17 @@ describe('It should pass', () => {
   });
 });
 
-function renderHeader(context?: {
-  signOut?: () => void;
-  getIsUserLoggedIn?: () => boolean;
-}): RenderResult {
+function renderHeader(context?: Partial<UserContextType>): RenderResult {
   const defaultContext = {
-    signOut: jest.fn(),
     getIsUserLoggedIn: jest.fn(() => false),
+    signOut: jest.fn(),
+    signIn: jest.fn(),
+    register: jest.fn(),
+    confirmEmail: jest.fn(),
+    resendRegisterCode: jest.fn(),
+    forgotPasswordInit: jest.fn(),
+    forgotPasswordSubmit: jest.fn(),
+    updateUserAttributes: jest.fn(),
   };
   return render(
     <UserContext.Provider value={{ ...defaultContext, ...context }}>

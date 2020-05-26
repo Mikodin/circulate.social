@@ -18,13 +18,13 @@ class StartACircle extends PureComponent<Props, {}> {
   context: React.ContextType<typeof UserContext>;
 
   render(): JSX.Element {
-    const { getIsUserLoggedIn } = this.context;
+    const { getIsUserLoggedIn, jwtToken } = this.context;
     return (
       <Layout>
         <div>
           <h2>Start a Circle</h2>
           {getIsUserLoggedIn() ? (
-            <StartCircleForm />
+            <StartCircleForm jwtToken={jwtToken} />
           ) : (
             <Fragment>
               <p>You must be signed in to Start a Circle</p>
