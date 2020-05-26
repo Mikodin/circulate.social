@@ -30,11 +30,11 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     };
   }
 
-  if (!name || !description) {
+  if (!name) {
     return {
       statusCode: 400,
       body: JSON.stringify({
-        message: 'Name and description fields are required',
+        message: 'Name field is required',
       }),
       headers: {
         // @TODO limit to only my domain
