@@ -3,7 +3,7 @@
 exports[`Register should render 1`] = `
 <div>
   <form
-    class="ant-form ant-form-vertical form"
+    class="ant-form ant-form-vertical ant-form-large form"
     id="horizontal_login"
   >
     <div
@@ -30,7 +30,7 @@ exports[`Register should render 1`] = `
             class="ant-form-item-control-input-content"
           >
             <span
-              class="ant-input-affix-wrapper"
+              class="ant-input-affix-wrapper ant-input-affix-wrapper-lg"
             >
               <span
                 class="ant-input-prefix"
@@ -58,7 +58,7 @@ exports[`Register should render 1`] = `
               </span>
               <input
                 autocomplete="email"
-                class="ant-input"
+                class="ant-input ant-input-lg"
                 id="horizontal_login_email"
                 placeholder="joedoe@gmail.com"
                 type="email"
@@ -93,7 +93,7 @@ exports[`Register should render 1`] = `
             class="ant-form-item-control-input-content"
           >
             <span
-              class="ant-input-affix-wrapper"
+              class="ant-input-affix-wrapper ant-input-affix-wrapper-lg"
             >
               <span
                 class="ant-input-prefix"
@@ -121,7 +121,7 @@ exports[`Register should render 1`] = `
               </span>
               <input
                 autocomplete="new-password"
-                class="ant-input"
+                class="ant-input ant-input-lg"
                 id="horizontal_login_password"
                 placeholder="Password"
                 type="password"

@@ -6,7 +6,7 @@ Object {
   "baseElement": <body>
     <div>
       <form
-        class="ant-form ant-form-vertical form"
+        class="ant-form ant-form-vertical ant-form-large form"
         id="horizontal_login"
       >
         <div
@@ -33,7 +33,7 @@ Object {
                 class="ant-form-item-control-input-content"
               >
                 <input
-                  class="ant-input"
+                  class="ant-input ant-input-lg"
                   id="horizontal_login_name"
                   placeholder="Circle name"
                   type="text"
@@ -126,7 +126,7 @@ Object {
                 class="ant-form-item-control-input-content"
               >
                 <input
-                  class="ant-input"
+                  class="ant-input ant-input-lg"
                   id="horizontal_login_guidelines"
                   placeholder="Circle guidelines"
                   type="text"
@@ -186,7 +186,7 @@ Object {
                 class="ant-form-item-control-input-content"
               >
                 <div
-                  class="ant-select ant-select-single ant-select-show-arrow"
+                  class="ant-select ant-select-lg ant-select-single ant-select-show-arrow"
                 >
                   <div
                     class="ant-select-selector"
@@ -298,7 +298,7 @@ Object {
                 class="ant-form-item-control-input-content"
               >
                 <div
-                  class="ant-radio-group ant-radio-group-outline"
+                  class="ant-radio-group ant-radio-group-outline ant-radio-group-large"
                   id="horizontal_login_privacy"
                 >
                   <label
@@ -376,7 +376,7 @@ Object {
   </body>,
   "container": <div>
     <form
-      class="ant-form ant-form-vertical form"
+      class="ant-form ant-form-vertical ant-form-large form"
       id="horizontal_login"
     >
       <div
@@ -403,7 +403,7 @@ Object {
               class="ant-form-item-control-input-content"
             >
               <input
-                class="ant-input"
+                class="ant-input ant-input-lg"
                 id="horizontal_login_name"
                 placeholder="Circle name"
                 type="text"
@@ -496,7 +496,7 @@ Object {
               class="ant-form-item-control-input-content"
             >
               <input
-                class="ant-input"
+                class="ant-input ant-input-lg"
                 id="horizontal_login_guidelines"
                 placeholder="Circle guidelines"
                 type="text"
@@ -556,7 +556,7 @@ Object {
               class="ant-form-item-control-input-content"
             >
               <div
-                class="ant-select ant-select-single ant-select-show-arrow"
+                class="ant-select ant-select-lg ant-select-single ant-select-show-arrow"
               >
                 <div
                   class="ant-select-selector"
@@ -668,7 +668,7 @@ Object {
               class="ant-form-item-control-input-content"
             >
               <div
-                class="ant-radio-group ant-radio-group-outline"
+                class="ant-radio-group ant-radio-group-outline ant-radio-group-large"
                 id="horizontal_login_privacy"
               >
                 <label

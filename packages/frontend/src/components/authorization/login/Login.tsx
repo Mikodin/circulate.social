@@ -67,6 +67,7 @@ const Login = (props: Props): JSX.Element => {
         className={css.form}
         form={form}
         name="horizontal_login"
+        size="large"
         layout="vertical"
         onFinish={onFormFinish}
         initialValues={{

@@ -3,7 +3,7 @@
 exports[`ConfirmEmail should render 1`] = `
 <div>
   <form
-    class="ant-form ant-form-vertical form"
+    class="ant-form ant-form-vertical ant-form-large form"
     id="horizontal_login"
   >
     <div
@@ -30,7 +30,7 @@ exports[`ConfirmEmail should render 1`] = `
             class="ant-form-item-control-input-content"
           >
             <span
-              class="ant-input-affix-wrapper"
+              class="ant-input-affix-wrapper ant-input-affix-wrapper-lg"
             >
               <span
                 class="ant-input-prefix"
@@ -58,7 +58,7 @@ exports[`ConfirmEmail should render 1`] = `
               </span>
               <input
                 autocomplete="email"
-                class="ant-input"
+                class="ant-input ant-input-lg"
                 id="horizontal_login_email"
                 placeholder="joedoe@gmail.com"
                 type="email"
@@ -93,7 +93,7 @@ exports[`ConfirmEmail should render 1`] = `
             class="ant-form-item-control-input-content"
           >
             <span
-              class="ant-input-affix-wrapper"
+              class="ant-input-affix-wrapper ant-input-affix-wrapper-lg"
             >
               <span
                 class="ant-input-prefix"
@@ -121,7 +121,7 @@ exports[`ConfirmEmail should render 1`] = `
               </span>
               <input
                 autocomplete="given-name"
-                class="ant-input"
+                class="ant-input ant-input-lg"
                 id="horizontal_login_firstName"
                 placeholder="John"
                 type="text"
@@ -156,7 +156,7 @@ exports[`ConfirmEmail should render 1`] = `
             class="ant-form-item-control-input-content"
           >
             <span
-              class="ant-input-affix-wrapper"
+              class="ant-input-affix-wrapper ant-input-affix-wrapper-lg"
             >
               <span
                 class="ant-input-prefix"
@@ -184,7 +184,7 @@ exports[`ConfirmEmail should render 1`] = `
               </span>
               <input
                 autocomplete="family-name"
-                class="ant-input"
+                class="ant-input ant-input-lg"
                 id="horizontal_login_lastName"
                 placeholder="Doe"
                 type="text"
@@ -219,7 +219,7 @@ exports[`ConfirmEmail should render 1`] = `
             class="ant-form-item-control-input-content"
           >
             <span
-              class="ant-input-affix-wrapper"
+              class="ant-input-affix-wrapper ant-input-affix-wrapper-lg"
             >
               <span
                 class="ant-input-prefix"
@@ -247,7 +247,7 @@ exports[`ConfirmEmail should render 1`] = `
               </span>
               <input
                 autocomplete="one-time-code"
-                class="ant-input"
+                class="ant-input ant-input-lg"
                 id="horizontal_login_confirmationCode"
                 placeholder="123456"
                 type="text"

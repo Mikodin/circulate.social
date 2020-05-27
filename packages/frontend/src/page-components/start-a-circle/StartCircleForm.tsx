@@ -157,6 +157,7 @@ const StartCircleForm = (props: Props): JSX.Element => {
         className={css.form}
         form={form}
         name="horizontal_login"
+        size="large"
         layout="vertical"
         onFinish={onFinish}
         initialValues={
