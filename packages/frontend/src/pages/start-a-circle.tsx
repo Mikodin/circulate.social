@@ -7,6 +7,7 @@ import AuthContainer, {
   AUTH_FORMS,
 } from '../components/authorization/AuthContainer';
 
+import css from './start-a-circle.module.scss';
 import UserContext from '../state-management/UserContext';
 
 interface Props {
@@ -22,7 +23,20 @@ class StartACircle extends PureComponent<Props, {}> {
     return (
       <Layout>
         <div>
-          <h2>Start a Circle</h2>
+          <div className={css.headerContainer}>
+            <h1>Start a Circle</h1>
+            <h4>
+              The most relevant, curated newsletter you’ve ever subscribed to
+              starts here.
+            </h4>
+          </div>
+          <div className={css.stepsContainer}>
+            <ul className={css.progressbar}>
+              <li className={css.active}>Create a Circle</li>
+              <li>Invite others</li>
+              <li>Get what matters</li>
+            </ul>
+          </div>
           {getIsUserLoggedIn() ? (
             <StartCircleForm jwtToken={jwtToken} />
           ) : (

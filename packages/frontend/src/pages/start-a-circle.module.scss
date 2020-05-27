@@ -1,0 +1,73 @@
+@import '../mixins/_breakpoint.module.scss';
+.headerContainer {
+  h1 {
+    margin-bottom: 5px;
+    padding-bottom: 0px;
+  }
+
+  h4 {
+    margin-top: -10px;
+  }
+}
+.stepsContainer {
+  margin-top: 25px;
+  display: flex;
+  width: 100%;
+
+  .progressbar {
+    width: 100%;
+    counter-reset: step;
+    padding-left: 0px;
+    margin-left: 0px;
+
+    li {
+      list-style-type: none;
+      float: left;
+      width: 33.33%;
+      position: relative;
+      text-align: center;
+      font-weight: 600;
+
+      &:first-child:after {
+        content: none;
+      }
+
+      &:before {
+        /* CSS for creating steper block before the li item*/
+        content: counter(step);
+        counter-increment: step;
+        height: 35px;
+        width: 35px;
+        line-height: 30px;
+        border: 2px solid #ddd;
+        display: block;
+        text-align: center;
+        margin: 0 auto 10px auto;
+        border-radius: 50%;
+        background-color: white;
+      }
+
+      &:after {
+        /* CSS for creating horizontal line*/
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background-color: #ddd;
+        top: 15px;
+        left: -50%;
+        z-index: -1;
+      }
+    }
+
+    li.active {
+      color: #27ae60;
+    }
+    li.active:before {
+      border-color: #27ae60;
+    }
+    li.active + li:after {
+      background-color: #27ae60;
+    }
+  }
+}
