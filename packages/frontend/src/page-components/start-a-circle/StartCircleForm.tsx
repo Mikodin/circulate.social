@@ -59,11 +59,20 @@ const StartCircleForm = (props: Props): JSX.Element => {
       title="Define your gudelines"
       content={
         <div>
-          <span>What kind of content would you like?</span>
+          <span>Boundaries are important.</span>
           <br />
           <span>
-            What kind of content would you <strong>not</strong> like?
+            We will surface these to users as they are joining the Circle.
           </span>
+          <br />
+          <span>
+            What sorts of content would you <strong>not</strong> like to see?
+          </span>
+          <br />
+          <span>Who is this not for?</span>
+          <br />
+          <span>Get clear - be specific - check out the examples below!</span>
+          <br />
           <Tabs defaultActiveKey="1" style={{ maxWidth: 'fit-content' }}>
             <TabPane tab="Example 1" key="1">
               Some good example of good guidelines
@@ -112,9 +121,9 @@ const StartCircleForm = (props: Props): JSX.Element => {
     </Popover>
   );
 
-  const renderPrivacyPopover = () => (
+  const renderPrivacyPopover = (): JSX.Element => (
     <Popover
-      title="About Circle privacy"
+      title="On Circle privacy"
       content={
         <div>
           <span>
