@@ -192,7 +192,11 @@ const StartCircleForm = (props: Props): JSX.Element => {
           ]}
           label="Circle description"
         >
-          <Input.TextArea rows={3} placeholder="Circle description" />
+          <Input.TextArea
+            rows={3}
+            placeholder="Circle description"
+            style={{ fontSize: '16px' }}
+          />
         </Form.Item>
 
         <Form.Item

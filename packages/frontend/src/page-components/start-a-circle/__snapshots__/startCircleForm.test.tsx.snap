@@ -71,6 +71,7 @@ Object {
                   id="horizontal_login_description"
                   placeholder="Circle description"
                   rows="3"
+                  style="font-size: 16px;"
                 />
               </div>
             </div>
@@ -441,6 +442,7 @@ Object {
                 id="horizontal_login_description"
                 placeholder="Circle description"
                 rows="3"
+                style="font-size: 16px;"
               />
             </div>
           </div>
