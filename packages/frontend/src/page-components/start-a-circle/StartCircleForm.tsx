@@ -209,7 +209,6 @@ const StartCircleForm = (props: Props): JSX.Element => {
             rows={3}
             placeholder="Circle description"
             onFocus={(): void => setShowDescriptionPopover(true)}
-            onBlur={(): void => setShowDescriptionPopover(false)}
             style={{ fontSize: '16px' }}
           />
         </Form.Item>
@@ -228,7 +227,6 @@ const StartCircleForm = (props: Props): JSX.Element => {
           <Select
             placeholder="Please select your Circulation frequency"
             onFocus={(): void => setShowFrequencyPopover(true)}
-            onBlur={(): void => setShowFrequencyPopover(false)}
           >
             <Select.Option value="daily">Daily</Select.Option>
             <Select.Option value="weekly">Weekly</Select.Option>
@@ -246,7 +244,6 @@ const StartCircleForm = (props: Props): JSX.Element => {
               value="private"
               // @ts-expect-error
               onFocus={(): void => setShowPrivacyPopover(true)}
-              onBlur={(): void => setShowPrivacyPopover(false)}
             >
               Private
             </Radio>
@@ -255,7 +252,6 @@ const StartCircleForm = (props: Props): JSX.Element => {
               value="public"
               // @ts-expect-error
               onFocus={(): void => setShowPrivacyPopover(true)}
-              onBlur={(): void => setShowPrivacyPopover(false)}
             >
               Public
             </Radio>
