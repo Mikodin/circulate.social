@@ -22,7 +22,7 @@ class StartACircle extends PureComponent<Props, {}> {
     const { getIsUserLoggedIn, jwtToken } = this.context;
     return (
       <Layout>
-        <div>
+        <div className={css.page}>
           <div className={css.headerContainer}>
             <h1>Start a Circle</h1>
             <h4>
