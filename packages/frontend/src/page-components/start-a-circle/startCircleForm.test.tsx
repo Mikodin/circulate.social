@@ -38,7 +38,6 @@ function getAllInputs(container: RenderResult) {
   const { queryByPlaceholderText, queryByText } = container;
   const inputNameOfCircle = queryByPlaceholderText(/Circle name/i);
   const inputDescription = queryByPlaceholderText(/Circle description/i);
-  const inputGuidelines = queryByPlaceholderText(/Circle guidelines/i);
   const dropdownCircleFrequency = queryByPlaceholderText(
     /Please select your Circulation frequency/i
   );
@@ -48,7 +47,6 @@ function getAllInputs(container: RenderResult) {
   return {
     inputNameOfCircle,
     inputDescription,
-    inputGuidelines,
     buttonSubmit,
     dropdownCircleFrequency,
     radioCirclePrivate,
@@ -58,7 +56,6 @@ function getAllInputs(container: RenderResult) {
 
 const nameOfCircleValue = 'The greatest circle ever';
 const descriptionValue = 'The greatest description ever';
-const guidelinesValue = 'The greatest guidelines ever';
 
 const setupCompleteForm = async (): Promise<RenderResult> => {
   const container = renderStartCircleForm();
@@ -66,7 +63,6 @@ const setupCompleteForm = async (): Promise<RenderResult> => {
   const {
     inputNameOfCircle,
     inputDescription,
-    inputGuidelines,
     // circleFrequencyDropdown,
     // circlePrivacyRadio,
   } = getAllInputs(container);
@@ -78,10 +74,6 @@ const setupCompleteForm = async (): Promise<RenderResult> => {
 
     fireEvent.change(inputDescription, {
       target: { value: descriptionValue },
-    });
-
-    fireEvent.change(inputGuidelines, {
-      target: { value: guidelinesValue },
     });
   });
 
@@ -114,7 +106,6 @@ describe('StartCircleForm', () => {
           {
             name: nameOfCircleValue,
             description: descriptionValue,
-            guidelines: guidelinesValue,
             frequency: 'weekly',
             privacy: 'private',
           },

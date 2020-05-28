@@ -19,7 +19,7 @@ const StartCircleForm = (props: Props): JSX.Element => {
 
   const [isCreateCircleInFlight, setIsCreateCircleInFlight] = useState(false);
   const [isCreateCircleError, setIsCreateCircleError] = useState(false);
-  const [showGuidelinesInfo, setShowGuidelinesInfo] = useState(false);
+  const [showDescriptionPopover, setShowDescriptionPopover] = useState(false);
   const [showFrequencyPopover, setShowFrequencyPopover] = useState(false);
   const [showPrivacyPopover, setShowPrivacyPopover] = useState(false);
 
@@ -28,7 +28,6 @@ const StartCircleForm = (props: Props): JSX.Element => {
   interface FormValues {
     name: string;
     description: string;
-    guidelines: string;
     frequency: 'daily' | 'weekly' | 'biweekly' | 'monthly';
     privacy: 'private' | 'public';
   }
@@ -54,44 +53,58 @@ const StartCircleForm = (props: Props): JSX.Element => {
     }
   };
 
-  const renderGuidelinesPopover = (): JSX.Element => (
+  // TODO have it popup on input focus
+  const renderDescriptionPopover = (): JSX.Element => (
     <Popover
-      title="Define your gudelines"
+      title="Define your Circle"
       content={
         <div>
-          <span>Boundaries are important.</span>
+          <span>
+            Descriptions are important. They help shape the community.
+          </span>
           <br />
           <span>
-            We will surface these to users as they are joining the Circle.
+            So are boundaries - they help to create a safe container for all.
+          </span>
+          <br />
+          <span>
+            We will surface this description to newcomers as they are joining
+            the Circle. So define what you want and don't want.
+          </span>
+          <br />
+          <span>
+            What sorts of content would you <strong>like</strong> to see?
           </span>
           <br />
           <span>
             What sorts of content would you <strong>not</strong> like to see?
           </span>
           <br />
-          <span>Who is this not for?</span>
+          <span>Who is this for? Who is this not for?</span>
           <br />
           <span>Get clear - be specific - check out the examples below!</span>
           <br />
           <Tabs defaultActiveKey="1" style={{ maxWidth: 'fit-content' }}>
             <TabPane tab="Example 1" key="1">
-              Some good example of good guidelines
+              Some good example of a description
             </TabPane>
             <TabPane tab="Example 2" key="2">
-              Another good example of good guidelines
+              Another good example of a description
             </TabPane>
             <TabPane tab="Example 3" key="3">
-              Yet another good example of good guidelines
+              Yet another good example of a description
             </TabPane>
           </Tabs>
         </div>
       }
       trigger="click"
-      onVisibleChange={(): void => setShowGuidelinesInfo(!showGuidelinesInfo)}
-      visible={showGuidelinesInfo}
+      onVisibleChange={(): void =>
+        setShowDescriptionPopover(!showDescriptionPopover)
+      }
+      visible={showDescriptionPopover}
     >
       <InfoCircleOutlined
-        onClick={(): void => setShowGuidelinesInfo(!showGuidelinesInfo)}
+        onClick={(): void => setShowDescriptionPopover(!showDescriptionPopover)}
       />
     </Popover>
   );
@@ -164,7 +177,6 @@ const StartCircleForm = (props: Props): JSX.Element => {
           {
             name: '',
             description: '',
-            guidelines: '',
             frequency: 'weekly',
             privacy: 'private',
           } as FormValues
@@ -182,6 +194,7 @@ const StartCircleForm = (props: Props): JSX.Element => {
         >
           <Input placeholder="Circle name" type="text" />
         </Form.Item>
+
         <Form.Item
           name="description"
           rules={[
@@ -190,26 +203,15 @@ const StartCircleForm = (props: Props): JSX.Element => {
               message: 'Please input a description for your Circle',
             },
           ]}
-          label="Circle description"
+          label={<span>{renderDescriptionPopover()} Circle description</span>}
         >
           <Input.TextArea
             rows={3}
             placeholder="Circle description"
+            onFocus={(): void => setShowDescriptionPopover(true)}
+            onBlur={(): void => setShowDescriptionPopover(false)}
             style={{ fontSize: '16px' }}
           />
-        </Form.Item>
-
-        <Form.Item
-          name="guidelines"
-          rules={[
-            {
-              required: false,
-              message: 'Please input some guidelines for your Circle',
-            },
-          ]}
-          label={<span>{renderGuidelinesPopover()} Cirulation guidelines</span>}
-        >
-          <Input placeholder="Circle guidelines" type="text" />
         </Form.Item>
         <Form.Item
           name="frequency"
@@ -223,7 +225,11 @@ const StartCircleForm = (props: Props): JSX.Element => {
             },
           ]}
         >
-          <Select placeholder="Please select your Circulation frequency">
+          <Select
+            placeholder="Please select your Circulation frequency"
+            onFocus={(): void => setShowFrequencyPopover(true)}
+            onBlur={(): void => setShowFrequencyPopover(false)}
+          >
             <Select.Option value="daily">Daily</Select.Option>
             <Select.Option value="weekly">Weekly</Select.Option>
             <Select.Option value="biweekly">Bi-weekly</Select.Option>
@@ -235,10 +241,22 @@ const StartCircleForm = (props: Props): JSX.Element => {
           label={<span>{renderPrivacyPopover()} Circle Privacy</span>}
         >
           <Radio.Group>
-            <Radio className={css.verticalRadioButton} value="private">
+            <Radio
+              className={css.verticalRadioButton}
+              value="private"
+              // @ts-expect-error
+              onFocus={(): void => setShowPrivacyPopover(true)}
+              onBlur={(): void => setShowPrivacyPopover(false)}
+            >
               Private
             </Radio>
-            <Radio className={css.verticalRadioButton} value="public">
+            <Radio
+              className={css.verticalRadioButton}
+              value="public"
+              // @ts-expect-error
+              onFocus={(): void => setShowPrivacyPopover(true)}
+              onBlur={(): void => setShowPrivacyPopover(false)}
+            >
               Public
             </Radio>
           </Radio.Group>
