@@ -17,6 +17,7 @@ const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 const mockRouterPushSpy = jest.fn(() => true);
 jest.mock('next/router', () => ({
+  // eslint-disable-next-line
   useRouter() {
     return {
       push: mockRouterPushSpy,
@@ -34,6 +35,7 @@ function renderStartCircleForm(props?: Partial<Props>): RenderResult {
   return render(<StartCircleForm {...DEFAULT_PROPS} {...props} />);
 }
 
+// eslint-disable-next-line
 function getAllInputs(container: RenderResult) {
   const { queryByPlaceholderText, queryByText } = container;
   const inputNameOfCircle = queryByPlaceholderText(/Circle name/i);

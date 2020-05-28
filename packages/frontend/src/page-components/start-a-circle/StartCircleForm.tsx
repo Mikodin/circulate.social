@@ -69,7 +69,7 @@ const StartCircleForm = (props: Props): JSX.Element => {
           <br />
           <span>
             We will surface this description to newcomers as they are joining
-            the Circle. So define what you want and don't want.
+            the Circle. So define what you want and don&apos;t want.
           </span>
           <br />
           <span>

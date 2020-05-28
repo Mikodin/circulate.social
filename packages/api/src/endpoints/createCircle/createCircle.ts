@@ -6,7 +6,7 @@ import 'source-map-support/register';
 
 export const handler: APIGatewayProxyHandler = async (event) => {
   const body = JSON.parse(event.body);
-  const { name, description } = body;
+  const { name, description, frequency, privacy } = body;
 
   const isInLocal = process.env.IS_LOCAL === 'true';
 
@@ -45,7 +45,10 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   }
 
   try {
-    const insertedCircle = await insertCircle({ name, description }, memberId);
+    const insertedCircle = await insertCircle(
+      { name, description, frequency, privacy },
+      memberId
+    );
     return {
       statusCode: 200,
       body: JSON.stringify({
