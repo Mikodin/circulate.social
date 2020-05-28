@@ -98,7 +98,8 @@ const Login = (props: Props): JSX.Element => {
           rules={[{ required: true, message: 'Please input your password' }]}
           label="Password"
         >
-          <Input
+          <Input.Password
+            visibilityToggle
             autoComplete="current-password"
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"

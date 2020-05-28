@@ -126,7 +126,8 @@ const ForgotPassword = (props: Props): JSX.Element => {
               ]}
               label="New password"
             >
-              <Input
+              <Input.Password
+                visibilityToggle
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 autoComplete="new-password"
                 type="password"

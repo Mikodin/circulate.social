@@ -103,7 +103,8 @@ const Register = (props: Props): JSX.Element => {
           rules={[{ required: true, message: 'Please input your password' }]}
           label="Password"
         >
-          <Input
+          <Input.Password
+            visibilityToggle
             prefix={<LockOutlined className="site-form-item-icon" />}
             autoComplete="new-password"
             type="password"
