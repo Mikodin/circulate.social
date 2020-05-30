@@ -25,7 +25,6 @@ const Home = (): JSX.Element => {
         </div>
         {!getIsUserLoggedIn() && (
           <div className={styles.loginContainer}>
-            <h2>Get in Circulation</h2>
             <AuthContainer
               onLoginRedirectTo="/circles/home"
               onConfirmEmailRedirectTo="/start-a-circle"

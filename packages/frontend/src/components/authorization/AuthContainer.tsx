@@ -196,6 +196,7 @@ class AuthContainer extends PureComponent<Props, State> {
       <div className={css.container}>
         {formToShow === AUTH_FORMS.register && (
           <Fragment>
+            <h2>Sign up!</h2>
             <Register
               seedEmail={seedEmail}
               seedPassword={seedPassword}
@@ -210,6 +211,7 @@ class AuthContainer extends PureComponent<Props, State> {
         )}
         {formToShow === AUTH_FORMS.confirmEmail && (
           <Fragment>
+            <h2>✉️ Confirm your email</h2>
             <ConfirmEmail
               seedEmail={seedEmail}
               fetchConfirmEmail={this.context.confirmEmail}
@@ -224,6 +226,7 @@ class AuthContainer extends PureComponent<Props, State> {
         )}
         {formToShow === AUTH_FORMS.login && (
           <Fragment>
+            <h2>Sign in!</h2>
             <Login
               seedEmail={seedEmail}
               seedPassword={seedPassword}
@@ -242,6 +245,7 @@ class AuthContainer extends PureComponent<Props, State> {
         )}
         {formToShow === AUTH_FORMS.forgotPassword && (
           <Fragment>
+            <h2>Forgot password</h2>
             <ForgotPassword
               fetchInitForgotPassword={this.context.forgotPasswordInit}
               fetchFinalizeForgotPassword={this.context.forgotPasswordSubmit}
