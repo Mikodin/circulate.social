@@ -40,7 +40,6 @@ const Login = (props: Props): JSX.Element => {
       const result = await props.fetchSignIn(email, password);
       setIsInvalidCredentials(false);
       setIsLoginInFlight(false);
-      await onFormCompletionCallback({ email, password });
       return result;
     } catch (error) {
       console.error(error);
@@ -59,6 +58,7 @@ const Login = (props: Props): JSX.Element => {
   const onFormFinish = async (values: FormValues): Promise<void> => {
     const { email, password } = values;
     await handleSignIn(email, password);
+    await onFormCompletionCallback({ email, password });
   };
 
   return (
