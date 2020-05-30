@@ -46,14 +46,19 @@ class CirclePage extends PureComponent<Props, State> {
     const { join } = this.props.router.query;
     const { jwtToken } = this.context;
 
-    if (jwtToken && !join) {
+    const isLoggedInButNotJoining = jwtToken && !join;
+    const isLoggedInAndJoining = join && jwtToken;
+    const isNotLoggedInAndJoining = join && !jwtToken;
+    const isNotLoggedInOrJoining = !join && !jwtToken;
+
+    if (isLoggedInButNotJoining) {
       await this.getCircle(jwtToken);
-    } else if (join && jwtToken) {
+    } else if (isLoggedInAndJoining) {
       await this.joinCircle(jwtToken);
       await this.getCircle(jwtToken);
-    } else if (join && !jwtToken) {
+    } else if (isNotLoggedInAndJoining) {
       this.setState({ showRegisterFlow: true });
-    } else if (!join && !jwtToken) {
+    } else if (isNotLoggedInOrJoining) {
       this.setState({ getCircleNotAuthorized: true });
     }
   }
@@ -77,6 +82,8 @@ class CirclePage extends PureComponent<Props, State> {
     } catch (error) {
       console.error('joinCircle', error);
       const { response } = error;
+
+      // TODO: Deal with general error state
       if (response && response.status === 401) {
         this.setState({
           getCircleNotAuthorized: true,
@@ -91,6 +98,7 @@ class CirclePage extends PureComponent<Props, State> {
     const { circleId } = this.props.router.query;
 
     this.setState({ isFetchingCircle: true });
+
     try {
       const createResponse = await axios.get(
         `${GET_CIRCLE_BY_ID_ENDPOINT}/${circleId}?getUpcomingEvents=true`,
