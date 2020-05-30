@@ -24,11 +24,13 @@ const Home = (): JSX.Element => {
           <h2>All delivered as one relevant email digest.</h2>
         </div>
         {!getIsUserLoggedIn() && (
-          <AuthContainer
-            onLoginRedirectTo="/circles/home"
-            onConfirmEmailRedirectTo="/start-a-circle"
-            onForgotPasswordRedirectTo="/circles/home"
-          />
+          <div className={styles.authContainer}>
+            <AuthContainer
+              onLoginRedirectTo="/circles/home"
+              onConfirmEmailRedirectTo="/start-a-circle"
+              onForgotPasswordRedirectTo="/circles/home"
+            />
+          </div>
         )}
       </div>
     </Layout>
