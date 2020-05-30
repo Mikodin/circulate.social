@@ -218,6 +218,7 @@ class AuthContainer extends PureComponent<Props, State> {
             <div className={css.formTagline}>
               <h2>✉️ Confirm your email</h2>
               <span>Hey - check your email, we sent you a code!</span>
+              <hr />
             </div>
             <ConfirmEmail
               seedEmail={seedEmail}
@@ -236,6 +237,7 @@ class AuthContainer extends PureComponent<Props, State> {
             <div className={css.formTagline}>
               <h2>Sign in</h2>
               <span>Welcome back</span>
+              <hr />
             </div>
             <Login
               seedEmail={seedEmail}
@@ -257,6 +259,7 @@ class AuthContainer extends PureComponent<Props, State> {
           <Fragment>
             <div className={css.formTagline}>
               <h2>Forgot password</h2>
+              <hr />
             </div>
             <ForgotPassword
               fetchInitForgotPassword={this.context.forgotPasswordInit}
