@@ -1,5 +1,4 @@
 import { PureComponent, Fragment } from 'react';
-import { withRouter, NextRouter } from 'next/router';
 
 import Layout from '../components/layout/Layout';
 import StartCircleForm from '../page-components/start-a-circle/StartCircleForm';
@@ -10,10 +9,7 @@ import AuthContainer, {
 import css from './start-a-circle.module.scss';
 import UserContext from '../state-management/UserContext';
 
-interface Props {
-  router: NextRouter;
-}
-class StartACircle extends PureComponent<Props, {}> {
+class StartACircle extends PureComponent<{}, {}> {
   static contextType = UserContext;
 
   context: React.ContextType<typeof UserContext>;
@@ -51,4 +47,4 @@ class StartACircle extends PureComponent<Props, {}> {
   }
 }
 
-export default withRouter(StartACircle);
+export default StartACircle;
