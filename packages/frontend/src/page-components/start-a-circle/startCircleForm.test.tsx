@@ -116,7 +116,7 @@ describe('StartCircleForm', () => {
       });
     });
 
-    it('Should route the user to the newly created circles page', async () => {
+    it('Should route the user to the event submit page with circleId as a query string parameter', async () => {
       const container = await setupCompleteForm();
       const { buttonSubmit } = getAllInputs(container);
       const data = { data: { circle: { id: '123' } } };
@@ -127,8 +127,7 @@ describe('StartCircleForm', () => {
 
       await waitFor(() => {
         expect(mockRouterPushSpy).toBeCalledWith(
-          '/circles/[circleId]',
-          `/circles/${data.data.circle.id}`
+          '/events/submit-event?circleId=123'
         );
       });
     });
