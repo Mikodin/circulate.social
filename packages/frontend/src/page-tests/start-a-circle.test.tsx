@@ -1,5 +1,5 @@
 import { render, RenderResult } from '@testing-library/react';
-import StartACircle from './start-a-circle';
+import StartACircle from '../pages/start-a-circle';
 import UserContext from '../state-management/UserContext';
 
 const jwtTokenMock = '123-asd';
