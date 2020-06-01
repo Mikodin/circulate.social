@@ -11,9 +11,5 @@ body {
 
   .ant-form-item-label {
     padding-bottom: 2px;
-    .ant-form-item-required::before {
-      content: '';
-      margin-right: 0;
-    }
   }
 }

@@ -68,6 +68,7 @@ const Register = (props: Props): JSX.Element => {
       <Form
         className={css.form}
         form={form}
+        hideRequiredMark
         name="horizontal_login"
         size="large"
         layout="vertical"
