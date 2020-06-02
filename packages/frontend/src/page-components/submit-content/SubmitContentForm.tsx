@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import { Form, Input, Button, Alert } from 'antd';
 
-import css from './SubmitEventForm.module.scss';
+import css from './SubmitContentForm.module.scss';
 
 export const SUBMIT_EVENT_ENDPOINT =
   'https://z3edrz53yg.execute-api.us-east-1.amazonaws.com/dev/events/create';
