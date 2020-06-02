@@ -45,7 +45,7 @@ const StartCircleForm = (props: Props): JSX.Element => {
       setIsCreateCircleInFlight(false);
       setIsCreateCircleError(false);
       const { circle } = createResponse.data;
-      router.push(`/events/submit-event?circleId=${circle.id}`);
+      router.push(`/submit-content?circleId=${circle.id}`);
     } catch (error) {
       console.error(error);
       setIsCreateCircleInFlight(false);

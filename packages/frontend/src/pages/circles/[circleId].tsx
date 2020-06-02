@@ -189,7 +189,7 @@ class CirclePage extends PureComponent<Props, State> {
               <Fragment>
                 <h1>Circle: {circle.name}</h1>
                 <h2>Description: {circle.description}</h2>
-                <Link href={`/events/submit-event?circleId=${circle.id}`}>
+                <Link href={`/submit-content?circleId=${circle.id}`}>
                   <a>Submit an event</a>
                 </Link>
                 {circle.upcomingEventDetails.length ? (

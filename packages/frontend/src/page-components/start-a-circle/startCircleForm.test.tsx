@@ -127,7 +127,7 @@ describe('StartCircleForm', () => {
 
       await waitFor(() => {
         expect(mockRouterPushSpy).toBeCalledWith(
-          '/events/submit-event?circleId=123'
+          '/submit-content?circleId=123'
         );
       });
     });
