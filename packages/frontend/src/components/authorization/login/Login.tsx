@@ -29,6 +29,8 @@ const Login = (props: Props): JSX.Element => {
   const [form] = Form.useForm();
 
   const [isInvalidCredentials, setIsInvalidCredentials] = useState(false);
+  const [isNetworkError, setIsNetworkError] = useState(false);
+
   const [isLoginInFlight, setIsLoginInFlight] = useState(false);
 
   const handleSignIn = async (
@@ -47,6 +49,10 @@ const Login = (props: Props): JSX.Element => {
 
       if (error && error.code === 'NotAuthorizedException') {
         setIsInvalidCredentials(true);
+      }
+
+      if (error && error.code === 'NetworkError') {
+        setIsNetworkError(true);
       }
       if (error && error.code === 'UserNotConfirmedException' && showForm) {
         showForm(AUTH_FORMS.confirmEmail);
@@ -110,6 +116,14 @@ const Login = (props: Props): JSX.Element => {
 
         {isInvalidCredentials && (
           <Alert message="Invalid username or password" type="error" showIcon />
+        )}
+
+        {isNetworkError && (
+          <Alert
+            message="Sorry, we couldn't connect to our server. Please try again."
+            type="error"
+            showIcon
+          />
         )}
 
         <Form.Item shouldUpdate={true}>

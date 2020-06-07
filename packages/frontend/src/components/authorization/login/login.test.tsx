@@ -343,5 +343,28 @@ describe('Login', () => {
         });
       });
     });
+
+    describe('When user receives a NetworkError from fetchSignIn', () => {
+      const fetchSignInNetworkErrorMock = jest.fn(() =>
+        Promise.reject({ code: 'NetworkError' })
+      );
+
+      const showFormMock = jest.fn();
+
+      it("Should display an alert telling them that we couldn't connect", async () => {
+        const { queryByText } = await setupFormAfterSubmit(
+          fetchSignInNetworkErrorMock,
+          showFormMock
+        );
+
+        await waitFor(() => {
+          expect(
+            queryByText(
+              /Sorry, we couldn't connect to our server. Please try again./i
+            )
+          ).toBeTruthy();
+        });
+      });
+    });
   });
 });
