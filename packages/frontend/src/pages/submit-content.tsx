@@ -10,7 +10,7 @@ import UserContext from '../state-management/UserContext';
 interface Props {
   router: NextRouter;
 }
-class SubmitEvent extends PureComponent<Props, {}> {
+class SubmitContent extends PureComponent<Props, {}> {
   static contextType = UserContext;
 
   context: React.ContextType<typeof UserContext>;
@@ -27,13 +27,11 @@ class SubmitEvent extends PureComponent<Props, {}> {
 
     return getIsUserLoggedIn() ? (
       <Layout>
-        <main>
-          <h2>Submit an event</h2>
-          <SubmitContentForm
-            seedCircleId={`${router.query.circleId}`}
-            jwtToken={this.context.jwtToken}
-          />
-        </main>
+        <h2>Submit content</h2>
+        <SubmitContentForm
+          seedCircleId={`${router.query.circleId}`}
+          jwtToken={this.context.jwtToken}
+        />
       </Layout>
     ) : (
       <div></div>
@@ -46,4 +44,4 @@ export const getServerSideProps: GetServerSideProps = async () => {
   };
 };
 
-export default withRouter(SubmitEvent);
+export default withRouter(SubmitContent);
