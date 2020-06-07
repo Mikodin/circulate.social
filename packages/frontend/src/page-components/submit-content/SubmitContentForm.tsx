@@ -29,7 +29,11 @@ export interface Props {
 
 export const AVAILABLE_TIMEZONES = ZoneId.getAvailableZoneIds();
 const TimezoneSelects = AVAILABLE_TIMEZONES.map((timeZone) => (
-  <Select.Option value={timeZone} key={timeZone}>
+  <Select.Option
+    value={timeZone}
+    key={timeZone}
+    data-testid={`tz-option-${timeZone}`}
+  >
     {timeZone}
   </Select.Option>
 ));

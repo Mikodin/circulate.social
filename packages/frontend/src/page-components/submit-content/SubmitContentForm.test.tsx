@@ -98,14 +98,14 @@ async function selectATimeFromTimePicker(
 async function selectTimezoneFromTimezonePicker(
   container: RenderResult
 ): Promise<RenderResult> {
-  const { queryAllByText } = container;
+  const { queryByTestId } = container;
   const { selectTimezone } = getAllFields(container);
   await act(async () => {
     await fireEvent.mouseDown(selectTimezone);
   });
 
   await act(async () => {
-    await fireEvent.click(queryAllByText('America/Jamaica')[0]);
+    await fireEvent.click(queryByTestId('tz-option-America/Jamaica'));
   });
 
   return container;
