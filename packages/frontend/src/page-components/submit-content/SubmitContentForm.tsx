@@ -69,18 +69,26 @@ const SubmitContentForm = (props: Props): JSX.Element => {
     }
   }, [isEventForm]);
 
+  function createJodaDateTime(
+    date: FormValues['date'],
+    time: FormValues['time'],
+    timezone: FormValues['timezone']
+  ): ZonedDateTime {
+    const dateObject = date.toObject();
+    const timeObject = time.toObject();
+
+    const { years, months, date: dateStr } = dateObject;
+    const { hours, minutes } = timeObject;
+    const ldt = LocalDateTime.of(years, months, dateStr, hours, minutes);
+    return ZonedDateTime.of(ldt, ZoneId.of(timezone));
+  }
+
   async function onFinish(formValues: FormValues): Promise<void> {
-    const { title, whyShare, date, time, timezone } = formValues;
+    const { title, whyShare, date, time, timezone, link } = formValues;
 
     let dateTimeStr: undefined | ZonedDateTime;
     if (date && time) {
-      const dateObject = date.toObject();
-      const timeObject = time.toObject();
-
-      const { years, months, date: dateStr } = dateObject;
-      const { hours, minutes } = timeObject;
-      const ldt = LocalDateTime.of(years, months, dateStr, hours, minutes);
-      dateTimeStr = ZonedDateTime.of(ldt, ZoneId.of(timezone));
+      dateTimeStr = createJodaDateTime(date, time, timezone);
     }
     try {
       setIsFetchCreateContentInFlight(true);
@@ -88,6 +96,7 @@ const SubmitContentForm = (props: Props): JSX.Element => {
       await axios.post(
         SUBMIT_EVENT_ENDPOINT,
         {
+          link,
           name: title,
           description: whyShare,
           circleId: seedCircleId,

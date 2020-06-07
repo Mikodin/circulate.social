@@ -233,6 +233,7 @@ describe('StartACircle page', () => {
           circleId: defaultProps.seedCircleId,
           name: inputtedTitleValue,
           description: inputtedWhyShareValue,
+          link: inputtedLinkValue,
         },
         { headers: { Authorization: defaultProps.jwtToken } }
       );
@@ -280,6 +281,7 @@ describe('StartACircle page', () => {
             name: inputtedTitleValue,
             description: inputtedWhyShareValue,
             dateTime: expectedDateTime,
+            link: inputtedLinkValue,
           },
           { headers: { Authorization: defaultProps.jwtToken } }
         );
