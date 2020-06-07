@@ -151,9 +151,7 @@ const SubmitContentForm = (props: Props): JSX.Element => {
 
         <Form.Item name="date" label="Event date">
           <DatePicker
-            // showTime
-            // showSecond={false}
-            // use12Hours={true}
+            use12Hours={true}
             open={isDatePickerOpen}
             onOpenChange={(isOpen): void => {
               setIsDatePickerOpen(isOpen);
@@ -180,7 +178,7 @@ const SubmitContentForm = (props: Props): JSX.Element => {
         {isEventForm && (
           <>
             <Form.Item name="time" label="Event time">
-              <TimePicker />
+              <TimePicker showSecond={false} use12Hours={true} />
             </Form.Item>
 
             <Form.Item name="timezone" label="Timezone">
