@@ -219,7 +219,7 @@ describe('StartACircle page', () => {
       return populatedContentContainer;
     }
 
-    it('Should fire off Axios.post on Submit', async () => {
+    it('Should fire off Axios.post on Submit and route to the Circle', async () => {
       const { queryByText } = await renderCompleteForm(false);
       const submitButton = queryByText(/Submit/i);
       mockedAxios.post.mockImplementationOnce(() => Promise.resolve(true));
@@ -237,6 +237,10 @@ describe('StartACircle page', () => {
         },
         { headers: { Authorization: defaultProps.jwtToken } }
       );
+      expect(mockRouterPushSpy).toHaveBeenCalledWith(
+        '/circles/[circleId]',
+        '/circles/asdf-fdsa'
+      );
     });
 
     it('Should render a "Submitting..." loading component', async () => {
@@ -249,7 +253,7 @@ describe('StartACircle page', () => {
     });
 
     describe('on submit of an Event form', () => {
-      it('Should fire off Axios.post on Submit', async () => {
+      it('Should fire off Axios.post on Submit and route to the circle', async () => {
         const basicContainer = await renderCompleteForm(true);
         const containerToShowTimeSelect = await selectADateFromDatePicker(
           basicContainer
@@ -284,6 +288,11 @@ describe('StartACircle page', () => {
             link: inputtedLinkValue,
           },
           { headers: { Authorization: defaultProps.jwtToken } }
+        );
+
+        expect(mockRouterPushSpy).toHaveBeenCalledWith(
+          '/circles/[circleId]',
+          '/circles/asdf-fdsa'
         );
       });
 

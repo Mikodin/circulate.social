@@ -107,9 +107,7 @@ const SubmitContentForm = (props: Props): JSX.Element => {
 
       setIsFetchCreateContentInFlight(false);
       setIsFetchCreateContentError(false);
-      router.push(`/circles/${seedCircleId}`);
-
-      return;
+      router.push('/circles/[circleId]', `/circles/${seedCircleId}`);
     } catch (e) {
       console.error(e);
       setIsFetchCreateContentInFlight(false);
