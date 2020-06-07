@@ -184,7 +184,16 @@ const SubmitContentForm = (props: Props): JSX.Element => {
 
         {isEventForm && (
           <>
-            <Form.Item name="time" label="Event time">
+            <Form.Item
+              name="time"
+              label="Event time"
+              rules={[
+                {
+                  required: true,
+                  message: 'Since you have a date - there must be a time.',
+                },
+              ]}
+            >
               <TimePicker showSecond={false} use12Hours={true} />
             </Form.Item>
 

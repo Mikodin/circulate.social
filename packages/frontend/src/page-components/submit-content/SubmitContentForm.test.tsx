@@ -286,6 +286,28 @@ describe('StartACircle page', () => {
           { headers: { Authorization: defaultProps.jwtToken } }
         );
       });
+
+      describe('When time is not inputted', () => {
+        it('Should not fire off Axios.post on Submit', async () => {
+          const basicContainer = await renderCompleteForm(true);
+          const container = await selectADateFromDatePicker(basicContainer);
+          const { queryByText } = container;
+
+          const submitButton = queryByText(/Submit/i);
+          mockedAxios.post.mockImplementationOnce(() => Promise.resolve(true));
+
+          await act(async () => {
+            fireEvent.submit(submitButton);
+          });
+
+          expect(mockedAxios.post).not.toHaveBeenCalled();
+          await waitFor(() =>
+            expect(
+              queryByText(/Since you have a date - there must be a time./i)
+            ).toBeTruthy()
+          );
+        });
+      });
     });
   });
 });
