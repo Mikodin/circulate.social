@@ -1,5 +1,4 @@
 import { Fragment, useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 import axios from 'axios';
 
 import { ZoneId, ZonedDateTime, LocalDateTime } from '@js-joda/core';
@@ -25,6 +24,7 @@ export const SUBMIT_EVENT_ENDPOINT =
 export interface Props {
   jwtToken: string;
   seedCircleId?: string;
+  onFormCompletion: (title: string) => void;
 }
 
 export const AVAILABLE_TIMEZONES = ZoneId.getAvailableZoneIds();
@@ -36,7 +36,7 @@ const TimezoneSelects = AVAILABLE_TIMEZONES.map((timeZone) => (
 
 const SubmitContentForm = (props: Props): JSX.Element => {
   const [form] = Form.useForm();
-  const router = useRouter();
+  // const router = useRouter();
   const { seedCircleId } = props;
 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
@@ -107,7 +107,9 @@ const SubmitContentForm = (props: Props): JSX.Element => {
 
       setIsFetchCreateContentInFlight(false);
       setIsFetchCreateContentError(false);
-      router.push('/circles/[circleId]', `/circles/${seedCircleId}`);
+      // router.push('/circles/[circleId]', `/circles/${seedCircleId}`);
+      props.onFormCompletion(title);
+      form.resetFields();
     } catch (e) {
       console.error(e);
       setIsFetchCreateContentInFlight(false);

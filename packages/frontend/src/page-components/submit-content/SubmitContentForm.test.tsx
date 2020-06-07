@@ -31,11 +31,14 @@ jest.mock('next/router', () => ({
   },
 }));
 
+const mockOnFormCompletion = jest.fn();
+
 const userTimeZone = ZonedDateTime.now().zone().toString();
 
 const defaultProps = {
   jwtToken: '123-asd',
   seedCircleId: 'asdf-fdsa',
+  onFormCompletion: mockOnFormCompletion,
 };
 
 function renderContainer(props?: Props): RenderResult {
@@ -102,12 +105,7 @@ async function selectTimezoneFromTimezonePicker(
     await fireEvent.mouseDown(selectTimezone);
   });
 
-  // await act(async () => {
-  //   await fireEvent.change(selectTimezone);
-  // });
-
   await act(async () => {
-    // console.log(container.debug(selectTimezone));
     await fireEvent.click(queryAllByText(userTimeZone)[0]);
   });
 
@@ -173,6 +171,7 @@ describe('StartACircle page', () => {
   describe('On submit of a complete ContentForm', () => {
     beforeEach(() => {
       mockedAxios.post.mockClear();
+      mockOnFormCompletion.mockClear();
     });
     const inputtedTitleValue = 'The greatest Circle ever';
     const inputtedLinkValue = 'https://circulate.social';
@@ -237,10 +236,7 @@ describe('StartACircle page', () => {
         },
         { headers: { Authorization: defaultProps.jwtToken } }
       );
-      expect(mockRouterPushSpy).toHaveBeenCalledWith(
-        '/circles/[circleId]',
-        '/circles/asdf-fdsa'
-      );
+      expect(mockOnFormCompletion).toHaveBeenCalledWith(inputtedTitleValue);
     });
 
     it('Should render a "Submitting..." loading component', async () => {
@@ -253,7 +249,7 @@ describe('StartACircle page', () => {
     });
 
     describe('on submit of an Event form', () => {
-      it('Should fire off Axios.post on Submit and route to the circle', async () => {
+      it('Should call Axios.post on Submit and props.onFormCompletion', async () => {
         const basicContainer = await renderCompleteForm(true);
         const containerToShowTimeSelect = await selectADateFromDatePicker(
           basicContainer
@@ -290,10 +286,7 @@ describe('StartACircle page', () => {
           { headers: { Authorization: defaultProps.jwtToken } }
         );
 
-        expect(mockRouterPushSpy).toHaveBeenCalledWith(
-          '/circles/[circleId]',
-          '/circles/asdf-fdsa'
-        );
+        expect(mockOnFormCompletion).toHaveBeenCalledWith(inputtedTitleValue);
       });
 
       describe('When time is not inputted', () => {
