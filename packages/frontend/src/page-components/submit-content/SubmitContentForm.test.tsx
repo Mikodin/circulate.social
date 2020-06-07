@@ -6,6 +6,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import axios from 'axios';
+import { ZonedDateTime } from '@js-joda/core';
 
 import SubmitContentForm, {
   SUBMIT_EVENT_ENDPOINT,
@@ -30,6 +31,8 @@ jest.mock('next/router', () => ({
   },
 }));
 
+const userTimeZone = ZonedDateTime.now().zone().toString();
+
 const defaultProps = {
   jwtToken: '123-asd',
   seedCircleId: 'asdf-fdsa',
@@ -41,26 +44,55 @@ function renderContainer(props?: Props): RenderResult {
 
 // eslint-disable-next-line
 function getAllFields(container: RenderResult) {
-  const { queryByPlaceholderText } = container;
+  const { queryByPlaceholderText, queryByText } = container;
 
   const inputTitle = queryByPlaceholderText(/Title/i);
   const inputLink = queryByPlaceholderText(/Link/i);
-  const inputDate = queryByPlaceholderText(/Date/i);
+  const selectDate = queryByPlaceholderText(/Select date/i);
+  const selectTime = queryByPlaceholderText(/Select time/i);
+  const selectTimezone = queryByText(userTimeZone);
   const inputWhyShare = queryByPlaceholderText(/Why are you sharing this?/i);
 
   const inputCost = queryByPlaceholderText(/Cost/i);
-  const inputTimezone = queryByPlaceholderText(/Timezone/i);
   const buttonSubmit = queryByPlaceholderText(/Submit/i);
 
   return {
     inputTitle,
     inputLink,
-    inputDate,
+    selectDate,
+    selectTime,
+    selectTimezone,
     inputWhyShare,
     inputCost,
-    inputTimezone,
     buttonSubmit,
   };
+}
+
+async function selectADateFromDatePicker(
+  container: RenderResult
+): Promise<RenderResult> {
+  const { queryByText } = container;
+  const { selectDate } = getAllFields(container);
+  await act(async () => {
+    await fireEvent.mouseDown(selectDate);
+    await fireEvent.click(queryByText(/15/i));
+  });
+
+  return container;
+}
+
+async function selectATimeFromTimePicker(
+  container: RenderResult
+): Promise<RenderResult> {
+  const { queryAllByText, queryByText } = container;
+  const { selectTime } = getAllFields(container);
+  await act(async () => {
+    await fireEvent.mouseDown(selectTime);
+    await fireEvent.click(queryAllByText(/07/i)[0]);
+    await fireEvent.click(queryByText(/Ok/i));
+  });
+
+  return container;
 }
 
 interface FieldToPopulate {
@@ -90,26 +122,34 @@ describe('StartACircle page', () => {
   });
 
   describe('When there is no value in the date input', () => {
-    it('Should not render inputCost or inputTimezone ', () => {
+    it('Should not render selectTimezone,selectTime or inputCost', () => {
       const container = renderContainer();
-      const { inputCost, inputTimezone } = getAllFields(container);
+      const { inputCost, selectTimezone, selectTime } = getAllFields(container);
       expect(inputCost).not.toBeTruthy();
-      expect(inputTimezone).not.toBeTruthy();
+      expect(selectTimezone).not.toBeTruthy();
+      expect(selectTime).not.toBeTruthy();
     });
   });
 
   describe('When a user inputs a date', () => {
-    it('should render the "event" flow.  inputCost, and inputTimezone should be visible', async () => {
+    it('should render the "event" flow. selectTimezone,selectTime and inputCost should all be visible', async () => {
       const container = renderContainer();
-      const { inputDate } = getAllFields(container);
 
-      await populateForm(container, [
-        { element: inputDate, value: '2020-05-30' },
-      ]);
+      await selectADateFromDatePicker(container);
 
-      const { inputCost, inputTimezone } = getAllFields(container);
+      const { inputCost, selectTimezone, selectTime } = getAllFields(container);
+      expect(selectTime).toBeTruthy();
+      expect(selectTimezone).toBeTruthy();
       expect(inputCost).toBeTruthy();
-      expect(inputTimezone).toBeTruthy();
+    });
+
+    it('should set the timezone by default to the users timezone returned by Joda', async () => {
+      const container = renderContainer();
+      const { queryByText } = container;
+
+      await selectADateFromDatePicker(container);
+
+      expect(queryByText(userTimeZone)).toBeTruthy();
     });
   });
 
@@ -119,14 +159,13 @@ describe('StartACircle page', () => {
     });
     const inputtedTitleValue = 'The greatest Circle ever';
     const inputtedLinkValue = 'https://circulate.social';
-    const inputtedDateValue = '2020-05-20';
+    // const inputtedDateValue = '2020-05-20';
     const inputtedWhyShareValue =
       "Because it's a great way to share and receive content that I care about";
-    // const inputtedCostValue = '$20';
-    // const inputtedTimezoneValue = 'EST';
-    // const inputtedShareToCirclesValue = ['abc-123'];
 
-    async function renderCompleteForm(): Promise<RenderResult> {
+    async function renderCompleteForm(
+      isEventForm: boolean
+    ): Promise<RenderResult> {
       const container = renderContainer();
       const fields = getAllFields(container);
       const fieldsToPopulate = [
@@ -139,27 +178,32 @@ describe('StartACircle page', () => {
           value: inputtedLinkValue,
         },
         {
-          element: fields.inputDate,
-          value: inputtedDateValue,
+          element: fields.selectDate,
+          value: '15',
         },
         {
           element: fields.inputWhyShare,
           value: inputtedWhyShareValue,
         },
-        // {
-        //   element: fields.inputCost,
-        //   value: inputtedCostValue,
-        // },
       ];
-      const populatedContainer = await populateForm(
+
+      const populatedContentContainer = await populateForm(
         container,
         fieldsToPopulate
       );
-      return populatedContainer;
+
+      if (isEventForm) {
+        const populatedEventContainer = await selectADateFromDatePicker(
+          populatedContentContainer
+        );
+        return populatedEventContainer;
+      }
+
+      return populatedContentContainer;
     }
 
     it('Should fire off Axios.post on Submit', async () => {
-      const { queryByText } = await renderCompleteForm();
+      const { queryByText } = await renderCompleteForm(false);
       const submitButton = queryByText(/Submit/i);
       mockedAxios.post.mockImplementationOnce(() => Promise.resolve(true));
 
@@ -178,12 +222,43 @@ describe('StartACircle page', () => {
     });
 
     it('Should render a "Submitting..." loading component', async () => {
-      const { queryByText } = await renderCompleteForm();
+      const { queryByText } = await renderCompleteForm(false);
       const submitButton = queryByText(/Submit/i);
       act(() => {
         fireEvent.submit(submitButton);
       });
       await waitFor(() => expect(queryByText(/Submitting.../i)).toBeTruthy());
+    });
+
+    describe('on submit of an Event form', () => {
+      it('Should fire off Axios.post on Submit', async () => {
+        const basicContainer = await renderCompleteForm(true);
+        const containerToShowTimeSelect = await selectADateFromDatePicker(
+          basicContainer
+        );
+        const container = await selectATimeFromTimePicker(
+          containerToShowTimeSelect
+        );
+        const { queryByText } = container;
+
+        const submitButton = queryByText(/Submit/i);
+        mockedAxios.post.mockImplementationOnce(() => Promise.resolve(true));
+
+        await act(async () => {
+          fireEvent.submit(submitButton);
+        });
+
+        expect(mockedAxios.post).toHaveBeenCalledWith(
+          SUBMIT_EVENT_ENDPOINT,
+          {
+            circleId: defaultProps.seedCircleId,
+            name: inputtedTitleValue,
+            description: inputtedWhyShareValue,
+            dateTime: '2020-05-15T07:00-07:00[America/Los_Angeles]',
+          },
+          { headers: { Authorization: defaultProps.jwtToken } }
+        );
+      });
     });
   });
 });

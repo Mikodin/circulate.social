@@ -19,10 +19,13 @@
   "dependencies": {
     "@ant-design/icons": "^4.1.0",
     "@circulate/types": "1.0.0",
+    "@js-joda/core": "^2.0.0",
+    "@js-joda/timezone": "^2.2.0",
     "antd": "^4.3.0",
     "api": "1.0.0",
     "aws-amplify": "^3.0.11",
     "axios": "^0.19.2",
+    "moment": "^2.26.0",
     "next": "^9.4.0",
     "react": "16.13.1",
     "react-dom": "16.13.1"

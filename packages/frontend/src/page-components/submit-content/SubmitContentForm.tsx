@@ -1,7 +1,21 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { Form, Input, Button, Alert } from 'antd';
+
+import { ZoneId, ZonedDateTime, LocalDateTime } from '@js-joda/core';
+import '@js-joda/timezone';
+
+import { AntdMoment } from '@circulate/types';
+
+import {
+  Form,
+  Input,
+  Button,
+  Alert,
+  DatePicker,
+  TimePicker,
+  Select,
+} from 'antd';
 
 import css from './SubmitContentForm.module.scss';
 
@@ -13,11 +27,19 @@ export interface Props {
   seedCircleId?: string;
 }
 
+export const AVAILABLE_TIMEZONES = ZoneId.getAvailableZoneIds();
+const TimezoneSelects = AVAILABLE_TIMEZONES.map((timeZone) => (
+  <Select.Option value={timeZone} key={timeZone}>
+    {timeZone}
+  </Select.Option>
+));
+
 const SubmitContentForm = (props: Props): JSX.Element => {
   const [form] = Form.useForm();
   const router = useRouter();
   const { seedCircleId } = props;
 
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [isEventForm, setIsEventForm] = useState(false);
   const [
     isFetchCreateContentInFlight,
@@ -28,16 +50,39 @@ const SubmitContentForm = (props: Props): JSX.Element => {
     false
   );
 
+  const userTimeZone = ZonedDateTime.now().zone().toString();
+
   interface FormValues {
     title: string;
     link: string;
-    date: string;
+    date: AntdMoment & string;
+    time: AntdMoment & string;
     whyShare: string;
     cost: number;
     timezone: string;
   }
+
+  useEffect(() => {
+    if (!isEventForm) {
+      form.setFieldsValue({ date: '' });
+      form.setFieldsValue({ time: '' });
+      form.setFieldsValue({ timezone: userTimeZone });
+    }
+  }, [isEventForm]);
+
   async function onFinish(formValues: FormValues): Promise<void> {
-    const { title, whyShare } = formValues;
+    const { title, whyShare, date, time, timezone } = formValues;
+
+    let dateTimeStr: undefined | ZonedDateTime;
+    if (date && time) {
+      const dateObject = date.toObject();
+      const timeObject = time.toObject();
+
+      const { years, months, date: dateStr } = dateObject;
+      const { hours, minutes } = timeObject;
+      const ldt = LocalDateTime.of(years, months, dateStr, hours, minutes);
+      dateTimeStr = ZonedDateTime.of(ldt, ZoneId.of(timezone));
+    }
     try {
       setIsFetchCreateContentInFlight(true);
 
@@ -47,6 +92,7 @@ const SubmitContentForm = (props: Props): JSX.Element => {
           name: title,
           description: whyShare,
           circleId: seedCircleId,
+          dateTime: dateTimeStr && dateTimeStr.toString(),
         },
         { headers: { Authorization: props.jwtToken } }
       );
@@ -58,6 +104,7 @@ const SubmitContentForm = (props: Props): JSX.Element => {
       return;
     } catch (e) {
       console.error(e);
+      setIsFetchCreateContentInFlight(false);
       setIsFetchCreateContentError(true);
     }
   }
@@ -77,17 +124,16 @@ const SubmitContentForm = (props: Props): JSX.Element => {
             title: '',
             link: '',
             date: '',
+            time: '',
             whyShare: '',
             cost: 0,
-            timezone: '',
+            timezone: userTimeZone,
           } as FormValues
         }
-        onValuesChange={(): void => {
+        onValuesChange={(formValues: FormValues): void => {
           setIsFetchCreateContentError(false);
-          if (form.getFieldValue('date')) {
+          if (formValues.date) {
             setIsEventForm(true);
-          } else if (!form.getFieldValue('date')) {
-            setIsEventForm(false);
           }
         }}
       >
@@ -98,18 +144,61 @@ const SubmitContentForm = (props: Props): JSX.Element => {
         >
           <Input placeholder="Title" type="text" />
         </Form.Item>
+
         <Form.Item name="link" label="Link to content">
           <Input placeholder="Link" type="text" />
         </Form.Item>
+
         <Form.Item name="date" label="Event date">
-          <Input placeholder="Date" type="text" />
+          <DatePicker
+            // showTime
+            // showSecond={false}
+            // use12Hours={true}
+            open={isDatePickerOpen}
+            onOpenChange={(isOpen): void => {
+              setIsDatePickerOpen(isOpen);
+              if (!isOpen && !form.getFieldValue('date')) {
+                setIsEventForm(false);
+              } else if (form.getFieldValue('date')) {
+                setIsEventForm(true);
+              }
+            }}
+            renderExtraFooter={(): JSX.Element => (
+              <Button
+                onClick={(): void => {
+                  setIsDatePickerOpen(false);
+                  setIsEventForm(false);
+                }}
+              >
+                Clear
+              </Button>
+            )}
+            allowClear={false}
+          />
         </Form.Item>
 
         {isEventForm && (
           <>
-            <Form.Item name="timezone" label="Timezone">
-              <Input placeholder="Timezone" type="text" />
+            <Form.Item name="time" label="Event time">
+              <TimePicker />
             </Form.Item>
+
+            <Form.Item name="timezone" label="Timezone">
+              <Select
+                showSearch
+                style={{ width: 200 }}
+                placeholder="Timezone"
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+              >
+                <Select.OptGroup>Americas</Select.OptGroup>
+                {TimezoneSelects}
+              </Select>
+            </Form.Item>
+
             <Form.Item name="cost" label="Event cost">
               <Input placeholder="Cost" type="text" />
             </Form.Item>
