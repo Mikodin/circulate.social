@@ -58,7 +58,6 @@ const SubmitContentForm = (props: Props): JSX.Element => {
     date: AntdMoment & string;
     time: AntdMoment & string;
     whyShare: string;
-    cost: number;
     timezone: string;
   }
 
@@ -126,7 +125,6 @@ const SubmitContentForm = (props: Props): JSX.Element => {
             date: '',
             time: '',
             whyShare: '',
-            cost: 0,
             timezone: userTimeZone,
           } as FormValues
         }
@@ -197,10 +195,6 @@ const SubmitContentForm = (props: Props): JSX.Element => {
                 <Select.OptGroup>Americas</Select.OptGroup>
                 {TimezoneSelects}
               </Select>
-            </Form.Item>
-
-            <Form.Item name="cost" label="Event cost">
-              <Input placeholder="Cost" type="text" />
             </Form.Item>
           </>
         )}

@@ -53,7 +53,6 @@ function getAllFields(container: RenderResult) {
   const selectTimezone = queryByText(userTimeZone);
   const inputWhyShare = queryByPlaceholderText(/Why are you sharing this?/i);
 
-  const inputCost = queryByPlaceholderText(/Cost/i);
   const buttonSubmit = queryByPlaceholderText(/Submit/i);
 
   return {
@@ -63,7 +62,6 @@ function getAllFields(container: RenderResult) {
     selectTime,
     selectTimezone,
     inputWhyShare,
-    inputCost,
     buttonSubmit,
   };
 }
@@ -143,25 +141,23 @@ describe('StartACircle page', () => {
   });
 
   describe('When there is no value in the date input', () => {
-    it('Should not render selectTimezone,selectTime or inputCost', () => {
+    it('Should not render selectTimezone,or selectTime', () => {
       const container = renderContainer();
-      const { inputCost, selectTimezone, selectTime } = getAllFields(container);
-      expect(inputCost).not.toBeTruthy();
+      const { selectTimezone, selectTime } = getAllFields(container);
       expect(selectTimezone).not.toBeTruthy();
       expect(selectTime).not.toBeTruthy();
     });
   });
 
   describe('When a user inputs a date', () => {
-    it('should render the "event" flow. selectTimezone,selectTime and inputCost should all be visible', async () => {
+    it('should render the "event" flow. selectTimezone,and selectTime should all be visible', async () => {
       const container = renderContainer();
 
       await selectADateFromDatePicker(container);
 
-      const { inputCost, selectTimezone, selectTime } = getAllFields(container);
+      const { selectTimezone, selectTime } = getAllFields(container);
       expect(selectTime).toBeTruthy();
       expect(selectTimezone).toBeTruthy();
-      expect(inputCost).toBeTruthy();
     });
 
     it('should set the timezone by default to the users timezone returned by Joda', async () => {
