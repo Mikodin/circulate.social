@@ -29,11 +29,7 @@ export interface Props {
 
 export const AVAILABLE_TIMEZONES = ZoneId.getAvailableZoneIds();
 const TimezoneSelects = AVAILABLE_TIMEZONES.map((timeZone) => (
-  <Select.Option
-    value={timeZone}
-    key={timeZone}
-    data-testid={`tz-option-${timeZone}`}
-  >
+  <Select.Option value={timeZone} key={timeZone}>
     {timeZone}
   </Select.Option>
 ));
@@ -194,8 +190,10 @@ const SubmitContentForm = (props: Props): JSX.Element => {
                 placeholder="Timezone"
                 optionFilterProp="children"
                 filterOption={(input, option) =>
+                  option &&
+                  option.children &&
                   option.children.toLowerCase().indexOf(input.toLowerCase()) >=
-                  0
+                    0
                 }
               >
                 <Select.OptGroup>Americas</Select.OptGroup>

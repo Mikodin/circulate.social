@@ -98,14 +98,19 @@ async function selectATimeFromTimePicker(
 async function selectTimezoneFromTimezonePicker(
   container: RenderResult
 ): Promise<RenderResult> {
-  const { queryByTestId } = container;
+  const { queryAllByText } = container;
   const { selectTimezone } = getAllFields(container);
   await act(async () => {
     await fireEvent.mouseDown(selectTimezone);
   });
 
+  // await act(async () => {
+  //   await fireEvent.change(selectTimezone);
+  // });
+
   await act(async () => {
-    await fireEvent.click(queryByTestId('tz-option-America/Jamaica'));
+    // console.log(container.debug(selectTimezone));
+    await fireEvent.click(queryAllByText(userTimeZone)[0]);
   });
 
   return container;
@@ -268,13 +273,17 @@ describe('StartACircle page', () => {
           fireEvent.submit(submitButton);
         });
 
+        const expectedDateTime =
+          userTimeZone === 'America/Los_Angeles'
+            ? '2020-05-15T07:00-07:00[America/Los_Angeles]'
+            : '2020-05-15T07:00Z[UTC]';
         expect(mockedAxios.post).toHaveBeenCalledWith(
           SUBMIT_EVENT_ENDPOINT,
           {
             circleId: defaultProps.seedCircleId,
             name: inputtedTitleValue,
             description: inputtedWhyShareValue,
-            dateTime: '2020-05-15T07:00-05:00[America/Jamaica]',
+            dateTime: expectedDateTime,
           },
           { headers: { Authorization: defaultProps.jwtToken } }
         );
