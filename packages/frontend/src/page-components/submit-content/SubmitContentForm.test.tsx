@@ -95,6 +95,22 @@ async function selectATimeFromTimePicker(
   return container;
 }
 
+async function selectTimezoneFromTimezonePicker(
+  container: RenderResult
+): Promise<RenderResult> {
+  const { queryAllByText } = container;
+  const { selectTimezone } = getAllFields(container);
+  await act(async () => {
+    await fireEvent.mouseDown(selectTimezone);
+  });
+
+  await act(async () => {
+    await fireEvent.click(queryAllByText('America/Jamaica')[0]);
+  });
+
+  return container;
+}
+
 interface FieldToPopulate {
   element: HTMLElement;
   value: string | number;
@@ -236,8 +252,12 @@ describe('StartACircle page', () => {
         const containerToShowTimeSelect = await selectADateFromDatePicker(
           basicContainer
         );
-        const container = await selectATimeFromTimePicker(
+        const containerWithSelectedTime = await selectATimeFromTimePicker(
           containerToShowTimeSelect
+        );
+
+        const container = await selectTimezoneFromTimezonePicker(
+          containerWithSelectedTime
         );
         const { queryByText } = container;
 
@@ -254,7 +274,7 @@ describe('StartACircle page', () => {
             circleId: defaultProps.seedCircleId,
             name: inputtedTitleValue,
             description: inputtedWhyShareValue,
-            dateTime: '2020-05-15T07:00Z[UTC]',
+            dateTime: '2020-05-15T07:00-05:00[America/Jamaica]',
           },
           { headers: { Authorization: defaultProps.jwtToken } }
         );
