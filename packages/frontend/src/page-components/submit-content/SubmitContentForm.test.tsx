@@ -254,7 +254,7 @@ describe('StartACircle page', () => {
             circleId: defaultProps.seedCircleId,
             name: inputtedTitleValue,
             description: inputtedWhyShareValue,
-            dateTime: '2020-05-15T07:00-07:00[America/Los_Angeles]',
+            dateTime: '2020-05-15T07:00Z[UTC]',
           },
           { headers: { Authorization: defaultProps.jwtToken } }
         );
