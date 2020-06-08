@@ -11,11 +11,14 @@ Object {
         <div
           class="logoContainer"
         >
+          <img
+            src="/logo.png"
+          />
           <h2>
             <a
               href="/"
             >
-              Circulate.social
+              Circulate
             </a>
           </h2>
         </div>
@@ -412,11 +415,14 @@ Object {
       <div
         class="logoContainer"
       >
+        <img
+          src="/logo.png"
+        />
         <h2>
           <a
             href="/"
           >
-            Circulate.social
+            Circulate
           </a>
         </h2>
       </div>
@@ -870,11 +876,14 @@ Object {
         <div
           class="logoContainer"
         >
+          <img
+            src="/logo.png"
+          />
           <h2>
             <a
               href="/"
             >
-              Circulate.social
+              Circulate
             </a>
           </h2>
         </div>
@@ -1147,11 +1156,14 @@ Object {
       <div
         class="logoContainer"
       >
+        <img
+          src="/logo.png"
+        />
         <h2>
           <a
             href="/"
           >
-            Circulate.social
+            Circulate
           </a>
         </h2>
       </div>
