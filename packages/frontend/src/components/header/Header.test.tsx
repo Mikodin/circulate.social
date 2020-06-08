@@ -36,13 +36,13 @@ describe('Header', () => {
     it('Should show our logo', () => {
       const { getByText } = renderHeader();
 
-      expect(getByText('Circulate.social')).toMatchInlineSnapshot(`
-      <a
-        href="/"
-      >
-        Circulate.social
-      </a>
-    `);
+      expect(getByText('Circulate')).toMatchInlineSnapshot(`
+        <a
+          href="/"
+        >
+          Circulate
+        </a>
+      `);
     });
   });
   describe('When user is signed out', () => {

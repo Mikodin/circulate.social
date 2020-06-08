@@ -8,11 +8,14 @@ exports[`Header When user is signed in Should match the snapshot 1`] = `
     <div
       class="logoContainer"
     >
+      <img
+        src="/logo.png"
+      />
       <h2>
         <a
           href="/"
         >
-          Circulate.social
+          Circulate
         </a>
       </h2>
     </div>
@@ -40,11 +43,14 @@ exports[`Header When user is signed out Should match the snapshot 1`] = `
     <div
       class="logoContainer"
     >
+      <img
+        src="/logo.png"
+      />
       <h2>
         <a
           href="/"
         >
-          Circulate.social
+          Circulate
         </a>
       </h2>
     </div>
