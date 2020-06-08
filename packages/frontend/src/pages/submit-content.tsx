@@ -56,7 +56,11 @@ class SubmitContent extends PureComponent<Props, State> {
             title="Successfully Put Content into Circulation!"
             subTitle="{Title} will go out with the next Circulation"
             extra={[
-              <Link key="goCircle" href={`/circles/${router.query.circleId}`}>
+              <Link
+                key="GoToCircle"
+                href="/circles/[cirleId]"
+                as={`/circles/${router.query.circleId}`}
+              >
                 <a>Go to Circle</a>
               </Link>,
               <Button
