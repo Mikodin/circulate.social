@@ -53,8 +53,8 @@ class SubmitContent extends PureComponent<Props, State> {
         {!showContentForm && (
           <Result
             status="success"
-            title="Successfully Put Content into Circulation!"
-            subTitle="{Title} will go out with the next Circulation"
+            title="Success!"
+            subTitle="Your content will go out with the next Circulation"
             extra={[
               <Link
                 key="GoToCircle"
