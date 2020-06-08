@@ -20,7 +20,7 @@ const Header = (): JSX.Element => {
         <div className={css.logoContainer}>
           <h2>
             <Link href="/">
-              <a>Circulate.social</a>
+              <a>Circulate</a>
             </Link>
           </h2>
         </div>
