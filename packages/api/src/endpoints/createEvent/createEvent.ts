@@ -31,7 +31,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     };
   }
 
-  if (!name || !description) {
+  if (!name) {
     return {
       statusCode: 400,
       body: JSON.stringify({
