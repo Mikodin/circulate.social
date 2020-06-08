@@ -36,7 +36,6 @@ const TimezoneSelects = AVAILABLE_TIMEZONES.map((timeZone) => (
 
 const SubmitContentForm = (props: Props): JSX.Element => {
   const [form] = Form.useForm();
-  // const router = useRouter();
   const { seedCircleId } = props;
 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
@@ -107,7 +106,6 @@ const SubmitContentForm = (props: Props): JSX.Element => {
 
       setIsFetchCreateContentInFlight(false);
       setIsFetchCreateContentError(false);
-      // router.push('/circles/[circleId]', `/circles/${seedCircleId}`);
       props.onFormCompletion(title);
       form.resetFields();
     } catch (e) {
