@@ -9,10 +9,11 @@ import AuthContainer from '../../components/authorization/AuthContainer';
 import Layout from '../../components/layout/Layout';
 // import css from './[circleId].module.scss';
 
+import { API_ENDPOINT } from '../../util/constants';
+
 import UserContext from '../../state-management/UserContext';
 
-const GET_CIRCLE_BY_ID_ENDPOINT =
-  'https://z3edrz53yg.execute-api.us-east-1.amazonaws.com/dev/circles';
+const GET_CIRCLE_BY_ID_ENDPOINT = `${API_ENDPOINT}/circles`;
 
 interface Props {
   router: NextRouter;

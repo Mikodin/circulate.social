@@ -16,10 +16,10 @@ import {
   Select,
 } from 'antd';
 
+import { API_ENDPOINT } from '../../util/constants';
 import css from './SubmitContentForm.module.scss';
 
-export const SUBMIT_EVENT_ENDPOINT =
-  'https://z3edrz53yg.execute-api.us-east-1.amazonaws.com/dev/events/create';
+export const SUBMIT_EVENT_ENDPOINT = `${API_ENDPOINT}/events/create`;
 
 export interface Props {
   jwtToken: string;

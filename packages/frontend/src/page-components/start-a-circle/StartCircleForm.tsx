@@ -4,10 +4,10 @@ import axios from 'axios';
 import { Form, Input, Button, Alert, Radio, Select, Popover, Tabs } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 
+import { API_ENDPOINT } from '../../util/constants';
 import css from './StartCircleForm.module.scss';
 
-export const CREATE_CIRCLE_ENDPOINT =
-  'https://z3edrz53yg.execute-api.us-east-1.amazonaws.com/dev/circles/create';
+export const CREATE_CIRCLE_ENDPOINT = `${API_ENDPOINT}/circles/create`;
 
 export interface Props {
   jwtToken: string;

@@ -9,8 +9,9 @@ import Layout from '../../components/layout/Layout';
 import UserContext from '../../state-management/UserContext';
 import css from './home.module.scss';
 
-const GET_MY_CIRCLES_ENDPOINT =
-  'https://z3edrz53yg.execute-api.us-east-1.amazonaws.com/dev/circles';
+import { API_ENDPOINT } from '../../util/constants';
+
+const GET_MY_CIRCLES_ENDPOINT = `${API_ENDPOINT}/circles`;
 
 interface Props {
   router: Router;
