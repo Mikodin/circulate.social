@@ -61,6 +61,8 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     const insertedCircle = ((await CircleModel.create({
       id: uuidv4(),
       createdBy: memberId,
+      members: [memberId],
+      events: [],
       name,
       description,
       frequency,
