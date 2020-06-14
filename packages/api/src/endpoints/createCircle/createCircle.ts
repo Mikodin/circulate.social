@@ -18,6 +18,10 @@ export const handler: APIGatewayProxyHandler = async (event) => {
         message: 'Could not parse the JSON Body',
         body: event.body,
       }),
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
     };
   }
   const { name, description, frequency, privacy } = body || {};
