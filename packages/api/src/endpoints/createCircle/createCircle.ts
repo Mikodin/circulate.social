@@ -1,15 +1,28 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import log from 'lambda-log';
-import { insertCircle } from '../../interfaces/dynamo/circlesTable';
-
 import 'source-map-support/register';
+import { v4 as uuidv4 } from 'uuid';
+import { Circle } from '@circulate/types/index';
+
+import CircleModel from '../../interfaces/dynamo/circlesModel';
 
 export const handler: APIGatewayProxyHandler = async (event) => {
-  const body = JSON.parse(event.body);
-  const { name, description, frequency, privacy } = body;
+  let body;
+  try {
+    body = JSON.parse(event.body);
+  } catch (error) {
+    log.error('Failed to parse JSON', { error, body: event.body });
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        message: 'Could not parse the JSON Body',
+        body: event.body,
+      }),
+    };
+  }
+  const { name, description, frequency, privacy } = body || {};
 
   const isInLocal = process.env.IS_LOCAL === 'true';
-
   const memberId = isInLocal
     ? 'dev-id'
     : event.requestContext.authorizer.claims['cognito:username'];
@@ -45,10 +58,14 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   }
 
   try {
-    const insertedCircle = await insertCircle(
-      { name, description, frequency, privacy },
-      memberId
-    );
+    const insertedCircle = ((await CircleModel.create({
+      id: uuidv4(),
+      createdBy: memberId,
+      name,
+      description,
+      frequency,
+      privacy,
+    })) as unknown) as Circle;
     return {
       statusCode: 200,
       body: JSON.stringify({
@@ -68,6 +85,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       statusCode: 500,
       body: JSON.stringify({
         message: 'Something went wrong trying to create the circle',
+        error,
       }),
       headers: {
         'Access-Control-Allow-Origin': '*',

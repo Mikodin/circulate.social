@@ -12,7 +12,7 @@
     "alertSwitchAwsAccount": "sh ./AWS_ACCOUNT_ALERT.sh",
     "deploy:dev": "serverless deploy --stage dev",
     "deploy:prod": "serverless deploy --stage prod",
-    "dev": "serverless offline --stage dev --is_local true",
+    "dev": "AWS_PROFILE=circulate serverless offline --stage dev --is_local true",
     "delete-stack:dev": "yarn alertSwitchAwsAccount && serverless remove --stage dev",
     "delete-stack:prod": "yarn alertSwitchAwsAccount && serverless remove --stage prod"
   },
@@ -27,6 +27,7 @@
     "@js-joda/timezone": "^2.2.0",
     "aws-lambda": "^1.0.6",
     "aws-sdk": "^2.683.0",
+    "dynamoose": "^2.2.1",
     "lambda-log": "^2.4.0",
     "source-map-support": "^0.5.16",
     "uuid": "^8.0.0"
