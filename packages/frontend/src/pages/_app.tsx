@@ -7,7 +7,7 @@ import UserContextProvider from '../state-management/UserContextProvider';
 import 'antd/dist/antd.css';
 import '../styles.scss';
 
-class MyApp extends App<{}, {}> {
+class MyApp extends App<Record<string, unknown>, Record<string, unknown>> {
   render(): JSX.Element {
     const { Component, pageProps } = this.props;
 

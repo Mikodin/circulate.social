@@ -5,6 +5,9 @@ module.exports = {
     node: true,
   },
   settings: {
+    react: {
+      version: 'detect',
+    },
     'import/resolver': {
       node: {
         extensions: ['.js', '.jsx', '.ts', '.tsx', '.scss'],
@@ -22,7 +25,6 @@ module.exports = {
     'plugin:import/errors',
     'plugin:import/warnings',
     'plugin:import/typescript',
-    'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
   ],
@@ -38,6 +40,7 @@ module.exports = {
   },
   plugins: ['@typescript-eslint', 'prettier'],
   rules: {
+    '@typescript-eslint/ban-ts-comment': 0,
     'prefer-promise-reject-errors': 0,
     'import/no-extraneous-dependencies': [
       'error',
