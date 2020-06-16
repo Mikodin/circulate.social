@@ -1,4 +1,5 @@
 /* eslint @typescript-eslint/no-explicit-any: 0 */
+/* eslint camelcase: 0 */
 
 export interface CurrentAuthenticatedUser {
   Session: null;

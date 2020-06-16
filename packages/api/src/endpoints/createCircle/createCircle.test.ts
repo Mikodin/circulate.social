@@ -18,7 +18,7 @@ const MOCK_EVENT = CreateMockEvent({
     authorizer: {
       claims: {
         'cognito:username': 'Dev User',
-        // eslint-disable-next-line @typescript-eslint/camelcase
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         email_verified: true,
       },
     },
@@ -64,7 +64,7 @@ describe('createCircle', () => {
           authorizer: {
             claims: {
               'cognito:username': undefined,
-              // eslint-disable-next-line @typescript-eslint/camelcase
+              // eslint-disable-next-line @typescript-eslint/naming-convention
               email_verified: undefined,
             },
           },

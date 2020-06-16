@@ -9,7 +9,10 @@ import AuthContainer, {
 import css from './start-a-circle.module.scss';
 import UserContext from '../state-management/UserContext';
 
-class StartACircle extends PureComponent<{}, {}> {
+class StartACircle extends PureComponent<
+  Record<string, unknown>,
+  Record<string, unknown>
+> {
   static contextType = UserContext;
 
   context: React.ContextType<typeof UserContext>;
