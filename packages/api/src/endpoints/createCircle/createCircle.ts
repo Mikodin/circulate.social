@@ -7,6 +7,8 @@ import { Circle } from '@circulate/types/index';
 import CircleModel from '../../interfaces/dynamo/circlesModel';
 
 export const handler: APIGatewayProxyHandler = async (event) => {
+  log.info('Incoming Event', { event });
+
   let body;
   try {
     body = JSON.parse(event.body);
@@ -34,11 +36,11 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     ? true
     : event.requestContext.authorizer.claims.email_verified;
 
-  if (!isEmailVerified) {
+  if (!isEmailVerified || !memberId) {
     return {
       statusCode: 401,
       body: JSON.stringify({
-        message: 'Please verify your email address',
+        message: 'Please verify your email address or login',
       }),
       headers: {
         'Access-Control-Allow-Origin': '*',
