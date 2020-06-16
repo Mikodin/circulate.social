@@ -35,6 +35,7 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
+        - dynamodb:DescribeTable
         - dynamodb:Query
         - dynamodb:Scan
         - dynamodb:GetItem
@@ -44,6 +45,7 @@ provider:
       Resource: 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.CIRCLES_TABLE_NAME}'
     - Effect: Allow
       Action:
+        - dynamodb:DescribeTable
         - dynamodb:Query
         - dynamodb:Scan
         - dynamodb:GetItem

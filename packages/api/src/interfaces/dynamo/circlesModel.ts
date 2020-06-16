@@ -43,8 +43,19 @@ const CircleSchema = new dynamoose.Schema(
   }
 );
 
-const CircleModel = dynamoose.model('circles-dev', CircleSchema, {
-  create: true,
-});
+const CircleModel = dynamoose.model(
+  process.env.CIRCLES_TABLE_NAME || 'circles-dev',
+  CircleSchema,
+  {
+    create: false,
+    waitForActive: {
+      enabled: false,
+      check: {
+        timeout: 180000,
+        frequency: 1000,
+      },
+    },
+  }
+);
 
 export default CircleModel;
