@@ -1,6 +1,6 @@
 import * as dynamoose from 'dynamoose';
 
-const CircleSchema = new dynamoose.Schema(
+export const ContentSchema = new dynamoose.Schema(
   {
     id: {
       type: String,
@@ -8,37 +8,36 @@ const CircleSchema = new dynamoose.Schema(
       required: true,
     },
     createdBy: { type: String, required: true },
-    name: {
+    title: {
       type: String,
       required: true,
     },
+    circleIds: {
+      required: true,
+      // @ts-expect-error
+      type: Set,
+      // @ts-expect-error
+      schema: [String],
+    },
+    dateTime: String,
     description: String,
-    frequency: {
-      type: String,
-      enum: ['daily', 'weekly', 'biweekly', 'monthly'],
-    },
-    members: {
-      // @ts-expect-error
-      type: Set,
-      // @ts-expect-error
-      schema: [String],
-    },
-    creatorId: String,
-    events: {
-      type: Array,
-      // @ts-expect-error
-      schema: [String],
-    },
-    content: {
-      // @ts-expect-error
-      type: Set,
-      // @ts-expect-error
-      schema: [String],
-    },
+    link: String,
     privacy: {
       type: String,
       enum: ['private', 'public'],
       default: 'private',
+    },
+    categories: {
+      // @ts-expect-error
+      type: Set,
+      // @ts-expect-error
+      schema: [String],
+    },
+    tags: {
+      // @ts-expect-error
+      type: Set,
+      // @ts-expect-error
+      schema: [String],
     },
   },
   {
@@ -49,9 +48,9 @@ const CircleSchema = new dynamoose.Schema(
   }
 );
 
-const CircleModel = dynamoose.model(
-  process.env.CIRCLES_TABLE_NAME || 'circles-dev',
-  CircleSchema,
+const ContentModel = dynamoose.model(
+  process.env.CONTENT_TABLE_NAME || 'content-dev',
+  ContentSchema,
   {
     create: false,
     waitForActive: {
@@ -64,4 +63,4 @@ const CircleModel = dynamoose.model(
   }
 );
 
-export default CircleModel;
+export default ContentModel;
