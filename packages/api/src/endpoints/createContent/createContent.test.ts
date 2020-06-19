@@ -1,3 +1,4 @@
+import log from 'lambda-log';
 import { CreateMockEvent, CreateMockContext } from '../testUtils';
 import { handler } from './createContent';
 import CircleModel from '../../interfaces/dynamo/circlesModel';
@@ -258,20 +259,77 @@ describe('createContent', () => {
       });
     });
 
-    describe.skip('When fetching the Circles returns an error', () => {
-      it('Should return a 500');
-      it('Should log.error');
+    describe('When fetching the Circles returns an error', () => {
+      it('Should return a 500', async () => {
+        const circleModelBatchGetSpy = jest.spyOn(CircleModel, 'batchGet');
+        circleModelBatchGetSpy.mockImplementationOnce(() =>
+          Promise.reject(false)
+        );
+
+        const resp = await handler(genMockEvent({}), MOCK_CONTEXT, null);
+        expect(resp).toEqual(expect.objectContaining({ statusCode: 500 }));
+      });
+      it('Should log.error', async () => {
+        const lambdaLogErrorSpy = jest.spyOn(log, 'error');
+        const circleModelBatchGetSpy = jest.spyOn(CircleModel, 'batchGet');
+        circleModelBatchGetSpy.mockImplementationOnce(() =>
+          Promise.reject(false)
+        );
+
+        await handler(genMockEvent({}), MOCK_CONTEXT, null);
+        expect(lambdaLogErrorSpy).toHaveBeenCalled();
+      });
     });
-    describe.skip('When the user passed in all invalid `circleIds`', () => {
-      it('Should return a 404');
+    describe('When the user passed in all invalid `circleIds`', () => {
+      it('Should return a 404', async () => {
+        const circleModelBatchGetSpy = jest.spyOn(CircleModel, 'batchGet');
+        circleModelBatchGetSpy.mockImplementationOnce(() =>
+          Promise.resolve([])
+        );
+
+        const resp = await handler(genMockEvent({}), MOCK_CONTEXT, null);
+        expect(resp).toEqual(expect.objectContaining({ statusCode: 404 }));
+      });
     });
-    describe.skip('When creating the Content returns an error', () => {
-      it('Should return a 500');
-      it('Should log.error');
+    describe('When creating the Content returns an error', () => {
+      it('Should return a 500', async () => {
+        const contentModelCreateSpy = jest.spyOn(ContentModel, 'create');
+        contentModelCreateSpy.mockImplementationOnce(() =>
+          Promise.reject(false)
+        );
+
+        const resp = await handler(genMockEvent({}), MOCK_CONTEXT, null);
+        expect(resp).toEqual(expect.objectContaining({ statusCode: 500 }));
+      });
+      it('Should log.error', async () => {
+        const contentModelCreateSpy = jest.spyOn(ContentModel, 'create');
+        contentModelCreateSpy.mockImplementationOnce(() =>
+          Promise.reject(false)
+        );
+        const lambdaLogErrorSpy = jest.spyOn(log, 'error');
+        await handler(genMockEvent({}), MOCK_CONTEXT, null);
+        expect(lambdaLogErrorSpy).toHaveBeenCalled();
+      });
     });
-    describe.skip('When updating the Circles with the added Content returns an error', () => {
-      it('Should return a 500');
-      it('Should log.error');
+    describe('When updating the Circles with the added Content returns an error', () => {
+      it('Should return a 500', async () => {
+        const circleModelUpdateSpy = jest.spyOn(CircleModel, 'update');
+        circleModelUpdateSpy.mockImplementationOnce(() =>
+          Promise.reject(false)
+        );
+
+        const resp = await handler(genMockEvent({}), MOCK_CONTEXT, null);
+        expect(resp).toEqual(expect.objectContaining({ statusCode: 500 }));
+      });
+      it('Should log.error', async () => {
+        const circleModelUpdateSpy = jest.spyOn(CircleModel, 'update');
+        circleModelUpdateSpy.mockImplementationOnce(() =>
+          Promise.reject(false)
+        );
+        const lambdaLogErrorSpy = jest.spyOn(log, 'error');
+        await handler(genMockEvent({}), MOCK_CONTEXT, null);
+        expect(lambdaLogErrorSpy).toHaveBeenCalled();
+      });
     });
   });
 });
