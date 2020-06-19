@@ -36,6 +36,7 @@ describe('createCircle', () => {
         createdBy: 'Dev User',
         description: 'An enticing description',
         events: [],
+        content: [],
         frequency: 'daily',
         id: expect.any(String),
         members: ['Dev User'],
