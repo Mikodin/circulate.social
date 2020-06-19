@@ -80,8 +80,7 @@ describe('createContent', () => {
         expect(createSpy).toHaveBeenCalledWith(
           expect.objectContaining({
             dateTime: '2020-05-23T23:00Z[UTC]',
-          }),
-          expect.anything()
+          })
         );
       });
     });
@@ -125,30 +124,26 @@ describe('createContent', () => {
       });
       it('Should Create the content in the DB', async () => {
         await handler(genMockEvent(), MOCK_CONTEXT, null);
-        expect(contentModelCreateSpy).toHaveBeenCalledWith(
-          {
-            categories: ['TestCat'],
-            circleIds: ['mock-circle-id-1', 'mock-circle-id-2'],
-            createdBy: 'dev-id',
-            dateTime: '2020-05-23T23:00Z[UTC]',
-            description: 'Test desc',
-            // uuidv4
-            id: expect.any(String),
-            link: 'Test.com',
-            privacy: 'private',
-            tags: ['test'],
-            title: 'Test',
-          },
-          'dev-id'
-        );
+        expect(contentModelCreateSpy).toHaveBeenCalledWith({
+          categories: ['TestCat'],
+          circleIds: ['mock-circle-id-1', 'mock-circle-id-2'],
+          createdBy: 'dev-id',
+          dateTime: '2020-05-23T23:00Z[UTC]',
+          description: 'Test desc',
+          // uuidv4
+          id: expect.any(String),
+          link: 'Test.com',
+          privacy: 'private',
+          tags: ['test'],
+          title: 'Test',
+        });
       });
       it('Should only contain circleIds that the user is a MEMBER of', async () => {
         await handler(genMockEvent(), MOCK_CONTEXT, null);
         expect(contentModelCreateSpy).toHaveBeenCalledWith(
           expect.objectContaining({
             circleIds: ['mock-circle-id-1', 'mock-circle-id-2'],
-          }),
-          'dev-id'
+          })
         );
       });
     });
@@ -184,6 +179,18 @@ describe('createContent', () => {
   });
 
   describe('Unhappy path', () => {
+    describe('When the JSON is malformed', () => {
+      it('Should return a 400 bad request', async () => {
+        // @ts-expect-error
+        const resp = await handler({ body: undefined }, MOCK_CONTEXT, null);
+        expect(resp).toEqual(
+          expect.objectContaining({
+            statusCode: 400,
+            body: '{"message":"Could not parse the JSON Body"}',
+          })
+        );
+      });
+    });
     describe('When the `dateTime` is in an invalid format', () => {
       it('Should return a 400 bad request', async () => {
         const resp = await handler(

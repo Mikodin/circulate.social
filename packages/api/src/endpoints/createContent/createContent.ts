@@ -4,30 +4,29 @@ import log from 'lambda-log';
 import { ZoneId, ZonedDateTime } from '@js-joda/core';
 import '@js-joda/timezone';
 
-import { Circle, Content } from '@circulate/types';
+import { Content } from '@circulate/types';
 import ContentModel from '../../interfaces/dynamo/contentModel';
 import CircleModel from '../../interfaces/dynamo/circlesModel';
 
-import 'source-map-support/register';
+import {
+  generateReturn,
+  checkRequiredFields,
+  getMemberFromAuthorizer,
+  fetchCirclesMemberIsIn,
+} from './createContentHelpers';
 
 export const handler: APIGatewayProxyHandler = async (event) => {
   log.info('Incoming event', { event });
+
   let body;
   try {
     body = JSON.parse(event.body);
   } catch (error) {
     log.error('Failed to parse JSON', { error, body: event.body });
-    return {
-      statusCode: 400,
-      body: JSON.stringify({
-        message: 'Could not parse the JSON Body',
-        body: event.body,
-      }),
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-      },
-    };
+    return generateReturn(400, {
+      message: 'Could not parse the JSON Body',
+      body: event.body,
+    });
   }
 
   const {
@@ -41,52 +40,19 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     tags,
   } = body;
 
-  const isInLocal = process.env.IS_LOCAL === 'true';
-  const memberId = isInLocal
-    ? 'dev-id'
-    : event.requestContext.authorizer.claims['cognito:username'];
-  const isEmailVerified = isInLocal
-    ? true
-    : event.requestContext.authorizer.claims.email_verified;
+  const { memberId, isEmailVerified } = getMemberFromAuthorizer(event);
 
-  if (!isEmailVerified || !memberId) {
-    return {
-      statusCode: 401,
-      body: JSON.stringify({
-        message: 'Please verify your email address or login',
-      }),
-      headers: {
-        // @TODO limit to only my domain
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-      },
-    };
-  }
-
-  if (!title) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({
-        message: 'Title field is required',
-      }),
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-      },
-    };
-  }
-
-  if (!circleId) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({
-        message: 'circleId field is required',
-      }),
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-      },
-    };
+  const requiredFieldsError = checkRequiredFields({
+    isEmailVerified,
+    memberId,
+    title,
+    circleId,
+  });
+  if (requiredFieldsError) {
+    return generateReturn(
+      requiredFieldsError.statusCode,
+      requiredFieldsError.body
+    );
   }
 
   let dateTimeUtc;
@@ -96,52 +62,36 @@ export const handler: APIGatewayProxyHandler = async (event) => {
         .withZoneSameInstant(ZoneId.of('UTC'))
         .toString();
     } catch (error) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({
-          message: `${dateTime} could not be parsed please use a format like "2020-05-23T16:00-07:00[America/Los_Angeles]"`,
-        }),
-      };
+      return generateReturn(400, {
+        message: `${dateTime} could not be parsed please use a format like "2020-05-23T16:00-07:00[America/Los_Angeles]"`,
+      });
     }
   }
 
   try {
-    const circleIds = Array.isArray(circleId) ? [...circleId] : [circleId];
-
-    const circlesToSubmitEventTo = (
-      await CircleModel.batchGet(circleIds.map((id) => ({ id })))
-    ).map((circleDocument) => circleDocument);
-
-    const circlesUserIsMemberOf = circlesToSubmitEventTo
-      .filter((circle) => {
-        return circle.original().members.values.includes(memberId);
-      })
-      .map((circleDoc) => circleDoc.original()) as Circle[];
+    const circlesUserIsMemberOf = await fetchCirclesMemberIsIn(
+      memberId,
+      circleId
+    );
 
     if (!circlesUserIsMemberOf.length) {
-      return {
-        statusCode: 404,
-        body: JSON.stringify({
-          message: `circleId: [${circleId}] were not found, or you are not a member of them`,
-        }),
-      };
+      return generateReturn(404, {
+        message: `circleId: [${circleId}] were not found, or you are not a member of them`,
+      });
     }
 
-    const insertedContent = ((await ContentModel.create(
-      {
-        id: uuidv4(),
-        createdBy: memberId,
-        title,
-        circleIds: circlesUserIsMemberOf.map((circleDoc) => circleDoc.id),
-        dateTime: dateTimeUtc,
-        description,
-        link,
-        privacy,
-        categories,
-        tags,
-      },
-      memberId
-    )) as unknown) as Content;
+    const insertedContent = ((await ContentModel.create({
+      id: uuidv4(),
+      createdBy: memberId,
+      title,
+      circleIds: circlesUserIsMemberOf.map((circleDoc) => circleDoc.id),
+      dateTime: dateTimeUtc,
+      description,
+      link,
+      privacy,
+      categories,
+      tags,
+    })) as unknown) as Content;
 
     await Promise.all(
       circlesUserIsMemberOf.map((circle) =>
@@ -152,17 +102,10 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       )
     );
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        message: 'Success',
-        content: insertedContent,
-      }),
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-      },
-    };
+    return generateReturn(200, {
+      message: 'Success',
+      content: insertedContent,
+    });
   } catch (error) {
     log.error('Failed to create content', {
       error,
@@ -172,24 +115,14 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       error.name === 'ValidationError' ||
       error.name === 'TypeMismatch'
     ) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({
-          message: error.message,
-          error,
-        }),
-      };
+      return generateReturn(400, {
+        message: error.message,
+        error,
+      });
     }
 
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        message: 'Something went wrong trying to add Content',
-      }),
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-      },
-    };
+    return generateReturn(500, {
+      message: 'Something went wrong trying to add Content',
+    });
   }
 };
