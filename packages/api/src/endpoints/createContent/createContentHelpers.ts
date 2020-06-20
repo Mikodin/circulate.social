@@ -45,15 +45,17 @@ export async function fetchCirclesMemberIsIn(
 ): Promise<Circle[]> {
   const circleIds = Array.isArray(circleId) ? [...circleId] : [circleId];
 
+  const circlesToFetch = circleIds.map((id) => ({ id }));
   const circlesToSubmitEventTo = (
-    await CircleModel.batchGet(circleIds.map((id) => ({ id })))
-  ).map((circleDocument) => circleDocument);
+    await CircleModel.batchGet(circlesToFetch)
+  ).map((circleDocument) =>
+    // Handles Dyanmo sets and arrays equally
+    JSON.parse(JSON.stringify(circleDocument.original() || {}))
+  ) as Circle[];
 
-  const circlesUserIsMemberOf = circlesToSubmitEventTo
-    .filter((circle) => {
-      return circle.original().members.values.includes(memberId);
-    })
-    .map((circleDoc) => circleDoc.original()) as Circle[];
+  const circlesUserIsMemberOf = circlesToSubmitEventTo.filter((circle) => {
+    return circle.members.includes(memberId);
+  });
 
   return circlesUserIsMemberOf;
 }

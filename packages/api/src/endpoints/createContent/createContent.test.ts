@@ -10,19 +10,19 @@ jest.mock('../../interfaces/dynamo/circlesModel', () => ({
       {
         original: () => ({
           id: 'mock-circle-id-1',
-          members: { values: ['dev-id'] },
+          members: ['dev-id'],
         }),
       },
       {
         original: () => ({
           id: 'mock-circle-id-2',
-          members: { values: ['dev-id'] },
+          members: ['dev-id'],
         }),
       },
       {
         original: () => ({
           id: 'mock-circle-id-3',
-          members: { values: ['NOT-dev-id'] },
+          members: ['NOT-dev-id'],
         }),
       },
     ])
