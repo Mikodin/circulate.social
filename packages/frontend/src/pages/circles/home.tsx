@@ -58,7 +58,7 @@ class CircleHome extends PureComponent<Props, State> {
 
   // @TODO: Move to own component
   // eslint-disable-next-line
-  renderCircle(circle: any): React.ReactElement {
+  renderCircle(circle: Circle): React.ReactElement {
     return (
       <div key={circle.id} className={css.circleContainer}>
         <h2>
@@ -68,7 +68,7 @@ class CircleHome extends PureComponent<Props, State> {
           </Link>
         </h2>
         <p>Description: {circle.description}</p>
-        <p># of Upcoming Events: {circle.events.length}</p>
+        <p># of Upcoming Events: {(circle.content || []).length}</p>
       </div>
     );
   }

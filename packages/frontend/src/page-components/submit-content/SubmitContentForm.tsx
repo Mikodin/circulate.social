@@ -19,7 +19,7 @@ import {
 import { API_ENDPOINT } from '../../util/constants';
 import css from './SubmitContentForm.module.scss';
 
-export const SUBMIT_EVENT_ENDPOINT = `${API_ENDPOINT}/events/create`;
+export const SUBMIT_CONTENT_ENDPOINT = `${API_ENDPOINT}/content`;
 
 export interface Props {
   jwtToken: string;
@@ -93,12 +93,12 @@ const SubmitContentForm = (props: Props): JSX.Element => {
       setIsFetchCreateContentInFlight(true);
 
       await axios.post(
-        SUBMIT_EVENT_ENDPOINT,
+        SUBMIT_CONTENT_ENDPOINT,
         {
           link,
-          name: title,
+          title,
           description: whyShare,
-          circleId: seedCircleId,
+          circleId: [seedCircleId],
           dateTime: dateTimeStr && dateTimeStr.toString(),
         },
         { headers: { Authorization: props.jwtToken } }

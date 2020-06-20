@@ -102,7 +102,7 @@ class CirclePage extends PureComponent<Props, State> {
 
     try {
       const createResponse = await axios.get(
-        `${GET_CIRCLE_BY_ID_ENDPOINT}/${circleId}?getUpcomingEvents=true`,
+        `${GET_CIRCLE_BY_ID_ENDPOINT}/${circleId}?getContentDetails=true`,
         { headers: { Authorization: idToken } }
       );
       const { circle }: { circle: Circle } = createResponse.data;
@@ -193,14 +193,12 @@ class CirclePage extends PureComponent<Props, State> {
                 <Link href={`/submit-content?circleId=${circle.id}`}>
                   <a>Submit an event</a>
                 </Link>
-                {circle.upcomingEventDetails.length ? (
+                {circle.contentDetails.length ? (
                   <h2>All Events</h2>
                 ) : (
                   <h2>There are no upcoming events</h2>
                 )}
-                {circle.upcomingEventDetails.map((event) =>
-                  this.renderEvent(event)
-                )}
+                {circle.contentDetails.map((event) => this.renderEvent(event))}
               </Fragment>
             )}
           </div>
