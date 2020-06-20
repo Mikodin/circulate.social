@@ -14,10 +14,10 @@ export const ContentSchema = new dynamoose.Schema(
     },
     circleIds: {
       required: true,
-      // @ts-expect-error
-      type: Set,
+      type: Array,
       // @ts-expect-error
       schema: [String],
+      default: [],
     },
     dateTime: String,
     description: String,

@@ -1,19 +1,11 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import log from 'lambda-log';
-import { getCircleById } from '../../interfaces/dynamo/circlesTable';
-import { getUpcomingCircleEvents } from '../../interfaces/dynamo/eventsTable';
-
-import 'source-map-support/register';
+import { generateReturn, getMemberFromAuthorizer } from '../endpointUtils';
+import CircleModel from '../../interfaces/dynamo/circlesModel';
+import ContentModel from '../../interfaces/dynamo/contentModel';
 
 export const handler: APIGatewayProxyHandler = async (event) => {
-  const isInLocal = process.env.IS_LOCAL === 'true';
-
-  const memberId = isInLocal
-    ? 'dev-id'
-    : event.requestContext.authorizer.claims['cognito:username'];
-  const isEmailVerified = isInLocal
-    ? true
-    : event.requestContext.authorizer.claims.email_verified;
+  const { memberId, isEmailVerified } = getMemberFromAuthorizer(event);
 
   const { circleId } = event.pathParameters;
   const getUpcomingEvents =
@@ -21,78 +13,43 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     event.queryStringParameters.getUpcomingEvents;
 
   if (!isEmailVerified) {
-    return {
-      statusCode: 401,
-      body: JSON.stringify({
-        message: 'Please verify your email address',
-      }),
-      headers: {
-        // @TODO limit to only my domain
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-      },
-    };
+    return generateReturn(401, {
+      message: 'Please verify your email address',
+    });
   }
 
   try {
-    const circle = await getCircleById(circleId);
+    const circle = (await CircleModel.get(circleId)).original();
     if (!circle) {
-      return {
-        statusCode: 404,
-        body: JSON.stringify({
-          message: `A Circle with id:[${circleId}] was not found`,
-        }),
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true,
-        },
-      };
+      return generateReturn(404, {
+        message: `A Circle with id:[${circleId}] was not found`,
+      });
     }
 
-    const isMemberInCircle = circle.members.includes(memberId);
+    const isMemberInCircle = circle.members.values.includes(memberId);
+    console.log(isMemberInCircle);
 
     if (!isMemberInCircle) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({
-          message: 'You are not authorized to access this circle',
-        }),
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true,
-        },
-      };
+      return generateReturn(401, {
+        message: 'You are not authorized to access this circle',
+      });
     }
 
-    if (getUpcomingEvents) {
-      const upcomingCircleEvents = await getUpcomingCircleEvents(circleId);
+    if (getUpcomingEvents && circle.content) {
+      const upcomingCircleEvents = await ContentModel.batchGet(circle.content);
       circle.upcomingEventDetails = upcomingCircleEvents;
     }
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        message: 'Success',
-        circle,
-      }),
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-      },
-    };
+    return generateReturn(200, {
+      message: 'Success',
+      circle,
+    });
   } catch (error) {
     log.error(`Failed to get Circle:[${circleId}] for Member:[${memberId}]`, {
       error,
     });
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        message: `Something went wrong trying to get Circle:[${circleId}] for Member:[${memberId}]`,
-      }),
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-      },
-    };
+    return generateReturn(500, {
+      message: `Something went wrong trying to get Circle:[${circleId}] for Member:[${memberId}]`,
+    });
   }
 };

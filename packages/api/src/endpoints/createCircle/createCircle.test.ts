@@ -40,6 +40,7 @@ describe('createCircle', () => {
         members: ['Dev User'],
         name: 'The greatest Circle ever',
         privacy: 'private',
+        content: [],
       });
     });
 

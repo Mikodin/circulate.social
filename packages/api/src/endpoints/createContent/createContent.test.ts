@@ -171,7 +171,7 @@ describe('createContent', () => {
           {
             id: 'mock-circle-id-1',
           },
-          { $ADD: { content: ['mock-content-1'] } }
+          { $ADD: { content: 'mock-content-1' } }
         );
         expect(circleModelUpdateSpy).toHaveBeenCalledTimes(2);
       });

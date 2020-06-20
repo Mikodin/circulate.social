@@ -9,6 +9,7 @@ export interface Circle {
   name: string;
   description: string;
   events: string[];
+  content?: string[];
   frequency: 'daily' | 'weekly' | 'biweekly' | 'monthly';
   privacy: 'private' | 'public';
   upcomingEventDetails?: Event[];

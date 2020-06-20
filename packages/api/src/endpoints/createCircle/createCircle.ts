@@ -69,6 +69,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       createdBy: memberId,
       members: [memberId],
       name,
+      content: [],
       description,
       frequency,
       privacy,

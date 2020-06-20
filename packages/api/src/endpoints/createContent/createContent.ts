@@ -83,7 +83,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       id: uuidv4(),
       createdBy: memberId,
       title,
-      circleIds: circlesUserIsMemberOf.map((circleDoc) => circleDoc.id),
+      circleIds: [...circlesUserIsMemberOf.map((circleDoc) => circleDoc.id)],
       dateTime: dateTimeUtc,
       description,
       link,
@@ -96,7 +96,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       circlesUserIsMemberOf.map((circle) =>
         CircleModel.update(
           { id: circle.id },
-          { $ADD: { content: [insertedContent.id] } }
+          { $ADD: { content: insertedContent.id } }
         )
       )
     );

@@ -30,10 +30,10 @@ const CircleSchema = new dynamoose.Schema(
       schema: [String],
     },
     content: {
-      // @ts-expect-error
-      type: Set,
+      type: Array,
       // @ts-expect-error
       schema: [String],
+      default: [],
     },
     privacy: {
       type: String,
