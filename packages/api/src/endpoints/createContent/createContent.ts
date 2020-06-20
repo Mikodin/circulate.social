@@ -9,11 +9,10 @@ import ContentModel from '../../interfaces/dynamo/contentModel';
 import CircleModel from '../../interfaces/dynamo/circlesModel';
 
 import {
-  generateReturn,
   checkRequiredFields,
-  getMemberFromAuthorizer,
   fetchCirclesMemberIsIn,
 } from './createContentHelpers';
+import { generateReturn, getMemberFromAuthorizer } from '../endpointUtils';
 
 export const handler: APIGatewayProxyHandler = async (event) => {
   log.info('Incoming event', { event });
