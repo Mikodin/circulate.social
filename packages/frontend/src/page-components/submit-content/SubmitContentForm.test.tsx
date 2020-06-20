@@ -9,7 +9,7 @@ import axios from 'axios';
 import { ZonedDateTime } from '@js-joda/core';
 
 import SubmitContentForm, {
-  SUBMIT_EVENT_ENDPOINT,
+  SUBMIT_CONTENT_ENDPOINT,
   Props,
 } from './SubmitContentForm';
 
@@ -227,10 +227,10 @@ describe('StartACircle page', () => {
         fireEvent.submit(submitButton);
       });
       expect(mockedAxios.post).toHaveBeenCalledWith(
-        SUBMIT_EVENT_ENDPOINT,
+        SUBMIT_CONTENT_ENDPOINT,
         {
-          circleId: defaultProps.seedCircleId,
-          name: inputtedTitleValue,
+          circleId: [defaultProps.seedCircleId],
+          title: inputtedTitleValue,
           description: inputtedWhyShareValue,
           link: inputtedLinkValue,
         },
@@ -275,10 +275,10 @@ describe('StartACircle page', () => {
             ? '2020-05-15T07:00-07:00[America/Los_Angeles]'
             : '2020-05-15T07:00Z[UTC]';
         expect(mockedAxios.post).toHaveBeenCalledWith(
-          SUBMIT_EVENT_ENDPOINT,
+          SUBMIT_CONTENT_ENDPOINT,
           {
-            circleId: defaultProps.seedCircleId,
-            name: inputtedTitleValue,
+            circleId: [defaultProps.seedCircleId],
+            title: inputtedTitleValue,
             description: inputtedWhyShareValue,
             dateTime: expectedDateTime,
             link: inputtedLinkValue,
