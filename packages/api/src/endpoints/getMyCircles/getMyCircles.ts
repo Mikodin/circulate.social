@@ -1,6 +1,8 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import log from 'lambda-log';
-import { getMyCircles } from '../../interfaces/dynamo/circlesTable';
+
+import { Circle } from '@circulate/types/index';
+import CircleModel from '../../interfaces/dynamo/circlesModel';
 import { generateReturn, getMemberFromAuthorizer } from '../endpointUtils';
 
 export const handler: APIGatewayProxyHandler = async (event) => {
@@ -13,10 +15,20 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   }
 
   try {
-    const circles = await getMyCircles(memberId);
+    // TODO make Member table.  Can query for member - then batchGet on Circles
+    const myCircles = (
+      await CircleModel.scan({
+        members: { contains: memberId },
+      }).exec()
+    ).map(
+      (circleDocument) =>
+        // @ts-expect-error dynamoose type is wrong circleDocument is not Document[]
+        JSON.parse(JSON.stringify(circleDocument.original())) as Circle
+    );
+
     return generateReturn(200, {
       message: 'Success',
-      circles,
+      circles: myCircles,
     });
   } catch (error) {
     log.error('Failed to get my circle', {
