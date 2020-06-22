@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { withRouter, NextRouter } from 'next/router';
 import axios from 'axios';
-import { Circle } from '@circulate/types';
+import { Circle, Content } from '@circulate/types';
 
 import AuthContainer from '../../components/authorization/AuthContainer';
 import Layout from '../../components/layout/Layout';
@@ -129,13 +129,12 @@ class CirclePage extends PureComponent<Props, State> {
     }
   }
 
-  // @TODO: Move to own component
   // eslint-disable-next-line
-  renderEvent(event) {
+  renderContent(content: Content) {
     return (
-      <Fragment key={event.id}>
-        <p>{event.name}</p>
-        <p>{event.description}</p>
+      <Fragment key={content.id}>
+        <p>{content.title}</p>
+        <p>{content.description}</p>
       </Fragment>
     );
   }
@@ -199,7 +198,7 @@ class CirclePage extends PureComponent<Props, State> {
                   <h2>There are no upcoming events</h2>
                 )}
                 {(circle.contentDetails || []).map((event) =>
-                  this.renderEvent(event)
+                  this.renderContent(event)
                 )}
               </Fragment>
             )}
