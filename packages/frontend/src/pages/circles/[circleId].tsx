@@ -193,12 +193,14 @@ class CirclePage extends PureComponent<Props, State> {
                 <Link href={`/submit-content?circleId=${circle.id}`}>
                   <a>Submit an event</a>
                 </Link>
-                {circle.contentDetails.length ? (
+                {(circle.contentDetails || []).length ? (
                   <h2>All Events</h2>
                 ) : (
                   <h2>There are no upcoming events</h2>
                 )}
-                {circle.contentDetails.map((event) => this.renderEvent(event))}
+                {(circle.contentDetails || []).map((event) =>
+                  this.renderEvent(event)
+                )}
               </Fragment>
             )}
           </div>
