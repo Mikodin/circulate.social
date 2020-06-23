@@ -119,16 +119,6 @@ functions:
           cors: true
           authorizer:
             arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_80QcO55dx
-  getMyEvents:
-    name: 'getMyEvents-${self:provider.stage}'
-    handler: src/endpoints/getMyEvents/getMyEvents.handler
-    events:
-      - http:
-          method: get
-          path: events/me
-          cors: true
-          authorizer:
-            arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_80QcO55dx
   getCircleById:
     name: 'getCircleById-${self:provider.stage}'
     handler: src/endpoints/getCircleById/getCircleById.handler
