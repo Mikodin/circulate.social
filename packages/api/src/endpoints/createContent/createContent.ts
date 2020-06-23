@@ -72,7 +72,6 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       memberId,
       circleId
     );
-    console.log(circlesUserIsMemberOf);
 
     if (!circlesUserIsMemberOf.length) {
       return generateReturn(404, {
