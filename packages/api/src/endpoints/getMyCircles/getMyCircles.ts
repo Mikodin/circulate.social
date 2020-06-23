@@ -19,10 +19,11 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     const myCircles = (
       await CircleModel.scan({
         members: { contains: memberId },
-      }).exec()
+      })
+        .all()
+        .exec()
     ).map(
       (circleDocument) =>
-        // @ts-expect-error dynamoose type is wrong circleDocument is not Document[]
         JSON.parse(JSON.stringify(circleDocument.original())) as Circle
     );
 

@@ -5,23 +5,25 @@ import CircleModel from '../../interfaces/dynamo/circlesModel';
 
 jest.mock('../../interfaces/dynamo/circlesModel', () => ({
   scan: jest.fn(() => ({
-    exec: jest.fn(() =>
-      Promise.resolve([
-        {
-          original: () => ({
-            content: ['425293dd-ac0e-49b3-931b-8293c82c5502'],
-            privacy: 'public',
-            updatedAt: 1592688117024,
-            members: ['dev-id'],
-            createdAt: 1592687256669,
-            description: 'Test desc',
-            id: '8c03b5c6-829a-4d91-80d9-e3c386af6839',
-            createdBy: 'dev-id',
-            name: 'Test',
-          }),
-        },
-      ])
-    ),
+    all: jest.fn(() => ({
+      exec: jest.fn(() =>
+        Promise.resolve([
+          {
+            original: () => ({
+              content: ['425293dd-ac0e-49b3-931b-8293c82c5502'],
+              privacy: 'public',
+              updatedAt: 1592688117024,
+              members: ['dev-id'],
+              createdAt: 1592687256669,
+              description: 'Test desc',
+              id: '8c03b5c6-829a-4d91-80d9-e3c386af6839',
+              createdBy: 'dev-id',
+              name: 'Test',
+            }),
+          },
+        ])
+      ),
+    })),
   })),
 }));
 
