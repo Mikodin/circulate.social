@@ -11,7 +11,7 @@ import css from './home.module.scss';
 
 import { API_ENDPOINT } from '../../util/constants';
 
-const GET_MY_CIRCLES_ENDPOINT = `${API_ENDPOINT}/circles`;
+const GET_MY_CIRCLES_ENDPOINT = `${API_ENDPOINT}/circles/me`;
 
 interface Props {
   router: Router;
@@ -41,7 +41,7 @@ class CircleHome extends PureComponent<Props, State> {
     const { jwtToken } = this.context;
 
     try {
-      const createResponse = await axios.get(`${GET_MY_CIRCLES_ENDPOINT}/me`, {
+      const createResponse = await axios.get(GET_MY_CIRCLES_ENDPOINT, {
         headers: { Authorization: jwtToken },
       });
       const { circles } = createResponse.data;
