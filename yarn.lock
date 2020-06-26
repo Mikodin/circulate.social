@@ -2784,6 +2784,16 @@
   resolved "https://registry.yarnpkg.com/@js-joda/core/-/core-2.0.0.tgz#e9a351ee6feb91262770e2a3d085aa0219ad6afb"
   integrity sha512-OWm/xa9O9e4ugzNHoRT3IsXZZYfaV6Ia1aRwctOmCQ2GYWMnhKBzMC1WomqCh/oGxEZKNtPy5xv5//VIAOgMqw==
 
+"@js-joda/locale@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@js-joda/locale/-/locale-3.1.1.tgz#1f03f12690905409b5f94eebee79907f556de165"
+  integrity sha512-2o+o7fZNikHLqiDuBd+9fSqY5DyOc7FJcNwBJoXEejOzm2CRl9JJ0OI+dBsqLD9GdZTs5m/DKbEgz6sr/O5jVw==
+
+"@js-joda/locale_en-us@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@js-joda/locale_en-us/-/locale_en-us-3.1.1.tgz#c2eab2561aa048f5366046edd313ce94108263c6"
+  integrity sha512-EYrs4h0Um/9LqcEwDb0kGTHGaGkJgEO2cj78KKICPz7hsdvJHPOADIkDtjesYInZ1YkNrtE3HopnfETLDBvnWg==
+
 "@js-joda/timezone@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@js-joda/timezone/-/timezone-2.2.0.tgz#6085937d83791cd0bda0b43b533273f2f76b678b"
@@ -5711,7 +5721,7 @@ copy-descriptor@^0.1.0:
   resolved "https://registry.yarnpkg.com/copy-descriptor/-/copy-descriptor-0.1.1.tgz#676f6eb3c39997c2ee1ac3a924fd6124748f578d"
   integrity sha1-Z29us8OZl8LuGsOpJP1hJHSPV40=
 
-copy-to-clipboard@^3.2.0:
+copy-to-clipboard@^3.2.0, copy-to-clipboard@^3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/copy-to-clipboard/-/copy-to-clipboard-3.3.1.tgz#115aa1a9998ffab6196f93076ad6da3b913662ae"
   integrity sha512-i13qo6kIHTTpCm8/Wup+0b1mVWETvu2kIMzKoK8FpkLkFxlt0znUAHcMzox+T8sPlqtZXq3CulEjQHsYiGFJUw==

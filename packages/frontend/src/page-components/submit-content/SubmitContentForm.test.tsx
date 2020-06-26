@@ -272,8 +272,8 @@ describe('StartACircle page', () => {
 
         const expectedDateTime =
           userTimeZone === 'America/Los_Angeles'
-            ? '2020-05-15T07:00-07:00[America/Los_Angeles]'
-            : '2020-05-15T07:00Z[UTC]';
+            ? '2020-06-15T07:00-07:00[America/Los_Angeles]'
+            : '2020-06-15T07:00Z[UTC]';
         expect(mockedAxios.post).toHaveBeenCalledWith(
           SUBMIT_CONTENT_ENDPOINT,
           {

@@ -78,7 +78,7 @@ const SubmitContentForm = (props: Props): JSX.Element => {
 
     const { years, months, date: dateStr } = dateObject;
     const { hours, minutes } = timeObject;
-    const ldt = LocalDateTime.of(years, months, dateStr, hours, minutes);
+    const ldt = LocalDateTime.of(years, months + 1, dateStr, hours, minutes);
     return ZonedDateTime.of(ldt, ZoneId.of(timezone));
   }
 
@@ -120,7 +120,6 @@ const SubmitContentForm = (props: Props): JSX.Element => {
       <Form
         className={css.form}
         form={form}
-        hideRequiredMark
         name="horizontal_login"
         size="large"
         layout="vertical"

@@ -6,7 +6,7 @@ Object {
   "baseElement": <body>
     <div>
       <form
-        class="ant-form ant-form-vertical ant-form-hide-required-mark ant-form-large form"
+        class="ant-form ant-form-vertical ant-form-large form"
         id="horizontal_login"
       >
         <div
@@ -210,7 +210,7 @@ Object {
   </body>,
   "container": <div>
     <form
-      class="ant-form ant-form-vertical ant-form-hide-required-mark ant-form-large form"
+      class="ant-form ant-form-vertical ant-form-large form"
       id="horizontal_login"
     >
       <div

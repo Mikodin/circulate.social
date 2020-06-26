@@ -104,9 +104,9 @@ class UserContextProvider extends Component<Props, State> {
       return auth;
     } catch (error) {
       console.error('confirmEmail', error);
-      if (error.code !== 'CodeMismatchException') {
-        alert(`confirmEmail: ${error.message}`);
-      }
+      // if (error.code !== 'CodeMismatchException') {
+      //   alert(`confirmEmail: ${error.message}`);
+      // }
       throw error;
     }
   };

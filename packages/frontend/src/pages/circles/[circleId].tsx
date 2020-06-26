@@ -1,19 +1,55 @@
 import { PureComponent, Fragment } from 'react';
 import { GetServerSideProps } from 'next';
+import copy from 'copy-to-clipboard';
+import { Skeleton, Divider, Input, Button, Collapse, List } from 'antd';
+import { CopyOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { withRouter, NextRouter } from 'next/router';
 import axios from 'axios';
 import { Circle, Content } from '@circulate/types';
+import { ZoneId, ZonedDateTime, DateTimeFormatter } from '@js-joda/core';
+import { Locale } from '@js-joda/locale_en-us';
+import '@js-joda/timezone';
 
 import AuthContainer from '../../components/authorization/AuthContainer';
 import Layout from '../../components/layout/Layout';
-// import css from './[circleId].module.scss';
+import styles from './[circleId].module.scss';
 
 import { API_ENDPOINT } from '../../util/constants';
 
 import UserContext from '../../state-management/UserContext';
 
+const { Panel } = Collapse;
+
 const GET_CIRCLE_BY_ID_ENDPOINT = `${API_ENDPOINT}/circles`;
+const domain = 'beta.circulate.social';
+
+const convertDateTimeToSystemZone = (dateTime: string) => {
+  return ZonedDateTime.parse(dateTime)
+    .withZoneSameInstant(ZoneId.of('SYSTEM'))
+    .toString();
+};
+
+const groupEventsByDate = (events: Content[]): Record<string, Content[]> => {
+  const eventsByDate = {};
+  events.forEach((event) => {
+    if (!event.dateTime) {
+      return;
+    }
+
+    const date = ZonedDateTime.parse(event.dateTime)
+      .withZoneSameInstant(ZoneId.of('SYSTEM'))
+      .toLocalDate()
+      .toString();
+
+    if (eventsByDate[date]) {
+      eventsByDate[date].push(event);
+    } else {
+      eventsByDate[date] = [event];
+    }
+  });
+  return eventsByDate;
+};
 
 interface Props {
   router: NextRouter;
@@ -21,11 +57,14 @@ interface Props {
 
 interface State {
   circle: Circle | undefined;
+  posts: Content[];
+  events: Record<string, Content[]>;
   getCircleNotAuthorized: boolean;
   showRegisterFlow: boolean;
   isFetchingCircle: boolean;
   isFetchingJoinCircle: boolean;
 }
+
 class CirclePage extends PureComponent<Props, State> {
   static contextType = UserContext;
 
@@ -33,6 +72,8 @@ class CirclePage extends PureComponent<Props, State> {
 
   state: State = {
     circle: undefined,
+    events: {},
+    posts: [],
     getCircleNotAuthorized: false,
     showRegisterFlow: false,
     isFetchingCircle: true,
@@ -107,8 +148,22 @@ class CirclePage extends PureComponent<Props, State> {
       );
       const { circle }: { circle: Circle } = createResponse.data;
 
+      const events = groupEventsByDate(
+        (circle.contentDetails || [])
+          .filter((content) => Boolean(content.dateTime))
+          .map((event) => ({
+            ...event,
+            dateTime: convertDateTimeToSystemZone(event.dateTime),
+          }))
+      );
+      const posts = (circle.contentDetails || []).filter(
+        (content) => !content.dateTime
+      );
+
       this.setState({
         circle,
+        events,
+        posts,
         getCircleNotAuthorized: false,
         showRegisterFlow: false,
         isFetchingCircle: false,
@@ -129,19 +184,58 @@ class CirclePage extends PureComponent<Props, State> {
     }
   }
 
-  // eslint-disable-next-line
-  renderContent(content: Content) {
+  renderContent = (content: Content) => {
     return (
       <Fragment key={content.id}>
+        {content.dateTime && <p>{content.dateTime}</p>}
         <p>{content.title}</p>
+        <p>{content.createdBy}</p>
         <p>{content.description}</p>
       </Fragment>
     );
-  }
+  };
+
+  renderEvent = (event: Content) => {
+    const dtf = DateTimeFormatter.ofPattern('h:mm a').withLocale(Locale.US);
+    const timeString = ZonedDateTime.parse(event.dateTime).format(dtf);
+
+    return (
+      <Fragment key={event.id}>
+        <p>{`${event.dateTime && timeString.toString()} | ${event.title}`}</p>
+        <p>{event.createdBy}</p>
+        <p>{event.description}</p>
+      </Fragment>
+    );
+  };
+
+  renderCopyCircleBtn = (circleId: string) => {
+    return (
+      <>
+        <Input
+          addonBefore={
+            <Button
+              onClick={() =>
+                copy(`https://${domain}/circles/${circleId}?join=true`)
+              }
+              type="primary"
+              icon={<CopyOutlined />}
+              block
+            >
+              Invite
+            </Button>
+          }
+          readOnly
+          value={`https://${domain}/circles/${circleId}?join=true`}
+        />
+      </>
+    );
+  };
 
   render(): JSX.Element {
     const {
       circle,
+      events,
+      posts,
       getCircleNotAuthorized,
       showRegisterFlow,
       isFetchingCircle,
@@ -174,34 +268,66 @@ class CirclePage extends PureComponent<Props, State> {
               </Fragment>
             )}
 
-            {Boolean(isFetchingCircle && !isFetchingJoinCircle) && (
-              <Fragment>
-                <h2>Loading Circle</h2>
-              </Fragment>
-            )}
             {isFetchingJoinCircle && (
               <Fragment>
                 <h2>Joining Circle</h2>
               </Fragment>
             )}
 
-            {circle && (
-              <Fragment>
-                <h1>Circle: {circle.name}</h1>
-                <h2>Description: {circle.description}</h2>
-                <Link href={`/submit-content?circleId=${circle.id}`}>
-                  <a>Submit an event</a>
-                </Link>
-                {(circle.contentDetails || []).length ? (
-                  <h2>All Events</h2>
+            <Fragment>
+              <div className={styles.circleInfoSection}>
+                {circle ? (
+                  <>
+                    <h3>{circle.name}</h3>
+                    <p>Posts: {(circle.content || []).length}</p>
+                    <p>Members: {circle.members.length}</p>
+                    {circle.description && (
+                      <p>Description: {circle.description}</p>
+                    )}
+                    {this.renderCopyCircleBtn(circle.id)}
+                    <Link href={`/submit-content?circleId=${circle.id}`}>
+                      <a>Submit a post</a>
+                    </Link>
+                    <Divider />
+                  </>
                 ) : (
-                  <h2>There are no upcoming events</h2>
+                  <Skeleton active={isFetchingCircle} />
                 )}
-                {(circle.contentDetails || []).map((event) =>
-                  this.renderContent(event)
-                )}
-              </Fragment>
-            )}
+              </div>
+              {circle && (
+                <Fragment>
+                  {!(circle.contentDetails || []).length && (
+                    <h2>There are no upcoming events</h2>
+                  )}
+                  <Collapse defaultActiveKey={['1']}>
+                    <Panel header="Events" key="1">
+                      {Object.keys(events)
+                        .sort()
+                        .reverse()
+                        .map((dateTime) => {
+                          return (
+                            <div key={dateTime}>
+                              <h3>{dateTime}</h3>
+                              {events[dateTime].map((event) =>
+                                this.renderEvent(event)
+                              )}
+
+                              <Divider />
+                            </div>
+                          );
+                        })}
+                    </Panel>
+
+                    <Panel header="Posts" key="2">
+                      <List
+                        dataSource={posts}
+                        renderItem={this.renderContent}
+                      ></List>
+                    </Panel>
+                  </Collapse>
+                </Fragment>
+              )}
+            </Fragment>
           </div>
         )}
       </Layout>
