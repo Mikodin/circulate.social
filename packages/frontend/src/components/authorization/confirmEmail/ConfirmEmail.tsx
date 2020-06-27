@@ -1,4 +1,4 @@
-import { useState, Fragment } from 'react';
+import { useState, Fragment, useEffect } from 'react';
 import { Form, Input, Button, Alert, notification } from 'antd';
 import { MailOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
 
@@ -69,24 +69,23 @@ const ConfirmEmail = (props: Props): JSX.Element => {
     notification.open({
       className: css.confirmEmailNotification,
       message: (
-        <>
-          <h3>
-            <MailOutlined /> Check your email.
-          </h3>
-        </>
+        <h3>
+          <MailOutlined /> Hey, Check your email
+        </h3>
       ),
-      description: <p>We&apos;ve sent you a code!</p>,
+      description: <p>We&apos;ve sent you a confirmation code!</p>,
       placement: 'topLeft',
     });
   };
-  openNotification();
+  useEffect(() => {
+    openNotification();
+  }, []);
 
   return (
     <Fragment>
       <Form
         className={css.form}
         form={form}
-        hideRequiredMark
         name="horizontal_login"
         size="large"
         layout="vertical"
