@@ -1,8 +1,6 @@
 import { PureComponent, Fragment } from 'react';
 import { GetServerSideProps } from 'next';
-import copy from 'copy-to-clipboard';
-import { Skeleton, Divider, Input, Button, Collapse, List } from 'antd';
-import { CopyOutlined } from '@ant-design/icons';
+import { Skeleton, Divider, Collapse, List } from 'antd';
 import Link from 'next/link';
 import { withRouter, NextRouter } from 'next/router';
 import axios from 'axios';
@@ -18,11 +16,11 @@ import styles from './[circleId].module.scss';
 import { API_ENDPOINT } from '../../util/constants';
 
 import UserContext from '../../state-management/UserContext';
+import CopyCircleInviteToClipboard from '../../page-components/[circleId]/CopyCircleInviteToClipboard';
 
 const { Panel } = Collapse;
 
 const GET_CIRCLE_BY_ID_ENDPOINT = `${API_ENDPOINT}/circles`;
-const domain = 'beta.circulate.social';
 
 const convertDateTimeToSystemZone = (dateTime: string) => {
   return ZonedDateTime.parse(dateTime)
@@ -208,29 +206,6 @@ class CirclePage extends PureComponent<Props, State> {
     );
   };
 
-  renderCopyCircleBtn = (circleId: string) => {
-    return (
-      <>
-        <Input
-          addonBefore={
-            <Button
-              onClick={() =>
-                copy(`https://${domain}/circles/${circleId}?join=true`)
-              }
-              type="primary"
-              icon={<CopyOutlined />}
-              block
-            >
-              Invite
-            </Button>
-          }
-          readOnly
-          value={`https://${domain}/circles/${circleId}?join=true`}
-        />
-      </>
-    );
-  };
-
   render(): JSX.Element {
     const {
       circle,
@@ -287,7 +262,7 @@ class CirclePage extends PureComponent<Props, State> {
                     {circle.description && (
                       <p>Description: {circle.description}</p>
                     )}
-                    {this.renderCopyCircleBtn(circle.id)}
+                    <CopyCircleInviteToClipboard circleId={circle.id} />
                     <Link href={`/submit-content?circleId=${circle.id}`}>
                       <a>Submit a post</a>
                     </Link>

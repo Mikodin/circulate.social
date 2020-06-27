@@ -10,3 +10,4 @@ window.matchMedia =
       removeListener: () => true,
     };
   };
+window.prompt = () => true;
