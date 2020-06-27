@@ -5,3 +5,22 @@
     font-size: 16px;
   }
 }
+
+.confirmEmailNotification {
+  background-color: #1890ff;
+  color: white;
+  h3 {
+    color: white;
+    margin-bottom: 0px;
+    margin-bottom: 2px;
+  }
+
+  svg {
+    color: white;
+    font-size: 25px;
+  }
+}
+
+.confirmEmailNotificationHeader {
+  display: flex;
+}

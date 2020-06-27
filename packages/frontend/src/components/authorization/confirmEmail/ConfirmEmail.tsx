@@ -1,5 +1,5 @@
 import { useState, Fragment } from 'react';
-import { Form, Input, Button, Alert } from 'antd';
+import { Form, Input, Button, Alert, notification } from 'antd';
 import { MailOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
 
 import type { UserContextType } from '../../../state-management/UserContext';
@@ -64,6 +64,22 @@ const ConfirmEmail = (props: Props): JSX.Element => {
       }
     }
   };
+
+  const openNotification = () => {
+    notification.open({
+      className: css.confirmEmailNotification,
+      message: (
+        <>
+          <h3>
+            <MailOutlined /> Check your email.
+          </h3>
+        </>
+      ),
+      description: <p>We&apos;ve sent you a code!</p>,
+      placement: 'topLeft',
+    });
+  };
+  openNotification();
 
   return (
     <Fragment>
