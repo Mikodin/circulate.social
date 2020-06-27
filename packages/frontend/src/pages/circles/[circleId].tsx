@@ -252,8 +252,8 @@ class CirclePage extends PureComponent<Props, State> {
           <Fragment>
             <h2>Please sign in or register to join this Circle</h2>
             <AuthContainer
-              onLoginSuccess={(): void => {
-                this.fetchCircleData();
+              onRegisterSuccess={async (): Promise<void> => {
+                await this.fetchCircleData();
               }}
             />
           </Fragment>

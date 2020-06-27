@@ -126,7 +126,7 @@ class AuthContainer extends PureComponent<Props, State> {
   ): Promise<void> => {
     const { email, firstName, lastName } = formValues;
     const { seedPassword } = this.state;
-    const { onConfirmEmailRedirectTo, router } = this.props;
+    const { onConfirmEmailRedirectTo, router, onRegisterSuccess } = this.props;
     if (seedPassword) {
       try {
         await this.context.signIn(email, seedPassword);
@@ -137,6 +137,10 @@ class AuthContainer extends PureComponent<Props, State> {
       }
     } else {
       this.showForm(AUTH_FORMS.login);
+    }
+
+    if (onRegisterSuccess) {
+      await onRegisterSuccess();
     }
 
     if (onConfirmEmailRedirectTo) {
