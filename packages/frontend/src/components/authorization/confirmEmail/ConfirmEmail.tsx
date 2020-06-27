@@ -147,6 +147,7 @@ const ConfirmEmail = (props: Props): JSX.Element => {
             autoComplete="one-time-code"
             prefix={<LockOutlined className="site-form-item-icon" />}
             placeholder="123456"
+            type="number"
           />
         </Form.Item>
 

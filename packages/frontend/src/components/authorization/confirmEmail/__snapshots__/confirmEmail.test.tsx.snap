@@ -250,7 +250,7 @@ exports[`ConfirmEmail should render 1`] = `
                 class="ant-input ant-input-lg"
                 id="horizontal_login_confirmationCode"
                 placeholder="123456"
-                type="text"
+                type="number"
                 value=""
               />
             </span>
