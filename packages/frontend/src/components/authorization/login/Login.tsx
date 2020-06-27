@@ -130,7 +130,9 @@ const Login = (props: Props): JSX.Element => {
             const isEmailTouched =
               form.isFieldTouched('email') ||
               Boolean(form.getFieldValue('email'));
-            const isPasswordTouched = form.isFieldTouched('password');
+            const isPasswordTouched =
+              form.isFieldTouched('password') ||
+              Boolean(form.getFieldValue('password'));
             return (
               <Button
                 data-testid="submitButton"

@@ -77,6 +77,7 @@ const ConfirmEmail = (props: Props): JSX.Element => {
       placement: 'topLeft',
     });
   };
+
   useEffect(() => {
     openNotification();
   }, []);
