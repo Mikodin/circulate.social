@@ -221,7 +221,6 @@ class AuthContainer extends PureComponent<Props, State> {
           <Fragment>
             <div className={css.formTagline}>
               <h2>✉️ Confirm your email</h2>
-              <span>Hey - check your email, we sent you a code!</span>
               <hr />
             </div>
             <ConfirmEmail
