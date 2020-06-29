@@ -63,8 +63,10 @@ const Login = (props: Props): JSX.Element => {
 
   const onFormFinish = async (values: FormValues): Promise<void> => {
     const { email, password } = values;
-    await handleSignIn(email, password);
-    await onFormCompletionCallback({ email, password });
+    const signInResult = await handleSignIn(email, password);
+    if (signInResult.email) {
+      await onFormCompletionCallback({ email, password });
+    }
   };
 
   return (
