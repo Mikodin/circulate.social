@@ -139,6 +139,14 @@ functions:
           cors: true
           authorizer:
             arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_80QcO55dx
+  postCognitoConfirmationTrigger:
+    handler: postCognitoConfirmation.handler
+    handler: src/triggers/postCognitoConfirmation/postCognitoConfirmation.handler
+    events:
+      - cognitoUserPool:
+          pool: circulate-users
+          trigger: PostConfirmation
+          existing: true
 resources:
   Resources:
     circlesTable:
