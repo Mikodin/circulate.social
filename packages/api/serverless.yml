@@ -31,6 +31,7 @@ provider:
     CIRCLES_TABLE_NAME: 'circles-${self:provider.stage}'
     EVENTS_TABLE_NAME: 'events-${self:provider.stage}'
     CONTENT_TABLE_NAME: 'content-${self:provider.stage}'
+    USERS_TABLE_NAME: 'users-${self:provider.stage}'
     STAGE: ${opt:stage, 'dev'}
     IS_LOCAL: ${opt:is_local, 'false'}
   iamRoleStatements:
@@ -67,6 +68,17 @@ provider:
         - dynamodb:DeleteItem
         - dynamodb:BatchGetItem
       Resource: 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.CONTENT_TABLE_NAME}'
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - dynamodb:BatchGetItem
+      Resource: 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.USERS_TABLE_NAME}'
 
 functions:
   createCircle:
@@ -140,7 +152,6 @@ functions:
           authorizer:
             arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_80QcO55dx
   postCognitoConfirmationTrigger:
-    handler: postCognitoConfirmation.handler
     handler: src/triggers/postCognitoConfirmation/postCognitoConfirmation.handler
     events:
       - cognitoUserPool:
@@ -175,6 +186,17 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: ${self:provider.environment.CONTENT_TABLE_NAME}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+    usersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.USERS_TABLE_NAME}
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
