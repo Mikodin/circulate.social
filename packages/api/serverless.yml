@@ -151,12 +151,12 @@ functions:
           cors: true
           authorizer:
             arn: arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_80QcO55dx
-  postCognitoConfirmationTrigger:
-    handler: src/triggers/postCognitoConfirmation/postCognitoConfirmation.handler
+  cognitoDynamoUserSyncTrigger:
+    handler: src/triggers/postCognitoAuthentication/cognitoDynamoUserSyncTrigger.handler
     events:
       - cognitoUserPool:
           pool: circulate-users
-          trigger: PostConfirmation
+          trigger: PostAuthentication
           existing: true
 resources:
   Resources:
