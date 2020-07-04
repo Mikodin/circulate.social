@@ -270,10 +270,11 @@ describe('StartACircle page', () => {
           fireEvent.submit(submitButton);
         });
 
+        // @TODO - Make this adaptive to the current month
         const expectedDateTime =
           userTimeZone === 'America/Los_Angeles'
-            ? '2020-06-15T07:00-07:00[America/Los_Angeles]'
-            : '2020-06-15T07:00Z[UTC]';
+            ? '2020-07-15T07:00-07:00[America/Los_Angeles]'
+            : '2020-07-15T07:00Z[UTC]';
         expect(mockedAxios.post).toHaveBeenCalledWith(
           SUBMIT_CONTENT_ENDPOINT,
           {
