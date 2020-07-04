@@ -15,7 +15,7 @@
       "email_verified": "true",
       "cognito:user_status": "CONFIRMED",
       "cognito:email_alias": "mike@circulate.social",
-      "custom:first_name": "Mike",
+      "custom:first_name": "Michael",
       "email": "mike@circulate.social"
     },
     "newDeviceUsed": false
