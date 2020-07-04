@@ -1,5 +1,5 @@
 circulate-frontend:
-  component: 'serverless-next.js'
+  component: 'serverless-next.js@1.9.5'
   inputs:
     bucketName: circulate-frontend
     domain: ['beta', 'circulate.social'] # [ sub-domain, domain ]
