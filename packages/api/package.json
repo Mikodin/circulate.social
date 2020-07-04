@@ -10,9 +10,10 @@
     "build": "serverless webpack",
     "lint": "eslint 'src/**/*.{js,ts,tsx}' --fix",
     "alertSwitchAwsAccount": "sh ./AWS_ACCOUNT_ALERT.sh",
+    "invoke:postAuthenticationTrigger": "serverless invoke local --function cognitoDynamoUserSyncTrigger --path src/triggers/postCognitoAuthentication/mockPostCognitoAuthenticationEvent.json",
+    "dev": "AWS_PROFILE=circulate serverless offline --stage dev --is_local true",
     "deploy:dev": "serverless deploy --stage dev",
     "deploy:prod": "serverless deploy --stage prod",
-    "dev": "AWS_PROFILE=circulate serverless offline --stage dev --is_local true",
     "delete-stack:dev": "yarn alertSwitchAwsAccount && serverless remove --stage dev",
     "delete-stack:prod": "yarn alertSwitchAwsAccount && serverless remove --stage prod"
   },

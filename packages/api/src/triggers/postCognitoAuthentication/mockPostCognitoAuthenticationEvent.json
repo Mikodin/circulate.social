@@ -1,0 +1,24 @@
+{
+  "version": "1",
+  "region": "us-east-1",
+  "userPoolId": "us-east-1_mock",
+  "userName": "51356193-19e0-46eb-b566-1c3410e15b2c",
+  "callerContext": {
+    "awsSdkVersion": "aws-sdk-unknown-unknown",
+    "clientId": "456mtbjnog3cvs92dn1ft023q5"
+  },
+  "triggerSource": "PostAuthentication_Authentication",
+  "request": {
+    "userAttributes": {
+      "sub": "51356193-19e0-46eb-b566-1c3410e15b2c",
+      "custom:last_name": "A",
+      "email_verified": "true",
+      "cognito:user_status": "CONFIRMED",
+      "cognito:email_alias": "mike@circulate.social",
+      "custom:first_name": "Mike",
+      "email": "mike@circulate.social"
+    },
+    "newDeviceUsed": false
+  },
+  "response": {}
+}
