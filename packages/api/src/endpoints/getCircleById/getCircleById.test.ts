@@ -4,6 +4,7 @@ import { CreateMockEvent, CreateMockContext } from '../testUtils';
 import { handler } from './getCircleById';
 import CircleModel from '../../interfaces/dynamo/circlesModel';
 import ContentModel from '../../interfaces/dynamo/contentModel';
+import UserModel from '../../interfaces/dynamo/userModel';
 
 jest.mock('../../interfaces/dynamo/circlesModel', () => ({
   get: jest.fn(() =>
@@ -44,6 +45,19 @@ jest.mock('../../interfaces/dynamo/contentModel', () => ({
   ),
 }));
 
+jest.mock('../../interfaces/dynamo/userModel', () => ({
+  batchGet: jest.fn(() =>
+    Promise.resolve([
+      {
+        id: 'asdf-123',
+        firstName: 'Mike',
+        lastName: 'A',
+        email: 'mikeA@circulate.social',
+      },
+    ])
+  ),
+}));
+
 const MOCK_EVENT_CONTEXT = {
   authorizer: {
     claims: {
@@ -79,13 +93,20 @@ describe('getCircleById', () => {
         MOCK_EVENT.pathParameters.circleId
       );
     });
-    it('Should return a 200 with the results from CircleModel.get', async () => {
-      const resp = await handler(MOCK_EVENT, MOCK_CONTEXT, null);
+    it('Should call UserModel.batchGet with the `CircleModel.members` array', async () => {
+      const circleModelGetSpy = jest.spyOn(UserModel, 'batchGet');
+      await handler(MOCK_EVENT, MOCK_CONTEXT, null);
+      expect(circleModelGetSpy).toHaveBeenCalledWith(['dev-id']);
+    });
+    it('Should return a 200 with the results from CircleModel.get and members filled out', async () => {
+      const mockEvent = genMockEvent(undefined, undefined);
+      const resp = await handler(mockEvent, MOCK_CONTEXT, null);
+
       expect(resp).toEqual(
         expect.objectContaining({
           statusCode: 200,
           body:
-            '{"circle":{"content":["425293dd-ac0e-49b3-931b-8293c82c5502"],"privacy":"public","updatedAt":1592688117024,"members":["dev-id"],"createdAt":1592687256669,"description":"Test desc","id":"8c03b5c6-829a-4d91-80d9-e3c386af6839","createdBy":"dev-id","name":"Test"}}',
+            '{"circle":{"content":["425293dd-ac0e-49b3-931b-8293c82c5502"],"privacy":"public","updatedAt":1592688117024,"members":["Mike A"],"createdAt":1592687256669,"description":"Test desc","id":"8c03b5c6-829a-4d91-80d9-e3c386af6839","createdBy":"dev-id","name":"Test"}}',
         })
       );
     });
@@ -99,14 +120,14 @@ describe('getCircleById', () => {
           '425293dd-ac0e-49b3-931b-8293c82c5502',
         ]);
       });
-      it('Should return a 200, with contentDetails filled out with the results from ContentModel.batchGet', async () => {
+      it('Should return a 200, with contentDetails filled out with the results from ContentModel.batchGet and UserModel.batchGet', async () => {
         const mockEvent = genMockEvent(undefined, { getContentDetails: true });
         const resp = await handler(mockEvent, MOCK_CONTEXT, null);
         expect(resp).toEqual(
           expect.objectContaining({
             statusCode: 200,
             body:
-              '{"circle":{"content":["425293dd-ac0e-49b3-931b-8293c82c5502"],"privacy":"public","updatedAt":1592688117024,"members":["dev-id"],"createdAt":1592687256669,"description":"Test desc","id":"8c03b5c6-829a-4d91-80d9-e3c386af6839","createdBy":"dev-id","name":"Test","contentDetails":[{"dateTime":"2020-05-23T23:00Z[UTC]","circleIds":["8c03b5c6-829a-4d91-80d9-e3c386af6839"],"privacy":"private","categories":{},"updatedAt":"2020-06-20T21:21:56.880Z","createdAt":"2020-06-20T21:21:56.880Z","link":"Test.com","description":"Test desc","id":"425293dd-ac0e-49b3-931b-8293c82c5502","createdBy":"dev-id","tags":{},"title":"Test Content11"}]}}',
+              '{"circle":{"content":["425293dd-ac0e-49b3-931b-8293c82c5502"],"privacy":"public","updatedAt":1592688117024,"members":["Mike A"],"createdAt":1592687256669,"description":"Test desc","id":"8c03b5c6-829a-4d91-80d9-e3c386af6839","createdBy":"dev-id","name":"Test","contentDetails":[{"dateTime":"2020-05-23T23:00Z[UTC]","circleIds":["8c03b5c6-829a-4d91-80d9-e3c386af6839"],"privacy":"private","categories":{},"updatedAt":"2020-06-20T21:21:56.880Z","createdAt":"2020-06-20T21:21:56.880Z","link":"Test.com","description":"Test desc","id":"425293dd-ac0e-49b3-931b-8293c82c5502","createdBy":"dev-id","tags":{},"title":"Test Content11"}]}}',
           })
         );
       });

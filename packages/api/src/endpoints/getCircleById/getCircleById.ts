@@ -1,9 +1,10 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import log from 'lambda-log';
-import { Circle, Content } from '@circulate/types/index';
+import { Circle, Content, User } from '@circulate/types/index';
 import { generateReturn, getMemberFromAuthorizer } from '../endpointUtils';
 import CircleModel from '../../interfaces/dynamo/circlesModel';
 import ContentModel from '../../interfaces/dynamo/contentModel';
+import UserModel from '../../interfaces/dynamo/userModel';
 
 export const handler: APIGatewayProxyHandler = async (event) => {
   const { memberId, isEmailVerified } = getMemberFromAuthorizer(event);
@@ -31,6 +32,10 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       JSON.stringify(circleDbModel.original())
     ) as Circle;
 
+    const members = JSON.parse(
+      JSON.stringify(await UserModel.batchGet(circle.members))
+    ) as User[];
+
     const isMemberInCircle = circle.members.includes(memberId);
     if (!isMemberInCircle) {
       return generateReturn(401, {
@@ -46,7 +51,12 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     }
 
     return generateReturn(200, {
-      circle,
+      circle: {
+        ...circle,
+        members: members.map(
+          (member) => `${member.firstName} ${member.lastName}`
+        ),
+      },
     });
   } catch (error) {
     log.error(`Failed to get Circle:[${circleId}] for Member:[${memberId}]`, {
