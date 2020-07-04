@@ -30,6 +30,7 @@ const Login = (props: Props): JSX.Element => {
 
   const [isInvalidCredentials, setIsInvalidCredentials] = useState(false);
   const [isNetworkError, setIsNetworkError] = useState(false);
+  const [isUnknownError, setIsUnknownError] = useState(false);
 
   const [isLoginInFlight, setIsLoginInFlight] = useState(false);
 
@@ -47,16 +48,27 @@ const Login = (props: Props): JSX.Element => {
       console.error(error);
       setIsLoginInFlight(false);
 
-      if (error && error.code === 'NotAuthorizedException') {
+      const isNotAuthorizedException =
+        error && error.code === 'NotAuthorizedException';
+      if (isNotAuthorizedException) {
         setIsInvalidCredentials(true);
       }
 
-      if (error && error.code === 'NetworkError') {
+      const isNetworkErrorCode = error && error.code === 'NetworkError';
+      if (isNetworkErrorCode) {
         setIsNetworkError(true);
       }
-      if (error && error.code === 'UserNotConfirmedException' && showForm) {
+
+      const isUserNotConfirmedException =
+        error && error.code === 'UserNotConfirmedException';
+      if (isUserNotConfirmedException && showForm) {
         showForm(AUTH_FORMS.confirmEmail);
       }
+
+      if (!isNotAuthorizedException && !isNetworkErrorCode) {
+        setIsUnknownError(true);
+      }
+
       return error;
     }
   };
@@ -122,6 +134,13 @@ const Login = (props: Props): JSX.Element => {
         {isNetworkError && (
           <Alert
             message="Sorry, we couldn't connect to our server. Please try again."
+            type="error"
+            showIcon
+          />
+        )}
+        {isUnknownError && (
+          <Alert
+            message="Sorry, something unknown went wrong. Please try again."
             type="error"
             showIcon
           />

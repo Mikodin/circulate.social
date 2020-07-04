@@ -366,5 +366,25 @@ describe('Login', () => {
         });
       });
     });
+
+    describe('When user receives an Unknown error from fetchSignIn', () => {
+      const fetchSignInNetworkErrorMock = jest.fn(() =>
+        Promise.reject({ code: 'Unknown' })
+      );
+
+      it('Should display an alert telling them to try again', async () => {
+        const { queryByText } = await setupFormAfterSubmit(
+          fetchSignInNetworkErrorMock
+        );
+
+        await waitFor(() => {
+          expect(
+            queryByText(
+              'Sorry, something unknown went wrong. Please try again.'
+            )
+          ).toBeTruthy();
+        });
+      });
+    });
   });
 });
