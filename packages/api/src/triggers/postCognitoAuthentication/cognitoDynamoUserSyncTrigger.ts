@@ -3,7 +3,6 @@ import {
   CognitoUserPoolTriggerHandler,
 } from 'aws-lambda';
 import log from 'lambda-log';
-import { User } from '@circulate/types/index';
 import UserModel from '../../interfaces/dynamo/userModel';
 
 export const handler: CognitoUserPoolTriggerHandler = async (
@@ -23,13 +22,11 @@ export const handler: CognitoUserPoolTriggerHandler = async (
     log.info('Attempting to create user', { user });
 
     // @ts-expect-error
-    const savedUser = (await UserModel.create(user, {
+    await UserModel.create(user, {
       overwrite: true,
-    })) as User;
+    });
 
-    log.info('Upserted user', user);
-
-    return { ...event, user: savedUser };
+    return event;
   } catch (error) {
     // Don't throw error.  We don't want to block a user from signing in because of this
     log.error('Failed to save user', error);

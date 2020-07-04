@@ -32,10 +32,10 @@ describe('cognitoDynamoUserSyncTrigger', async () => {
         { overwrite: true }
       );
     });
-    it('Should return the passed in event with the user in the response', async () => {
+    it('Should return the passed in event ', async () => {
       // @ts-expect-error
       const resp = await handler(mockEvent);
-      expect(resp).toEqual({ ...mockEvent, user: mockUser });
+      expect(resp).toEqual(mockEvent);
     });
 
     describe('Unappy path', () => {
@@ -54,7 +54,7 @@ describe('cognitoDynamoUserSyncTrigger', async () => {
         it('Should return the passed in event', async () => {
           // @ts-expect-error
           const resp = await handler(mockEvent);
-          expect(resp).toEqual({ ...mockEvent });
+          expect(resp).toEqual(mockEvent);
         });
       });
     });
