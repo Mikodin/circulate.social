@@ -263,10 +263,10 @@ class CirclePage extends PureComponent<Props, State> {
                       <p>Description: {circle.description}</p>
                     )}
                     <CopyCircleInviteToClipboard circleId={circle.id} />
+                    <Divider />
                     <Link href={`/submit-content?circleId=${circle.id}`}>
                       <a>Submit a post</a>
                     </Link>
-                    <Divider />
                   </>
                 ) : (
                   <Skeleton active={isFetchingCircle} />
