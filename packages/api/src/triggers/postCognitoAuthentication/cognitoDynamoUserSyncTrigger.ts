@@ -3,6 +3,7 @@ import {
   CognitoUserPoolTriggerHandler,
 } from 'aws-lambda';
 import log from 'lambda-log';
+import { User } from '@circulate/types/index';
 import UserModel from '../../interfaces/dynamo/userModel';
 
 export const handler: CognitoUserPoolTriggerHandler = async (
@@ -22,7 +23,9 @@ export const handler: CognitoUserPoolTriggerHandler = async (
     log.info('Attempting to create user', { user });
 
     // @ts-expect-error
-    const savedUser = await UserModel.create(user, { overwrite: true });
+    const savedUser = (await UserModel.create(user, {
+      overwrite: true,
+    })) as User;
 
     log.info('Upserted user', user);
 
