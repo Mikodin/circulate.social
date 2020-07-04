@@ -7,11 +7,11 @@ const UserSchema = new dynamoose.Schema(
       hashKey: true,
       required: true,
     },
-    first_name: {
+    firstName: {
       type: String,
       required: true,
     },
-    last_name: {
+    lastName: {
       type: String,
       required: true,
     },
