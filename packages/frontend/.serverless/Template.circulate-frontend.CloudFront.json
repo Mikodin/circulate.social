@@ -8,27 +8,37 @@
       "url": "http://circulate-frontend.s3.amazonaws.com",
       "private": true,
       "pathPatterns": {
-        "_next/*": {
+        "_next/static/*": {
           "ttl": 86400
         },
         "static/*": {
           "ttl": 86400
+        },
+        "_next/data/*": {
+          "ttl": 0,
+          "allowedHttpMethods": [
+            "HEAD",
+            "GET"
+          ],
+          "lambda@edge": {
+            "origin-request": "arn:aws:lambda:us-east-1:441799942923:function:53upso9-o7mi6o8:152"
+          }
         }
       }
     }
   ],
   "defaults": {
     "ttl": 0,
-    "allowedHttpMethods": [
-      "HEAD",
-      "GET"
-    ],
     "forward": {
       "cookies": "all",
       "queryString": true
     },
+    "allowedHttpMethods": [
+      "HEAD",
+      "GET"
+    ],
     "lambda@edge": {
-      "origin-request": "arn:aws:lambda:us-east-1:441799942923:function:53upso9-o7mi6o8:2"
+      "origin-request": "arn:aws:lambda:us-east-1:441799942923:function:53upso9-o7mi6o8:152"
     }
   }
 }
