@@ -186,18 +186,18 @@ class CirclePage extends PureComponent<Props, State> {
 
   renderContent = (content: Content) => {
     const header = content.link ? (
-      <p>
+      <h4>
         <StarOutlined /> {''}
         <a href={content.link} target="_blank" rel="noreferrer">
           {content.title}
         </a>{' '}
         | {content.createdBy}
-      </p>
+      </h4>
     ) : (
-      <p>
+      <h4>
         <StarOutlined /> {''}
         {content.title} | {content.createdBy}
-      </p>
+      </h4>
     );
     return (
       <Fragment key={content.id}>
@@ -212,19 +212,19 @@ class CirclePage extends PureComponent<Props, State> {
     const timeString = ZonedDateTime.parse(event.dateTime).format(dtf);
 
     const header = event.link ? (
-      <p>
+      <h4>
         <StarOutlined /> {''}
         {timeString.toString()}{' '}
         <a href={event.link} target="_blank" rel="noreferrer">
           {event.title}
         </a>{' '}
         | {event.createdBy}
-      </p>
+      </h4>
     ) : (
-      <p>
+      <h4>
         <StarOutlined /> {''}
         {timeString.toString()} {event.title} | {event.createdBy}
-      </p>
+      </h4>
     );
 
     return (
@@ -296,7 +296,7 @@ class CirclePage extends PureComponent<Props, State> {
                   <Divider className={styles.divider} orientation="left">
                     Posts in Circulation
                   </Divider>
-                  <Collapse defaultActiveKey={['1']} bordered={false}>
+                  <Collapse defaultActiveKey={['1', '2']} bordered={false}>
                     <Panel header="Events" key="1">
                       {Object.keys(events)
                         .sort()
