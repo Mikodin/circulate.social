@@ -185,11 +185,23 @@ class CirclePage extends PureComponent<Props, State> {
   }
 
   renderContent = (content: Content) => {
+    const header = content.link ? (
+      <p>
+        <StarOutlined /> {''}
+        <a href={content.link} target="_blank" rel="noreferrer">
+          {content.title}
+        </a>{' '}
+        | {content.createdBy}
+      </p>
+    ) : (
+      <p>
+        <StarOutlined /> {''}
+        {content.title} | {content.createdBy}
+      </p>
+    );
     return (
       <Fragment key={content.id}>
-        <p>
-          {content.title} | {content.createdBy}
-        </p>
+        {header}
         <p>{content.description}</p>
       </Fragment>
     );
@@ -304,10 +316,12 @@ class CirclePage extends PureComponent<Props, State> {
                     </Panel>
 
                     <Panel header="Posts" key="2">
-                      <List
-                        dataSource={posts}
-                        renderItem={this.renderContent}
-                      ></List>
+                      <div className={styles.contentPanel}>
+                        <List
+                          dataSource={posts}
+                          renderItem={this.renderContent}
+                        ></List>
+                      </div>
                     </Panel>
                   </Collapse>
                 </Fragment>
