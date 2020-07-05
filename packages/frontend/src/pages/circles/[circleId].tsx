@@ -1,6 +1,7 @@
 import { PureComponent, Fragment } from 'react';
 import { GetServerSideProps } from 'next';
 import { Skeleton, Divider, Collapse, List } from 'antd';
+import { StarOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { withRouter, NextRouter } from 'next/router';
 import axios from 'axios';
@@ -185,9 +186,9 @@ class CirclePage extends PureComponent<Props, State> {
   renderContent = (content: Content) => {
     return (
       <Fragment key={content.id}>
-        {content.dateTime && <p>{content.dateTime}</p>}
-        <p>{content.title}</p>
-        <p>{content.createdBy}</p>
+        <p>
+          {content.title} | {content.createdBy}
+        </p>
         <p>{content.description}</p>
       </Fragment>
     );
@@ -197,11 +198,26 @@ class CirclePage extends PureComponent<Props, State> {
     const dtf = DateTimeFormatter.ofPattern('h:mm a').withLocale(Locale.US);
     const timeString = ZonedDateTime.parse(event.dateTime).format(dtf);
 
+    const header = event.link ? (
+      <p>
+        <StarOutlined /> {''}
+        {timeString.toString()}{' '}
+        <a href={event.link} target="_blank" rel="noreferrer">
+          {event.title}
+        </a>{' '}
+        | {event.createdBy}
+      </p>
+    ) : (
+      <p>
+        <StarOutlined /> {''}
+        {timeString.toString()} {event.title} | {event.createdBy}
+      </p>
+    );
+
     return (
       <Fragment key={event.id}>
-        <p>{`${event.dateTime && timeString.toString()} | ${event.title}`}</p>
-        <p>{event.createdBy}</p>
-        <p>{event.description}</p>
+        {header}
+        {event.description && <p>{event.description}</p>}
       </Fragment>
     );
   };
@@ -275,9 +291,9 @@ class CirclePage extends PureComponent<Props, State> {
               {circle && (
                 <Fragment>
                   {!(circle.contentDetails || []).length && (
-                    <h2>There are no upcoming events</h2>
+                    <h2>There are is no content</h2>
                   )}
-                  <Collapse defaultActiveKey={['1']}>
+                  <Collapse defaultActiveKey={['1']} bordered={false}>
                     <Panel header="Events" key="1">
                       {Object.keys(events)
                         .sort()
@@ -286,11 +302,11 @@ class CirclePage extends PureComponent<Props, State> {
                           return (
                             <div key={dateTime}>
                               <h3>{dateTime}</h3>
-                              {events[dateTime].map((event) =>
-                                this.renderEvent(event)
-                              )}
-
-                              <Divider />
+                              <div className={styles.eventsPanel}>
+                                {events[dateTime].map((event) =>
+                                  this.renderEvent(event)
+                                )}
+                              </div>
                             </div>
                           );
                         })}
