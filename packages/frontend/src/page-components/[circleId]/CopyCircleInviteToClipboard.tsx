@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import * as copy from 'copy-to-clipboard';
-import { Input, Button } from 'antd';
-import { CopyOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import { Input, Button, Modal } from 'antd';
+import {
+  CheckCircleOutlined,
+  UserAddOutlined,
+  CopyOutlined,
+} from '@ant-design/icons';
 
 export interface Props {
   circleId: string;
@@ -10,31 +14,57 @@ const domain = 'beta.circulate.social';
 
 const CopyCircleInviteToClipboard = (props: Props): JSX.Element => {
   const { circleId } = props;
+  const baseInviteText = `Hey, you should come join our Circle!\n\nhttps://${domain}/circles/${circleId}?join=true`;
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTextCopied, setIsTextCopied] = useState(false);
-  return (
-    <Input
-      size="small"
-      addonBefore={
-        <Button
-          size="small"
-          onClick={() => {
-            copy.default(`https://${domain}/circles/${circleId}?join=true`);
-            setIsTextCopied(true);
+  const [inviteText, setInviteText] = useState(baseInviteText);
 
-            setTimeout(() => {
-              setIsTextCopied(false);
-            }, 2000);
+  const inviteButton = (
+    <Button
+      key="inviteButton"
+      size="middle"
+      onClick={() => {
+        copy.default(inviteText);
+        setIsTextCopied(true);
+
+        setTimeout(() => {
+          setIsTextCopied(false);
+          setIsModalOpen(false);
+        }, 2000);
+      }}
+      type={isTextCopied ? 'primary' : 'default'}
+      icon={isTextCopied ? <CheckCircleOutlined /> : <CopyOutlined />}
+    >
+      {isTextCopied ? 'Copied!' : 'Copy To Clipboard'}
+    </Button>
+  );
+
+  return (
+    <div>
+      <Button onClick={() => setIsModalOpen(true)} icon={<UserAddOutlined />}>
+        Invite
+      </Button>
+
+      <Modal
+        visible={isModalOpen}
+        title="Invite someone"
+        onOk={() => setIsModalOpen(false)}
+        onCancel={() => {
+          setIsModalOpen(false);
+          setInviteText(baseInviteText);
+        }}
+        footer={[inviteButton]}
+      >
+        <Input.TextArea
+          rows={4}
+          value={inviteText}
+          onChange={(event) => {
+            setInviteText(event.target.value);
           }}
-          type={isTextCopied ? 'primary' : 'default'}
-          icon={isTextCopied ? <CheckCircleOutlined /> : <CopyOutlined />}
-          block
-        >
-          {isTextCopied ? 'Copied!' : 'Invite'}
-        </Button>
-      }
-      readOnly
-      value={`https://${domain}/circles/${circleId}?join=true`}
-    />
+        />
+      </Modal>
+      {/* {inviteButton} */}
+    </div>
   );
 };
 

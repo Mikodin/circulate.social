@@ -1,6 +1,6 @@
 import { PureComponent, Fragment } from 'react';
 import { GetServerSideProps } from 'next';
-import { Skeleton, Divider, Collapse, List } from 'antd';
+import { Divider, Collapse, List } from 'antd';
 import { StarOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { withRouter, NextRouter } from 'next/router';
@@ -14,10 +14,11 @@ import AuthContainer from '../../components/authorization/AuthContainer';
 import Layout from '../../components/layout/Layout';
 import styles from './[circleId].module.scss';
 
+import CircleInfoHeader from '../../page-components/[circleId]/CircleInfoHeader';
+
 import { API_ENDPOINT } from '../../util/constants';
 
 import UserContext from '../../state-management/UserContext';
-import CopyCircleInviteToClipboard from '../../page-components/[circleId]/CopyCircleInviteToClipboard';
 
 const { Panel } = Collapse;
 
@@ -270,29 +271,19 @@ class CirclePage extends PureComponent<Props, State> {
 
             <Fragment>
               <div className={styles.circleInfoSection}>
-                {circle ? (
-                  <>
-                    <h3>{circle.name}</h3>
-                    <p>Posts: {(circle.content || []).length}</p>
-                    <p>Members: {circle.members.length}</p>
-                    {circle.description && (
-                      <p>Description: {circle.description}</p>
-                    )}
-                    <CopyCircleInviteToClipboard circleId={circle.id} />
-                    <Divider />
-                    <Link href={`/submit-content?circleId=${circle.id}`}>
-                      <a>Submit a post</a>
-                    </Link>
-                  </>
-                ) : (
-                  <Skeleton active={isFetchingCircle} />
-                )}
+                <CircleInfoHeader
+                  circle={circle}
+                  isLoading={isFetchingCircle}
+                />
               </div>
               {circle && (
                 <Fragment>
                   {!(circle.contentDetails || []).length && (
                     <h2>There are is no content</h2>
                   )}
+                  <Divider className={styles.divider} orientation="left">
+                    Posts in Circulation
+                  </Divider>
                   <Collapse defaultActiveKey={['1']} bordered={false}>
                     <Panel header="Events" key="1">
                       {Object.keys(events)
