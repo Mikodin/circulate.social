@@ -45,12 +45,15 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 
     if (getContentDetails && circle.content.length) {
       // @TODO Clean this shit up
-      const contentDetails = (JSON.parse(
+      const contentDetails = JSON.parse(
         JSON.stringify(await ContentModel.batchGet(circle.content))
-      ) as Content[]).map((content) => {
+      ) as Content[];
+
+      const contentWithMemberNames = contentDetails.map((content) => {
         const createdByMember =
           members.find((member) => member.id === content.createdBy) ||
           undefined;
+
         const createdByName = createdByMember
           ? `${createdByMember.firstName} ${createdByMember.lastName}`
           : '';
@@ -60,7 +63,8 @@ export const handler: APIGatewayProxyHandler = async (event) => {
           createdBy: createdByName,
         };
       }) as Content[];
-      circle.contentDetails = contentDetails;
+
+      circle.contentDetails = contentWithMemberNames;
     }
 
     return generateReturn(200, {
