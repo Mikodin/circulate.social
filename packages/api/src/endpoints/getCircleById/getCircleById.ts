@@ -44,6 +44,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     }
 
     if (getContentDetails && circle.content.length) {
+      // @TODO Clean this shit up
       const contentDetails = (JSON.parse(
         JSON.stringify(await ContentModel.batchGet(circle.content))
       ) as Content[]).map((content) => {
