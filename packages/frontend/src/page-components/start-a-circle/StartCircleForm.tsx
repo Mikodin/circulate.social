@@ -5,7 +5,7 @@ import { Form, Input, Button, Alert, Radio, Select, Popover, Tabs } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 
 import { API_ENDPOINT } from '../../util/constants';
-import css from './StartCircleForm.module.scss';
+import styles from './StartCircleForm.module.scss';
 
 export const CREATE_CIRCLE_ENDPOINT = `${API_ENDPOINT}/circles/create`;
 
@@ -53,46 +53,70 @@ const StartCircleForm = (props: Props): JSX.Element => {
     }
   };
 
-  // TODO have it popup on input focus
   const renderDescriptionPopover = (): JSX.Element => (
     <Popover
       title="Define your Circle"
       content={
-        <div>
-          <span>
-            Descriptions are important. They help shape the community.
-          </span>
+        <div className={styles.descriptionPopover}>
+          <span>Give your Circle a clear description.</span>
+          <br />
+          <span>Include things like:</span>
           <br />
           <span>
-            So are boundaries - they help to create a safe container for all.
+            What sorts of content would you like to see? Who is this for? Is it
+            only for a certain area?
           </span>
           <br />
-          <span>
-            We will surface this description to newcomers as they are joining
-            the Circle. So define what you want and don&apos;t want.
-          </span>
-          <br />
-          <span>
-            What sorts of content would you <strong>like</strong> to see?
-          </span>
-          <br />
-          <span>
-            What sorts of content would you <strong>not</strong> like to see?
-          </span>
-          <br />
-          <span>Who is this for? Who is this not for?</span>
-          <br />
-          <span>Get clear - be specific - check out the examples below!</span>
-          <br />
+          <span>Here are some examples of a good descriptions</span>
           <Tabs defaultActiveKey="1" style={{ maxWidth: 'fit-content' }}>
-            <TabPane tab="Example 1" key="1">
-              Some good example of a description
+            <TabPane tab="Bali’s Best" key="1">
+              <p>For those living in Bali.</p>{' '}
+              <p>
+                Post fun things to do and useful resources relating to Bali.
+                Things like parties, events, group trips, workshops, doctors and
+                chefs.
+              </p>
+              <p>
+                Don’t post housing, products, online events, books or self
+                promotion.
+              </p>
             </TabPane>
-            <TabPane tab="Example 2" key="2">
-              Another good example of a description
+            <TabPane tab="Deep House Playlists" key="2">
+              <p>
+                For the lovers of Deep House music. Post links to your favorite
+                Soundcloud and Spotify playlists.
+              </p>
+              <p>Please don’t post any other genres</p>
             </TabPane>
-            <TabPane tab="Example 3" key="3">
-              Yet another good example of a description
+            <TabPane tab="Online Wellness Classes" key="3">
+              <p>
+                Post your favorite free online yoga, workouts, mediation and
+                wellness classes.
+              </p>
+            </TabPane>
+            <TabPane tab="Joe’s friends Group" key="4">
+              <p>
+                Post any recommendations on events, books, movies, podcasts,
+                articles or anything else you think our friends will be
+                interested in.
+              </p>
+              <p>Don’t post any porn or recipes.</p>
+            </TabPane>
+            <TabPane tab="Fortnite hacks" key="5">
+              <p>Post any hacks, tips, tricks or walk throughs for Fortnite.</p>
+            </TabPane>
+            <TabPane tab="Alternative Medicine for Parkinson’s" key="6">
+              <p>
+                Post articles, scientific studies or homeopathic treatments.
+              </p>
+            </TabPane>
+            <TabPane tab="Best Photography Accounts" key="7">
+              <p>Post your favorite Photography Instagram Accounts.</p>
+              <p>Don’t post more than 3 a day.</p>
+            </TabPane>
+            <TabPane tab="Best Vegan Recipes" key="8">
+              <p>Post links to your favorite vegan recipes.</p>
+              <p>Don’t post more than 2 a day.</p>
             </TabPane>
           </Tabs>
         </div>
@@ -167,7 +191,7 @@ const StartCircleForm = (props: Props): JSX.Element => {
   return (
     <Fragment>
       <Form
-        className={css.form}
+        className={styles.form}
         form={form}
         name="horizontal_login"
         size="large"
@@ -240,7 +264,7 @@ const StartCircleForm = (props: Props): JSX.Element => {
         >
           <Radio.Group>
             <Radio
-              className={css.verticalRadioButton}
+              className={styles.verticalRadioButton}
               value="private"
               // @ts-expect-error
               onFocus={(): void => setShowPrivacyPopover(true)}
@@ -248,7 +272,7 @@ const StartCircleForm = (props: Props): JSX.Element => {
               Private
             </Radio>
             <Radio
-              className={css.verticalRadioButton}
+              className={styles.verticalRadioButton}
               value="public"
               // @ts-expect-error
               onFocus={(): void => setShowPrivacyPopover(true)}

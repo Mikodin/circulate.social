@@ -12,3 +12,10 @@
   height: 30px;
   lineheight: 30px;
 }
+
+.descriptionPopover {
+  max-width: 80vw;
+  max-height: 25vh;
+  overflow-x: scroll;
+  overflow-y: scroll;
+}
