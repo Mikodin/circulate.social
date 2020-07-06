@@ -120,7 +120,7 @@ const CircleContent = (props: Props): JSX.Element => {
   const hasContentToDisplay = Boolean(events && posts);
 
   if (isLoading) {
-    return <Skeleton />;
+    return <Skeleton active={isLoading} />;
   }
 
   if (!hasContentToDisplay) {
