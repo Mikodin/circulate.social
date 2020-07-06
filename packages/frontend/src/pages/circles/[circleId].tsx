@@ -291,7 +291,7 @@ class CirclePage extends PureComponent<Props, State> {
               {circle && (
                 <Fragment>
                   {!(circle.contentDetails || []).length && (
-                    <h2>There are is no content</h2>
+                    <h2>There is no content</h2>
                   )}
                   <Divider className={styles.divider} orientation="left">
                     Posts in Circulation
