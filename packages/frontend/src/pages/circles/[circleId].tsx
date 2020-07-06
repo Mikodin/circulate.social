@@ -296,7 +296,11 @@ class CirclePage extends PureComponent<Props, State> {
                   <Divider className={styles.divider} orientation="left">
                     Posts in Circulation
                   </Divider>
-                  <Collapse defaultActiveKey={['1', '2']} bordered={false}>
+                  <Collapse
+                    defaultActiveKey={['1', '2']}
+                    bordered={false}
+                    className={styles.contentCollapse}
+                  >
                     <Panel header="Events" key="1">
                       {Object.keys(events)
                         .sort()

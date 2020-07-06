@@ -3,6 +3,12 @@
   flex-direction: column;
 }
 
+.contentCollapse {
+  border: 2px solid black !important;
+  box-shadow: 1px 1px 0 black !important;
+  border-radius: 4px !important;
+}
+
 .eventsPanel {
   margin-left: 5px;
   h4 {
