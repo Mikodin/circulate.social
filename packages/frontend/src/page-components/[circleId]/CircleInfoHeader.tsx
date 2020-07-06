@@ -15,13 +15,19 @@ export interface Props {
 const CircleInfoHeader = (props: Props): JSX.Element => {
   const { circle, isLoading } = props;
   return isLoading || !circle ? (
-    <Skeleton active={isLoading} />
+    <div data-testid="skeleton">
+      <Skeleton active={isLoading} />
+    </div>
   ) : (
     <div className={styles.infoHeader}>
       <h2>{circle.name}</h2>
       <h4>Posts: {(circle.content || []).length}</h4>
       <h4>Members: {circle.members.length}</h4>
-      {circle.description && <p>Description: {circle.description}</p>}
+      {circle.description && (
+        <>
+          <h4>Description:</h4> <p>{circle.description}</p>
+        </>
+      )}
       <div className={styles.circleActions}>
         <CopyCircleInviteToClipboard circleId={circle.id} />
 
