@@ -4,16 +4,23 @@ import Head from 'next/head';
 import css from './Layout.module.scss';
 import Header from '../header/Header';
 
-const Layout = (
-  props: PropsWithChildren<Record<string, unknown>>
-): JSX.Element => (
+interface Props {
+  extraWide?: boolean;
+}
+const Layout = (props: PropsWithChildren<Props>): JSX.Element => (
   <Fragment>
     <Head>
       <title>Circulate</title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
     <Header />
-    <div className={css.Layout}>{props.children}</div>
+    <div
+      className={
+        props.extraWide ? `${css.Layout} ${css.extraWide}` : css.Layout
+      }
+    >
+      {props.children}
+    </div>
   </Fragment>
 );
 

@@ -13,7 +13,7 @@ const Home = (): JSX.Element => {
     return <Fragment></Fragment>;
   }
   return (
-    <Layout>
+    <Layout extraWide>
       <div className={styles.container}>
         <div className={styles.infoContainer}>
           <h1>A collaborative newsletter platform.</h1>
