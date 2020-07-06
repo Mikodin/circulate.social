@@ -1,5 +1,4 @@
 import { PureComponent, Fragment } from 'react';
-import { GetServerSideProps } from 'next';
 import { Divider } from 'antd';
 import Link from 'next/link';
 import { withRouter, NextRouter } from 'next/router';
@@ -243,9 +242,4 @@ class CirclePage extends PureComponent<Props, State> {
   }
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  return {
-    props: {}, // will be passed to the page component as props
-  };
-};
 export default withRouter(CirclePage);
