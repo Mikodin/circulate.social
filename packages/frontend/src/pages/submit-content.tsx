@@ -1,5 +1,4 @@
 import { PureComponent } from 'react';
-import { GetServerSideProps } from 'next';
 import { withRouter, NextRouter } from 'next/router';
 import Link from 'next/link';
 import { Result, Button } from 'antd';
@@ -82,10 +81,5 @@ class SubmitContent extends PureComponent<Props, State> {
     );
   }
 }
-export const getServerSideProps: GetServerSideProps = async () => {
-  return {
-    props: {}, // will be passed to the page component as props
-  };
-};
 
 export default withRouter(SubmitContent);
