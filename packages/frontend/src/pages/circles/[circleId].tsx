@@ -294,35 +294,56 @@ class CirclePage extends PureComponent<Props, State> {
                     <h2>There is no content</h2>
                   )}
                   <Divider className={styles.divider} orientation="left">
-                    Posts in Circulation
+                    <h3>Circulation for this week</h3>
                   </Divider>
                   <Collapse
                     defaultActiveKey={['1', '2']}
                     bordered={false}
                     className={styles.contentCollapse}
                   >
-                    <Panel header="Events" key="1">
-                      {Object.keys(events)
-                        .sort()
-                        .reverse()
-                        .map((dateTime) => {
-                          return (
-                            <div key={dateTime}>
-                              <h3>{dateTime}</h3>
-                              <div className={styles.eventsPanel}>
-                                {events[dateTime].map((event) =>
-                                  this.renderEvent(event)
-                                )}
+                    <Panel
+                      header={<h4 className={styles.panelHeader}>Events</h4>}
+                      key="1"
+                    >
+                      <div className={styles.eventsPanel}>
+                        {Object.keys(events)
+                          .sort()
+                          .reverse()
+                          .map((dateTime) => {
+                            return (
+                              <div
+                                key={dateTime}
+                                className={styles.eventsDayContainer}
+                              >
+                                <h3 className={styles.eventDayHeader}>
+                                  {dateTime}
+                                </h3>
+                                <div className={styles.eventContainer}>
+                                  {events[dateTime].map((event) =>
+                                    this.renderEvent(event)
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                          );
-                        })}
+                            );
+                          })}
+                      </div>
                     </Panel>
 
-                    <Panel header="Posts" key="2">
+                    <Panel
+                      header={<h4 className={styles.panelHeader}>Posts</h4>}
+                      key="2"
+                    >
                       <div className={styles.contentPanel}>
                         <List
-                          dataSource={posts}
+                          dataSource={posts.sort((postA, postB) => {
+                            const epochA = ZonedDateTime.parse(
+                              postA.createdAt
+                            ).toEpochSecond();
+                            const epochB = ZonedDateTime.parse(
+                              postB.createdAt
+                            ).toEpochSecond();
+                            return epochB - epochA;
+                          })}
                           renderItem={this.renderContent}
                         ></List>
                       </div>

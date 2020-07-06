@@ -7,22 +7,42 @@
   border: 2px solid black !important;
   box-shadow: 1px 1px 0 black !important;
   border-radius: 4px !important;
-}
 
-.eventsPanel {
-  margin-left: 5px;
-  h4 {
-    margin-bottom: 0px;
+  .panelHeader {
+    margin: 0px;
+    font-size: 16px;
+    font-weight: 400;
   }
-}
 
-.contentPanel {
-  margin-left: 5px;
-  h4 {
-    margin-bottom: 0px;
+  .eventsPanel {
+    .eventsDayContainer {
+      margin-bottom: 10px;
+    }
+
+    .eventDayHeader {
+      margin-bottom: 5px;
+    }
+
+    .eventContainer {
+      margin-left: 10px;
+      h4 {
+        margin-bottom: 0px;
+      }
+    }
+  }
+  .contentPanel {
+    margin-left: 5px;
+    margin-bottom: 10px;
+    h4 {
+      margin-bottom: 0px;
+    }
   }
 }
 
 .divider {
   margin-bottom: 0px;
+  h3 {
+    margin-bottom: 0px;
+    padding: 0px;
+  }
 }
