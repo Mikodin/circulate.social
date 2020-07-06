@@ -1,26 +1,22 @@
 import { PureComponent, Fragment } from 'react';
 import { GetServerSideProps } from 'next';
-import { Divider, Collapse, List } from 'antd';
-import { StarOutlined } from '@ant-design/icons';
+import { Divider } from 'antd';
 import Link from 'next/link';
 import { withRouter, NextRouter } from 'next/router';
 import axios from 'axios';
 import { Circle, Content } from '@circulate/types';
-import { ZoneId, ZonedDateTime, DateTimeFormatter } from '@js-joda/core';
-import { Locale } from '@js-joda/locale_en-us';
-import '@js-joda/timezone';
+import { ZoneId, ZonedDateTime } from '@js-joda/core';
 
 import AuthContainer from '../../components/authorization/AuthContainer';
 import Layout from '../../components/layout/Layout';
 import styles from './[circleId].module.scss';
 
 import CircleInfoHeader from '../../page-components/[circleId]/CircleInfoHeader';
+import CircleContent from '../../page-components/[circleId]/CircleContent';
 
 import { API_ENDPOINT } from '../../util/constants';
 
 import UserContext from '../../state-management/UserContext';
-
-const { Panel } = Collapse;
 
 const GET_CIRCLE_BY_ID_ENDPOINT = `${API_ENDPOINT}/circles`;
 
@@ -184,62 +180,9 @@ class CirclePage extends PureComponent<Props, State> {
     }
   }
 
-  renderContent = (content: Content) => {
-    const header = content.link ? (
-      <h4>
-        <StarOutlined /> {''}
-        <a href={content.link} target="_blank" rel="noreferrer">
-          {content.title}
-        </a>{' '}
-        | {content.createdBy}
-      </h4>
-    ) : (
-      <h4>
-        <StarOutlined /> {''}
-        {content.title} | {content.createdBy}
-      </h4>
-    );
-    return (
-      <Fragment key={content.id}>
-        {header}
-        <p>{content.description}</p>
-      </Fragment>
-    );
-  };
-
-  renderEvent = (event: Content) => {
-    const dtf = DateTimeFormatter.ofPattern('h:mm a').withLocale(Locale.US);
-    const timeString = ZonedDateTime.parse(event.dateTime).format(dtf);
-
-    const header = event.link ? (
-      <h4>
-        <StarOutlined /> {''}
-        {timeString.toString()}{' '}
-        <a href={event.link} target="_blank" rel="noreferrer">
-          {event.title}
-        </a>{' '}
-        | {event.createdBy}
-      </h4>
-    ) : (
-      <h4>
-        <StarOutlined /> {''}
-        {timeString.toString()} {event.title} | {event.createdBy}
-      </h4>
-    );
-
-    return (
-      <Fragment key={event.id}>
-        {header}
-        {event.description && <p>{event.description}</p>}
-      </Fragment>
-    );
-  };
-
   render(): JSX.Element {
     const {
       circle,
-      events,
-      posts,
       getCircleNotAuthorized,
       showRegisterFlow,
       isFetchingCircle,
@@ -288,69 +231,10 @@ class CirclePage extends PureComponent<Props, State> {
                   isLoading={isFetchingCircle}
                 />
               </div>
-              {circle && (
-                <Fragment>
-                  {!(circle.contentDetails || []).length && (
-                    <h2>There is no content</h2>
-                  )}
-                  <Divider className={styles.divider} orientation="left">
-                    <h3>Circulation for this week</h3>
-                  </Divider>
-                  <Collapse
-                    defaultActiveKey={['1', '2']}
-                    bordered={false}
-                    className={styles.contentCollapse}
-                  >
-                    <Panel
-                      header={<h4 className={styles.panelHeader}>Events</h4>}
-                      key="1"
-                    >
-                      <div className={styles.eventsPanel}>
-                        {Object.keys(events)
-                          .sort()
-                          .reverse()
-                          .map((dateTime) => {
-                            return (
-                              <div
-                                key={dateTime}
-                                className={styles.eventsDayContainer}
-                              >
-                                <h3 className={styles.eventDayHeader}>
-                                  {dateTime}
-                                </h3>
-                                <div className={styles.eventContainer}>
-                                  {events[dateTime].map((event) =>
-                                    this.renderEvent(event)
-                                  )}
-                                </div>
-                              </div>
-                            );
-                          })}
-                      </div>
-                    </Panel>
-
-                    <Panel
-                      header={<h4 className={styles.panelHeader}>Posts</h4>}
-                      key="2"
-                    >
-                      <div className={styles.contentPanel}>
-                        <List
-                          dataSource={posts.sort((postA, postB) => {
-                            const epochA = ZonedDateTime.parse(
-                              postA.createdAt
-                            ).toEpochSecond();
-                            const epochB = ZonedDateTime.parse(
-                              postB.createdAt
-                            ).toEpochSecond();
-                            return epochB - epochA;
-                          })}
-                          renderItem={this.renderContent}
-                        ></List>
-                      </div>
-                    </Panel>
-                  </Collapse>
-                </Fragment>
-              )}
+              <Divider className={styles.divider} orientation="left">
+                <h3>Circulation for this week</h3>
+              </Divider>
+              <CircleContent circle={circle} isLoading={isFetchingCircle} />
             </Fragment>
           </div>
         )}
@@ -358,10 +242,10 @@ class CirclePage extends PureComponent<Props, State> {
     );
   }
 }
+
 export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {}, // will be passed to the page component as props
   };
 };
-
 export default withRouter(CirclePage);
