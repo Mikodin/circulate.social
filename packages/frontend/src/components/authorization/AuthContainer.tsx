@@ -129,8 +129,11 @@ class AuthContainer extends PureComponent<Props, State> {
     const { onConfirmEmailRedirectTo, router, onRegisterSuccess } = this.props;
     if (seedPassword) {
       try {
+        // This is GROSS.  But it happens because the PostAuthentication trigger happens on login
+        // And updateUserAttributes needs a user in local storage, which Login gives
         await this.context.signIn(email, seedPassword);
         await this.context.updateUserAttributes(firstName, lastName);
+        await this.context.signIn(email, seedPassword);
       } catch (error) {
         console.error(error);
         this.showForm(AUTH_FORMS.login);
