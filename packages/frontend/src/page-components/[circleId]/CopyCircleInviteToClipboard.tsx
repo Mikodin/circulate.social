@@ -7,6 +7,8 @@ import {
   CopyOutlined,
 } from '@ant-design/icons';
 
+import styles from './copyCircleInviteToClipboard.module.scss';
+
 export interface Props {
   circleId: string;
 }
@@ -46,6 +48,7 @@ const CopyCircleInviteToClipboard = (props: Props): JSX.Element => {
       </Button>
 
       <Modal
+        className={styles.modal}
         visible={isModalOpen}
         title="Invite someone"
         onOk={() => setIsModalOpen(false)}
