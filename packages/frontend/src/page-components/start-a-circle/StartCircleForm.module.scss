@@ -1,4 +1,4 @@
-// @type
+@import '../../mixins/_breakpoint.module.scss';
 
 .container {
   display: flex;
@@ -10,7 +10,6 @@
 .verticalRadioButton {
   display: block;
   height: 30px;
-  lineheight: 30px;
 }
 
 .descriptionPopover {
@@ -18,4 +17,8 @@
   max-height: 25vh;
   overflow-x: scroll;
   overflow-y: scroll;
+
+  @include atMediaUp(medium) {
+    max-width: 400px;
+  }
 }
