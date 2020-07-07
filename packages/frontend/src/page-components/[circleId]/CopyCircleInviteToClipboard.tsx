@@ -21,19 +21,19 @@ const CopyCircleInviteToClipboard = (props: Props): JSX.Element => {
   const [isTextCopied, setIsTextCopied] = useState(false);
   const [inviteText, setInviteText] = useState(baseInviteText);
 
-  const inviteButton = (
+  const copyText = () => {
+    copy.default(inviteText);
+    setIsTextCopied(true);
+    setTimeout(() => {
+      setIsTextCopied(false);
+      setIsModalOpen(false);
+    }, 2000);
+  };
+  const copyToClipboardButton = (
     <Button
       key="inviteButton"
       size="middle"
-      onClick={() => {
-        copy.default(inviteText);
-        setIsTextCopied(true);
-
-        setTimeout(() => {
-          setIsTextCopied(false);
-          setIsModalOpen(false);
-        }, 2000);
-      }}
+      onClick={copyText}
       type={isTextCopied ? 'primary' : 'default'}
       icon={isTextCopied ? <CheckCircleOutlined /> : <CopyOutlined />}
     >
@@ -43,7 +43,15 @@ const CopyCircleInviteToClipboard = (props: Props): JSX.Element => {
 
   return (
     <div>
-      <Button onClick={() => setIsModalOpen(true)} icon={<UserAddOutlined />}>
+      <Button
+        onClick={() => {
+          setIsModalOpen(true);
+          // setTimeout(() => {
+          //   copyText();
+          // }, 500);
+        }}
+        icon={<UserAddOutlined />}
+      >
         Invite
       </Button>
 
@@ -56,7 +64,7 @@ const CopyCircleInviteToClipboard = (props: Props): JSX.Element => {
           setIsModalOpen(false);
           setInviteText(baseInviteText);
         }}
-        footer={[inviteButton]}
+        footer={[copyToClipboardButton]}
       >
         <Input.TextArea
           rows={4}
