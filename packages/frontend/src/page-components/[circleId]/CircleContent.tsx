@@ -34,6 +34,7 @@ const groupEventsByDate = (events: Content[]): Record<string, Content[]> => {
       eventsByDate[date] = [event];
     }
   });
+
   return eventsByDate;
 };
 
@@ -100,19 +101,22 @@ const CircleContent = (props: Props): JSX.Element => {
 
   useEffect(() => {
     if (circle && circle.contentDetails) {
-      setEvents(
-        groupEventsByDate(
-          (circle.contentDetails || [])
-            .filter((content) => Boolean(content.dateTime))
-            .map((event) => ({
-              ...event,
-              dateTime: convertDateTimeToSystemZone(event.dateTime),
-            }))
-        )
-      );
+      const eventsWithDateConvertedToUsersTime = (circle.contentDetails || [])
+        .filter((content) => Boolean(content.dateTime))
+        .map((event) => ({
+          ...event,
+          dateTime: convertDateTimeToSystemZone(event.dateTime),
+        }));
+      setEvents(groupEventsByDate(eventsWithDateConvertedToUsersTime));
 
       setPosts(
-        (circle.contentDetails || []).filter((content) => !content.dateTime)
+        (circle.contentDetails || [])
+          .filter((content) => !content.dateTime)
+          .sort((postA, postB) => {
+            const epochA = ZonedDateTime.parse(postA.createdAt).toEpochSecond();
+            const epochB = ZonedDateTime.parse(postB.createdAt).toEpochSecond();
+            return epochB - epochA;
+          })
       );
     }
   }, [circle]);
@@ -159,18 +163,7 @@ const CircleContent = (props: Props): JSX.Element => {
 
       <Panel header={<h4 className={styles.panelHeader}>Posts</h4>} key="2">
         <div className={styles.contentPanel}>
-          <List
-            dataSource={posts.sort((postA, postB) => {
-              const epochA = ZonedDateTime.parse(
-                postA.createdAt
-              ).toEpochSecond();
-              const epochB = ZonedDateTime.parse(
-                postB.createdAt
-              ).toEpochSecond();
-              return epochB - epochA;
-            })}
-            renderItem={renderContent}
-          ></List>
+          <List dataSource={posts} renderItem={renderContent}></List>
         </div>
       </Panel>
     </Collapse>
