@@ -1,7 +1,17 @@
 import { useState, Fragment } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { Form, Input, Button, Alert, Radio, Select, Popover, Tabs } from 'antd';
+import {
+  Form,
+  Input,
+  Button,
+  Alert,
+  Radio,
+  Select,
+  Popover,
+  Tabs,
+  Card,
+} from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 
 import { API_ENDPOINT } from '../../util/constants';
@@ -53,85 +63,77 @@ const StartCircleForm = (props: Props): JSX.Element => {
     }
   };
 
-  const renderDescriptionPopover = (): JSX.Element => (
-    <Popover
-      title="Define your Circle"
-      content={
-        <div className={styles.descriptionPopover}>
-          <span>Give your Circle a clear description.</span>
-          <br />
-          <span>Include things like:</span>
-          <br />
-          <span>
-            What sorts of content would you like to see? Who is this for? Is it
-            only for a certain area?
-          </span>
-          <br />
-          <span>Here are some examples of a good descriptions</span>
-          <Tabs defaultActiveKey="1" style={{ maxWidth: 'fit-content' }}>
-            <TabPane tab="Bali’s Best" key="1">
-              <p>For those living in Bali.</p>{' '}
-              <p>
-                Post fun things to do and useful resources relating to Bali.
-                Things like parties, events, group trips, workshops, doctors and
-                chefs.
-              </p>
-              <p>
-                Don’t post housing, products, online events, books or self
-                promotion.
-              </p>
-            </TabPane>
-            <TabPane tab="Deep House Playlists" key="2">
-              <p>
-                For the lovers of Deep House music. Post links to your favorite
-                Soundcloud and Spotify playlists.
-              </p>
-              <p>Please don’t post any other genres</p>
-            </TabPane>
-            <TabPane tab="Online Wellness Classes" key="3">
-              <p>
-                Post your favorite free online yoga, workouts, mediation and
-                wellness classes.
-              </p>
-            </TabPane>
-            <TabPane tab="Joe’s friends Group" key="4">
-              <p>
-                Post any recommendations on events, books, movies, podcasts,
-                articles or anything else you think our friends will be
-                interested in.
-              </p>
-              <p>Don’t post any porn or recipes.</p>
-            </TabPane>
-            <TabPane tab="Fortnite hacks" key="5">
-              <p>Post any hacks, tips, tricks or walk throughs for Fortnite.</p>
-            </TabPane>
-            <TabPane tab="Alternative Medicine for Parkinson’s" key="6">
-              <p>
-                Post articles, scientific studies or homeopathic treatments.
-              </p>
-            </TabPane>
-            <TabPane tab="Best Photography Accounts" key="7">
-              <p>Post your favorite Photography Instagram Accounts.</p>
-              <p>Don’t post more than 3 a day.</p>
-            </TabPane>
-            <TabPane tab="Best Vegan Recipes" key="8">
-              <p>Post links to your favorite vegan recipes.</p>
-              <p>Don’t post more than 2 a day.</p>
-            </TabPane>
-          </Tabs>
-        </div>
-      }
-      trigger="click"
-      onVisibleChange={(): void =>
-        setShowDescriptionPopover(!showDescriptionPopover)
-      }
-      visible={showDescriptionPopover}
-    >
-      <InfoCircleOutlined
-        onClick={(): void => setShowDescriptionPopover(!showDescriptionPopover)}
-      />
-    </Popover>
-  );
+  const renderDescriptionPiece = () => {
+    return (
+      <Card
+        title="Description examples"
+        className={styles.descriptionExampleCard}
+        extra={
+          <Button onClick={() => setShowDescriptionPopover(false)}>
+            Close
+          </Button>
+        }
+      >
+        <p>Give your Circle a clear description.</p>
+        <p>Include things like:</p>
+        <p>
+          What sorts of content would you like to see? Who is this for? Is it
+          only for a certain area?
+        </p>
+        <p>Here are some examples of good descriptions</p>
+        <Tabs defaultActiveKey="1" style={{ maxWidth: 'fit-content' }}>
+          <TabPane tab="Bali’s Best" key="1">
+            <p>For those living in Bali.</p>{' '}
+            <p>
+              Post fun things to do and useful resources relating to Bali.
+              Things like parties, events, group trips, workshops, doctors and
+              chefs.
+            </p>
+            <p>
+              Don’t post housing, products, online events, books or self
+              promotion.
+            </p>
+          </TabPane>
+          <TabPane tab="Deep House Playlists" key="2">
+            <p>
+              For the lovers of Deep House music. Post links to your favorite
+              Soundcloud and Spotify playlists.
+            </p>
+            <p>Please don’t post any other genres</p>
+          </TabPane>
+          <TabPane tab="Online Wellness Classes" key="3">
+            <p>
+              Post your favorite free online yoga, workouts, mediation and
+              wellness classes.
+            </p>
+          </TabPane>
+          <TabPane tab="Joe’s friends Group" key="4">
+            <p>
+              Post any recommendations on events, books, movies, podcasts,
+              articles or anything else you think our friends will be interested
+              in.
+            </p>
+            <p>Don’t post any porn or recipes.</p>
+          </TabPane>
+          <TabPane tab="Fortnite hacks" key="5">
+            <p>Post any hacks, tips, tricks or walk throughs for Fortnite.</p>
+          </TabPane>
+          <TabPane tab="Alternative Medicine for Parkinson’s" key="6">
+            <p>Post articles, scientific studies or homeopathic treatments.</p>
+          </TabPane>
+          <TabPane tab="Best Photography Accounts" key="7">
+            <p>Post your favorite Photography Instagram Accounts.</p>
+            <p>Don’t post more than 3 a day.</p>
+          </TabPane>
+          <TabPane tab="Best Vegan Recipes" key="8">
+            <p>Post links to your favorite vegan recipes.</p>
+            <p>Don’t post more than 2 a day.</p>
+          </TabPane>
+        </Tabs>
+      </Card>
+    );
+  };
+
   const renderFrequencyPopover = (): JSX.Element => (
     <Popover
       title="Newsletters only go out when there is content"
@@ -227,15 +229,17 @@ const StartCircleForm = (props: Props): JSX.Element => {
               message: 'Please input a description for your Circle',
             },
           ]}
-          label={<span>{renderDescriptionPopover()} Circle description</span>}
+          label={<span>Circle description</span>}
         >
           <Input.TextArea
             rows={3}
             placeholder="Circle description"
             onFocus={(): void => setShowDescriptionPopover(true)}
+            onBlur={(): void => setShowDescriptionPopover(false)}
             style={{ fontSize: '16px' }}
           />
         </Form.Item>
+        {showDescriptionPopover && <div>{renderDescriptionPiece()}</div>}
         <Form.Item
           name="frequency"
           label={<span>{renderFrequencyPopover()} Cirulation frequency</span>}
