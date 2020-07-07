@@ -38,6 +38,10 @@ describe('CircleInfoHeader', () => {
     const { queryByText } = renderCircleInfoHeader();
     expect(queryByText(DEFAULT_PROPS.circle.description)).toBeTruthy();
   });
+  it('Should contain the frequency that the Circle sends with', () => {
+    const { queryByText } = renderCircleInfoHeader();
+    expect(queryByText(/Weekly/i)).toBeTruthy();
+  });
 
   describe('When Circle has no description', () => {
     it('Should not contain the description from the Circle if there is no description', () => {
