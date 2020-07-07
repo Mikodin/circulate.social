@@ -36,7 +36,12 @@ const CircleInfoHeader = (props: Props): JSX.Element => {
 
         {/* TODO - have it link to /settings */}
         <Link href={`${circle.id}`}>
-          <Button size="middle" type="default" icon={<SettingOutlined />}>
+          <Button
+            size="middle"
+            type="default"
+            icon={<SettingOutlined />}
+            disabled
+          >
             Settings
           </Button>
         </Link>
