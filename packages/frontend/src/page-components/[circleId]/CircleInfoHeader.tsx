@@ -23,11 +23,7 @@ const CircleInfoHeader = (props: Props): JSX.Element => {
       <h2>{circle.name}</h2>
       <h4>Posts: {(circle.content || []).length}</h4>
       <h4>Members: {circle.members.length}</h4>
-      {circle.description && (
-        <>
-          <h4>Description:</h4> <p>{circle.description}</p>
-        </>
-      )}
+      {circle.description && <p>{circle.description}</p>}
       <div className={styles.circleActions}>
         <CopyCircleInviteToClipboard circleId={circle.id} />
 
