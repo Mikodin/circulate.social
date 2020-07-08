@@ -4,7 +4,7 @@ import { FileAddOutlined, SettingOutlined } from '@ant-design/icons';
 
 import Link from 'next/link';
 
-import CopyCircleInviteToClipboard from './CopyCircleInviteToClipboard';
+import CopyCircleInviteToClipboard from '../../components/copyCircleInviteToClipboard/CopyCircleInviteToClipboard';
 import styles from './circleInfoHeader.module.scss';
 
 export interface Props {
