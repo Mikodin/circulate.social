@@ -44,7 +44,7 @@ class CircleHome extends PureComponent<Props, State> {
   }
 
   async getMyCircles(): Promise<Circle[]> {
-    const { jwtToken } = this.context;
+    const { jwtToken, getIsUserLoggedIn } = this.context;
 
     try {
       const createResponse = await axios.get(GET_MY_CIRCLES_ENDPOINT, {
@@ -55,6 +55,8 @@ class CircleHome extends PureComponent<Props, State> {
       return circles;
     } catch (error) {
       console.error(error);
+      // TODO: Remove, but helps debug the random issue
+      console.error('isUserLoggedIn:', getIsUserLoggedIn());
       this.setState({ isFetchingCircles: false, isFetchCircleError: true });
 
       return [];
@@ -103,7 +105,7 @@ class CircleHome extends PureComponent<Props, State> {
           <h1>Your Circles</h1>
           {isFetchingCircles && <Skeleton />}
           {isFetchCircleError && (
-            <p>Whoops - something went wrong, please refresh the page</p>
+            <h3>Whoops - something went wrong, please refresh the page</h3>
           )}
 
           {!isFetchingCircles && (
