@@ -3,13 +3,17 @@ import { withRouter, Router } from 'next/router';
 import Link from 'next/link';
 import axios from 'axios';
 import { Circle } from '@circulate/types';
-
-import Layout from '../../components/layout/Layout';
+import { Button, Divider, Skeleton } from 'antd';
+import { FileAddOutlined } from '@ant-design/icons';
 
 import UserContext from '../../state-management/UserContext';
-import css from './home.module.scss';
+
+import Layout from '../../components/layout/Layout';
+import CopyCircleInviteToClipboard from '../../components/copyCircleInviteToClipboard/CopyCircleInviteToClipboard';
 
 import { API_ENDPOINT } from '../../util/constants';
+
+import styles from './home.module.scss';
 
 const GET_MY_CIRCLES_ENDPOINT = `${API_ENDPOINT}/circles/me`;
 
@@ -50,7 +54,6 @@ class CircleHome extends PureComponent<Props, State> {
     } catch (error) {
       console.error(error);
       this.setState({ isFetchingCircles: false });
-      this.props.router.push('/');
 
       return [];
     }
@@ -60,15 +63,32 @@ class CircleHome extends PureComponent<Props, State> {
   // eslint-disable-next-line
   renderCircle(circle: Circle): React.ReactElement {
     return (
-      <div key={circle.id} className={css.circleContainer}>
+      <div key={circle.id} className={styles.circleContainer}>
         <h2>
-          Name:{' '}
           <Link href="[circleId]" as={`${circle.id}`}>
             <a>{circle.name}</a>
           </Link>
         </h2>
-        <p>Description: {circle.description}</p>
-        <p># of Upcoming Events: {(circle.content || []).length}</p>
+        <div className={styles.circleInfoContainer}>
+          {circle.description && <h5>{circle.description.slice(0, 120)}...</h5>}
+          <p>Upcoming Circulation: {(circle.content || []).length} posts</p>
+          <p>Frequency: {circle.frequency}</p>
+          <p>Members: {circle.members.length}</p>
+
+          <div className={styles.circleActionContainer}>
+            <Link href={`/submit-content?circleId=${circle.id}`}>
+              <Button size="middle" type="primary" icon={<FileAddOutlined />}>
+                Submit a post
+              </Button>
+            </Link>
+
+            <CopyCircleInviteToClipboard circleId={circle.id} />
+            <Button type="ghost" disabled>
+              Leave
+            </Button>
+          </div>
+        </div>
+        <Divider className={styles.divider} />
       </div>
     );
   }
@@ -77,13 +97,9 @@ class CircleHome extends PureComponent<Props, State> {
     const { circles, isFetchingCircles } = this.state;
     return (
       <Layout>
-        <div className={css.container}>
+        <div className={styles.container}>
           <h1>Your Circles</h1>
-          {isFetchingCircles && (
-            <Fragment>
-              <h3>Loading</h3>
-            </Fragment>
-          )}
+          {isFetchingCircles && <Skeleton />}
 
           {!isFetchingCircles && (
             <Fragment>
@@ -94,7 +110,7 @@ class CircleHome extends PureComponent<Props, State> {
                 </Link>
               </Fragment>
               {Boolean(circles.length) && (
-                <div className={css.circlesContainer}>
+                <div className={styles.circlesContainer}>
                   {circles.map((circle) => this.renderCircle(circle))}
                 </div>
               )}

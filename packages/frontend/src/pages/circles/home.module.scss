@@ -9,20 +9,42 @@
 .circlesContainer {
   margin-top: 20px;
   width: 100%;
+  border: 2px solid black !important;
+  box-shadow: 1px 1px 0 black !important;
+  border-radius: 4px !important;
+
+  .circleContainer {
+    width: 100%;
+    padding: 5px 5px;
+    h2 {
+      line-height: 1;
+      padding: 0;
+      margin: 0;
+    }
+    h5 {
+      margin: 0;
+    }
+
+    .circleInfoContainer {
+      margin-left: 5px;
+      text-transform: capitalize;
+      p {
+        padding: 0;
+        margin: 0;
+      }
+    }
+
+    .circleActionContainer {
+      margin-top: 5px;
+      display: flex;
+      flex-direction: row;
+      button {
+        margin-right: 10px;
+      }
+    }
+  }
 }
 
-.circleContainer {
-  border-style: solid none solid none;
-  width: 100%;
-  border-width: 1px;
-  padding: 5px 5px;
-  h2 {
-    padding: 0;
-    margin: 0;
-  }
-
-  p {
-    padding: 0;
-    margin: 0;
-  }
+.divider {
+  margin: 6px 0 !important;
 }
