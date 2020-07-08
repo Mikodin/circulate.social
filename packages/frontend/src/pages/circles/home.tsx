@@ -23,6 +23,7 @@ interface Props {
 interface State {
   circles: Circle[];
   isFetchingCircles: boolean;
+  isFetchCircleError: boolean;
 }
 class CircleHome extends PureComponent<Props, State> {
   static contextType = UserContext;
@@ -32,6 +33,7 @@ class CircleHome extends PureComponent<Props, State> {
   state = {
     circles: [],
     isFetchingCircles: true,
+    isFetchCircleError: false,
   };
 
   async componentDidMount(): Promise<void> {
@@ -49,11 +51,11 @@ class CircleHome extends PureComponent<Props, State> {
         headers: { Authorization: jwtToken },
       });
       const { circles } = createResponse.data;
-      this.setState({ isFetchingCircles: false });
+      this.setState({ isFetchingCircles: false, isFetchCircleError: false });
       return circles;
     } catch (error) {
       console.error(error);
-      this.setState({ isFetchingCircles: false });
+      this.setState({ isFetchingCircles: false, isFetchCircleError: true });
 
       return [];
     }
@@ -94,12 +96,15 @@ class CircleHome extends PureComponent<Props, State> {
   }
 
   render(): JSX.Element {
-    const { circles, isFetchingCircles } = this.state;
+    const { circles, isFetchingCircles, isFetchCircleError } = this.state;
     return (
       <Layout>
         <div className={styles.container}>
           <h1>Your Circles</h1>
           {isFetchingCircles && <Skeleton />}
+          {isFetchCircleError && (
+            <p>Whoops - something went wrong, please refresh the page</p>
+          )}
 
           {!isFetchingCircles && (
             <Fragment>
