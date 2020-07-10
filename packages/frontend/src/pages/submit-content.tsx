@@ -42,9 +42,7 @@ class SubmitContent extends PureComponent<Props, State> {
     return getIsUserLoggedIn() ? (
       <Layout>
         <h2>Submit content</h2>
-        <h3>Some other content here would be great.</h3>
-        <h3>Perhaps a graphic like Start a Circle</h3>
-        <span>Perhaps that Start a circle graphic would tie into this</span>
+        <h3>What should your Circle know about and why?</h3>
         {showContentForm && (
           <SubmitContentForm
             seedCircleId={`${router.query.circleId}`}
