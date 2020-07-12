@@ -55,7 +55,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
           undefined;
 
         const createdByName = createdByMember
-          ? `${createdByMember.firstName} ${createdByMember.lastName.charAt[0]}`
+          ? `${createdByMember.firstName} ${createdByMember.lastName.charAt(0)}`
           : '';
 
         return {
