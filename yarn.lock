@@ -13879,7 +13879,7 @@ serialize-javascript@^2.1.2:
   resolved "https://registry.yarnpkg.com/serialize-javascript/-/serialize-javascript-2.1.2.tgz#ecec53b0e0317bdc95ef76ab7074b7384785fa61"
   integrity sha512-rs9OggEUF0V4jUSecXazOYsLfu7OGK2qIn3c7IPBiffz32XniEp/TX9Xmc9LQfK2nQ2QKHvZ2oygKUGU0lG4jQ==
 
-serverless-next.js@^1.15.1:
+serverless-next.js@^1.15.0-alpha.2:
   version "1.15.0-alpha.2"
   resolved "https://registry.yarnpkg.com/serverless-next.js/-/serverless-next.js-1.15.0-alpha.2.tgz#34356f80b1f3683befcd2fb0fa6c6e31b38449a0"
   integrity sha512-WRIUNqRqAL+iGFIyhSMWp+kTWHj+b+mj5A9oRPDuI59YbsQQkOyRKM7QFG1Vu+JLcPd+G6DRttARatgifQPU6Q==
