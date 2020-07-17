@@ -3,8 +3,13 @@ import log from 'lambda-log';
 import 'source-map-support/register';
 import { v4 as uuidv4 } from 'uuid';
 import { Circle } from '@circulate/types/index';
+import { someFunction } from 'base-package';
 
 import CircleModel from '../../interfaces/dynamo/circlesModel';
+
+console.log(someFunction());
+console.log(someFunction());
+console.log(someFunction());
 
 export const handler: APIGatewayProxyHandler = async (event) => {
   log.info('Incoming Event', { event });

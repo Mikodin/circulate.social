@@ -17,6 +17,7 @@
     }
   },
   "dependencies": {
+    "base-package": "1.0.0",
     "@ant-design/icons": "^4.1.0",
     "@circulate/types": "1.0.0",
     "@js-joda/core": "^2.0.0",

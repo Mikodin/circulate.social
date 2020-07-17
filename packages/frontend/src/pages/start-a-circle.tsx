@@ -1,5 +1,7 @@
 import { PureComponent, Fragment } from 'react';
 
+import { someFunction } from 'base-package';
+
 import Layout from '../components/layout/Layout';
 import StartCircleForm from '../page-components/start-a-circle/StartCircleForm';
 import AuthContainer, {
@@ -19,6 +21,10 @@ class StartACircle extends PureComponent<
 
   render(): JSX.Element {
     const { getIsUserLoggedIn, jwtToken } = this.context;
+    console.log(someFunction());
+    console.log(someFunction());
+    console.log(someFunction());
+    console.log(someFunction());
     return (
       <Layout>
         <div className={css.page}>

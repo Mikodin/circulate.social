@@ -1,0 +1,45 @@
+{
+  "name": "base-package",
+  "version": "1.0.0",
+  "description": "Serverless webpack example using Typescript",
+  "main": "./dist/bundle.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "build": "tsc",
+    "build:webpack": "webpack",
+    "lint": "eslint 'src/**/*.{js,ts,tsx}' --fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint"
+    }
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/jest": "^26.0.3",
+    "@types/node": "^14.0.11",
+    "@typescript-eslint/eslint-plugin": "^3.6.0",
+    "@typescript-eslint/parser": "^2.30.0",
+    "eslint": "^7.3.1",
+    "eslint-config-airbnb-base": "latest",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.20.1",
+    "husky": "^4.2.3",
+    "jest": "^26.0.1",
+    "prettier": "^2.0.5",
+    "serverless": "^1.73.1",
+    "serverless-offline": "^6.1.4",
+    "serverless-plugin-monorepo": "^0.9.0",
+    "serverless-webpack": "^5.3.1",
+    "ts-loader": "^7.0.5",
+    "typescript": "^3.9.3",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "author": "Mike Alicea",
+  "license": "MIT"
+}
