@@ -158,6 +158,15 @@ functions:
           pool: circulate-users
           trigger: PostAuthentication
           existing: true
+  # CirculationSender
+  buildCirculationTable:
+    handler: src/circulationSender/triggers/contentTable/buildCirculationTable.handler
+    events:
+      - stream:
+          type: dynamodb
+          arn:
+            Fn::GetAtt: [contentTable, StreamArn]
+
 resources:
   Resources:
     circlesTable:
@@ -193,6 +202,8 @@ resources:
           - AttributeName: id
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
     usersTable:
       Type: AWS::DynamoDB::Table
       Properties:
