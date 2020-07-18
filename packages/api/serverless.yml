@@ -32,6 +32,8 @@ provider:
     EVENTS_TABLE_NAME: 'events-${self:provider.stage}'
     CONTENT_TABLE_NAME: 'content-${self:provider.stage}'
     USERS_TABLE_NAME: 'users-${self:provider.stage}'
+    UPCOMING_CIRCULATION_TABLE_NAME: 'upcomingCirculation-${self:provider.stage}'
+
     STAGE: ${opt:stage, 'dev'}
     IS_LOCAL: ${opt:is_local, 'false'}
   iamRoleStatements:
@@ -79,6 +81,17 @@ provider:
         - dynamodb:DeleteItem
         - dynamodb:BatchGetItem
       Resource: 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.USERS_TABLE_NAME}'
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - dynamodb:BatchGetItem
+      Resource: 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.UPCOMING_CIRCULATION_TABLE_NAME}'
 
 functions:
   createCircle:
@@ -213,6 +226,17 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+    upcomingCirculationTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.UPCOMING_CIRCULATION_TABLE_NAME}
+        AttributeDefinitions:
+          - AttributeName: urn
+            AttributeType: S
+        KeySchema:
+          - AttributeName: urn
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
 Outputs:
