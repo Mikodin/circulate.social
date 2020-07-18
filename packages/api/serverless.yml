@@ -48,11 +48,11 @@ provider:
         - dynamodb:DeleteItem
         - dynamodb:BatchGetItem
       Resource:
-        - Fn::GetAtt: [circlesTable, StreamArn]
-        - Fn::GetAtt: [eventsTable, StreamArn]
-        - Fn::GetAtt: [contentTable, StreamArn]
-        - Fn::GetAtt: [usersTable, StreamArn]
-        - Fn::GetAtt: [upcomingCirculationTable, StreamArn]
+        - Fn::GetAtt: [circlesTable, Arn]
+        - Fn::GetAtt: [eventsTable, Arn]
+        - Fn::GetAtt: [contentTable, Arn]
+        - Fn::GetAtt: [usersTable, Arn]
+        - Fn::GetAtt: [upcomingCirculationTable, Arn]
 
 functions:
   createCircle:
