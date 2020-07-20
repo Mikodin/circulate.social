@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "alwaysStrict": true,
-    "lib": ["es2017"],
+    "lib": ["esnext"],
+    "target": "es2017",
     "esModuleInterop": true,
     "removeComments": true,
     "moduleResolution": "node",
@@ -9,7 +10,6 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "sourceMap": true,
-    "target": "es2017",
     "outDir": "lib",
     "baseUrl": "./src/"
   },
