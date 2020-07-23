@@ -4129,19 +4129,10 @@ alphanum-sort@^1.0.0:
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
 
-amazon-cognito-identity-js@^4.2.3:
-  version "4.2.3"
-  resolved "https://registry.yarnpkg.com/amazon-cognito-identity-js/-/amazon-cognito-identity-js-4.2.3.tgz#ddde931884aca97c1845942e1e2ab5c21cba72c4"
-  integrity sha512-jjFH82vgiJxxV8bMBNcdwgIUhlwRAr4P+d231c6M7RfpNIIjoGEjXSSh7uLmk+43Z5rV1SSEcs6QmFUGMY6MLw==
-  dependencies:
-    buffer "4.9.1"
-    crypto-js "^3.3.0"
-    js-cookie "^2.1.4"
-
-amazon-cognito-identity-js@^4.2.4:
-  version "4.2.4"
-  resolved "https://registry.yarnpkg.com/amazon-cognito-identity-js/-/amazon-cognito-identity-js-4.2.4.tgz#48ba35af825e55c1d00b92e5ca97ce8d4ecf76a0"
-  integrity sha512-kznU1XF6NFpdP62OTX/IMLD+b2RWL/ePcfv60uo8BdDylG+HW9BgzFALLOLHr8NYy6ouJyohJ8jmR30NcTKuog==
+amazon-cognito-identity-js@^4.2.4, amazon-cognito-identity-js@^4.3.3:
+  version "4.3.3"
+  resolved "https://registry.yarnpkg.com/amazon-cognito-identity-js/-/amazon-cognito-identity-js-4.3.3.tgz#1b940fbd0d9e7eeb78f8944b8dc2a06ea01f1b5f"
+  integrity sha512-LrOJU8zhRrfO9C+zYNYbLYg67i607eVWQW1kQXuxMieq0e9i/ThAuZoUq8OV/rprmjQRFvg9EHhY24OlmC7OAA==
   dependencies:
     buffer "4.9.1"
     crypto-js "^3.3.0"
