@@ -1,4 +1,4 @@
-import { DynamoDBStreamHandler } from 'aws-lambda';
+import { DynamoDBStreamHandler, DynamoDBStreamEvent } from 'aws-lambda';
 import { DynamoDB } from 'aws-sdk';
 import log from 'lambda-log';
 import { v4 as uuidv4 } from 'uuid';
@@ -8,7 +8,9 @@ import { Content, Circle } from '@circulate/types';
 import CircleModel from '../../../interfaces/dynamo/circlesModel';
 import UpcomingCirculationModel from '../../../interfaces/dynamo/upcomingCirculationModel';
 
-export const handler: DynamoDBStreamHandler = async (event) => {
+export const handler: DynamoDBStreamHandler = async (
+  event: DynamoDBStreamEvent
+) => {
   log.info('Incoming event', event);
 
   // Handle delete
