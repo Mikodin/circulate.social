@@ -28,6 +28,11 @@ export const handler: DynamoDBStreamHandler = async (
     DynamoDB.Converter.unmarshall(record.dynamodb.NewImage)
   ) as Content[];
 
+  if (!insertEvents || !insertEvents.length) {
+    log.info('No insert events, returning');
+    return;
+  }
+
   const circleIdsToFetch = insertEvents.flatMap((content) => content.circleIds);
 
   let circles: Circle[];
@@ -43,45 +48,50 @@ export const handler: DynamoDBStreamHandler = async (
     log.error('Failed to batchGet circles', circleIdsToFetch, error);
     throw error;
   }
+  let circulationsAdded;
+  try {
+    circulationsAdded = await Promise.all(
+      await Promise.all(
+        circles.map((circle) =>
+          Promise.all(
+            circle.members.map(async (memberId) => {
+              const urn = `${memberId}:${circle.frequency}`;
+              let circulationAlreadyExists;
+              try {
+                circulationAlreadyExists = Boolean(
+                  await UpcomingCirculationModel.get(urn)
+                );
+              } catch (error) {
+                log.error('Error fetching members upcomingCirculation', {
+                  memberId,
+                  error,
+                });
+              }
 
-  const circulationsAdded = await Promise.all(
-    await Promise.all(
-      circles.map((circle) =>
-        Promise.all(
-          circle.members.map(async (memberId) => {
-            const urn = `${memberId}:${circle.frequency}`;
-            let circulationAlreadyExists;
-            try {
-              circulationAlreadyExists = Boolean(
-                await UpcomingCirculationModel.get(urn)
-              );
-            } catch (error) {
-              log.error('Error fetching members upcomingCirculation', {
-                memberId,
-                error,
+              if (circulationAlreadyExists) {
+                return UpcomingCirculationModel.update(
+                  {
+                    urn,
+                  },
+                  { $ADD: { circles: [circle.id] } }
+                );
+              }
+
+              return UpcomingCirculationModel.create({
+                urn,
+                circulationId: uuidv4(),
+                userId: memberId,
+                circles: [circle.id],
               });
-            }
-
-            if (circulationAlreadyExists) {
-              return UpcomingCirculationModel.update(
-                {
-                  urn,
-                },
-                { $ADD: { circles: [circle.id] } }
-              );
-            }
-
-            return UpcomingCirculationModel.create({
-              urn,
-              circulationId: uuidv4(),
-              userId: memberId,
-              circles: [circle.id],
-            });
-          })
+            })
+          )
         )
       )
-    )
-  );
+    );
+  } catch (error) {
+    log.error('Failed to get/update/create Circulations', { circles, error });
+    throw error;
+  }
 
   log.info('Created circulations', circulationsAdded);
 };

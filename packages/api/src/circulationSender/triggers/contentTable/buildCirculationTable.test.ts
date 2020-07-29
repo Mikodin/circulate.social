@@ -1,4 +1,4 @@
-import { DynamoDBStreamEvent } from 'aws-lambda';
+import { DynamoDBStreamEvent, DynamoDBRecord } from 'aws-lambda';
 import log from 'lambda-log';
 import { handler } from './buildCirculationTable';
 import CircleModel from '../../../interfaces/dynamo/circlesModel';
@@ -62,19 +62,19 @@ describe('buildCirculationTable', () => {
     logErrorSpy.mockClear();
   });
 
-  describe('Happy path', () => {
-    it('Should return void', async () => {
-      const resp = await handler(MockInsertEvent, null, null);
-      expect(resp).toBe(undefined);
-    });
-    describe('When given INSERT events', () => {
+  it('Should return void', async () => {
+    const resp = await handler(MockInsertEvent, null, null);
+    expect(resp).toBe(undefined);
+  });
+  describe('When given INSERT events', () => {
+    describe('Happy path', () => {
       it('Should call CircleModel.batchGet with each circle id in the event', async () => {
         await handler(MockInsertEvent, null, null);
         expect(circleBatchGetSpy).toHaveBeenCalledWith([
           '08ee2184-1a4c-454a-bfa0-ee3c77917be1',
         ]);
       });
-      it('Should call UpcomingCirculationModel.get for each member id in the Circle', async () => {
+      it("Should call UpcomingCirculationModel.get(3x) for each memberId's in the Circle", async () => {
         await handler(MockInsertEvent, null, null);
         expect(upcomingCirculationGetSpy).toHaveBeenCalledTimes(3);
         expect(upcomingCirculationGetSpy).toHaveBeenNthCalledWith(
@@ -97,7 +97,7 @@ describe('buildCirculationTable', () => {
             Promise.resolve(true)
           );
         });
-        it('Should call UpcomingCirculationModel.update for each member', async () => {
+        it('Should call UpcomingCirculationModel.update(3x) for each member', async () => {
           await handler(MockInsertEvent, null, null);
           expect(upcomingCirculationUpdateSpy).toHaveBeenNthCalledWith(
             1,
@@ -122,7 +122,7 @@ describe('buildCirculationTable', () => {
             Promise.resolve(false)
           );
         });
-        it('Should call UpcomingCirculationModel.create', async () => {
+        it('Should call UpcomingCirculationModel.create(3x) for each member that exists', async () => {
           await handler(MockInsertEvent, null, null);
           expect(upcomingCirculationCreateSpy).toHaveBeenCalledTimes(3);
           expect(upcomingCirculationCreateSpy).toHaveBeenNthCalledWith(1, {
@@ -144,6 +144,24 @@ describe('buildCirculationTable', () => {
             userId: 'NOT-dev-id',
           });
         });
+      });
+    });
+
+    describe('When there are no Insert Events', () => {
+      const MockDeleteRecords: DynamoDBRecord[] = MockInsertEvent.Records.map(
+        (record) => ({
+          ...record,
+          eventName: 'REMOVE',
+        })
+      );
+      const MockNotInsertEvent: DynamoDBStreamEvent = {
+        ...MockInsertEvent,
+        Records: MockDeleteRecords,
+      };
+      it('Should return undefined', async () => {
+        const resp = await handler(MockNotInsertEvent, null, null);
+
+        expect(resp).toEqual(undefined);
       });
     });
   });
