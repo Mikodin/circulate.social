@@ -8,31 +8,7 @@ import { Content, Circle } from '@circulate/types';
 import CircleModel from '../../../interfaces/dynamo/circlesModel';
 import UpcomingCirculationModel from '../../../interfaces/dynamo/upcomingCirculationModel';
 
-export const handler: DynamoDBStreamHandler = async (
-  event: DynamoDBStreamEvent
-) => {
-  log.info('Incoming event', event);
-
-  // Handle delete
-  //   const deleteEvents = event.Records.filter(
-  //     (record) => record.eventName === 'REMOVE'
-  //   );
-
-  // Fetch all Circles
-  // Loop through Member id's and build Circulation object
-  // Insert Circulation object into table
-  // Done
-  const insertEvents = event.Records.filter(
-    (record) => record.eventName === 'INSERT'
-  ).map((record) =>
-    DynamoDB.Converter.unmarshall(record.dynamodb.NewImage)
-  ) as Content[];
-
-  if (!insertEvents || !insertEvents.length) {
-    log.info('No insert events, returning');
-    return;
-  }
-
+async function fetchCircles(insertEvents: Content[]): Promise<Circle[]> {
   const circleIdsToFetch = insertEvents.flatMap((content) => content.circleIds);
 
   let circles: Circle[];
@@ -44,54 +20,99 @@ export const handler: DynamoDBStreamHandler = async (
         )
       )
     ) as Circle[];
+
+    return circles;
   } catch (error) {
     log.error('Failed to batchGet circles', circleIdsToFetch, error);
     throw error;
   }
-  let circulationsAdded;
+}
+
+async function getIfCirculationExists(userUrn: string) {
   try {
-    circulationsAdded = await Promise.all(
-      await Promise.all(
-        circles.map((circle) =>
-          Promise.all(
-            circle.members.map(async (memberId) => {
-              const urn = `${memberId}:${circle.frequency}`;
-              let circulationAlreadyExists;
-              try {
-                circulationAlreadyExists = Boolean(
-                  await UpcomingCirculationModel.get(urn)
-                );
-              } catch (error) {
-                log.error('Error fetching members upcomingCirculation', {
-                  memberId,
-                  error,
-                });
-              }
+    return Boolean(await UpcomingCirculationModel.get(userUrn));
+  } catch (error) {
+    log.error(`Error fetching memberId:[${userUrn}] upcomingCirculation`, {
+      userUrn,
+      error,
+    });
 
-              if (circulationAlreadyExists) {
-                return UpcomingCirculationModel.update(
-                  {
-                    urn,
-                  },
-                  { $ADD: { circles: [circle.id] } }
-                );
-              }
+    throw error;
+  }
+}
+async function updateOrCreateCirculation(
+  circulationAlreadyExists: boolean,
+  urn: string,
+  circleId: string,
+  memberId?: string
+) {
+  if (circulationAlreadyExists) {
+    return UpcomingCirculationModel.update(
+      {
+        urn,
+      },
+      { $ADD: { circles: [circleId] } }
+    );
+  }
 
-              return UpcomingCirculationModel.create({
-                urn,
-                circulationId: uuidv4(),
-                userId: memberId,
-                circles: [circle.id],
-              });
-            })
-          )
+  return UpcomingCirculationModel.create({
+    urn,
+    circulationId: uuidv4(),
+    userId: memberId,
+    circles: [circleId],
+  });
+}
+
+async function updateUsersCirclulation(circles: Circle[]) {
+  try {
+    // Loop through Circles
+    //  Loop through Members
+    //    Update or create circulation
+    const circulationsAdded = await Promise.all(
+      circles.map(async (circle) =>
+        Promise.all(
+          circle.members.map(async (memberId) => {
+            const urn = `${memberId}:${circle.frequency}`;
+            const circulationAlreadyExists = await getIfCirculationExists(urn);
+
+            const circulation = await updateOrCreateCirculation(
+              circulationAlreadyExists,
+              urn,
+              circle.id,
+              memberId
+            );
+
+            return circulation;
+          })
         )
       )
     );
+    return circulationsAdded;
   } catch (error) {
     log.error('Failed to get/update/create Circulations', { circles, error });
     throw error;
   }
+}
 
-  log.info('Created circulations', circulationsAdded);
+export const handler: DynamoDBStreamHandler = async (
+  event: DynamoDBStreamEvent
+) => {
+  log.info('Incoming event', event);
+
+  const insertEvents = event.Records.filter(
+    (record) => record.eventName === 'INSERT'
+  ).map((record) =>
+    DynamoDB.Converter.unmarshall(record.dynamodb.NewImage)
+  ) as Content[];
+
+  if (!insertEvents || !insertEvents.length) {
+    log.info('No insert events, returning');
+    return;
+  }
+
+  const circles = await fetchCircles(insertEvents);
+  const circulationsUpdated = await updateUsersCirclulation(circles);
+
+  console.log(circulationsUpdated);
+  log.info('Created circulations', circulationsUpdated);
 };
