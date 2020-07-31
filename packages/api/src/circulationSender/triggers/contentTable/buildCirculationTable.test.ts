@@ -72,31 +72,22 @@ describe('buildCirculationTable', () => {
         await handler(MockInsertEvent, null, null);
         expect(circleBatchGetSpy).toHaveBeenCalledWith([
           '08ee2184-1a4c-454a-bfa0-ee3c77917be1',
+          '3278f0bc-6d49-44c0-aa88-4d2e9edf3636',
         ]);
-      });
-      it("Should call UpcomingCirculationModel.get(3x) for each memberId's in the Circle", async () => {
-        await handler(MockInsertEvent, null, null);
-        expect(upcomingCirculationGetSpy).toHaveBeenCalledTimes(3);
-        expect(upcomingCirculationGetSpy).toHaveBeenNthCalledWith(
-          1,
-          'dev-id:daily'
-        );
-        expect(upcomingCirculationGetSpy).toHaveBeenNthCalledWith(
-          2,
-          'dev-id, someOtherId:weekly'
-        );
-        expect(upcomingCirculationGetSpy).toHaveBeenNthCalledWith(
-          3,
-          'NOT-dev-id:weekly'
-        );
       });
 
       describe('When the Upcoming Circulation exists', () => {
         beforeEach(() => {
-          upcomingCirculationGetSpy.mockImplementationOnce(() =>
+          upcomingCirculationCreateSpy.mockImplementation(() =>
+            Promise.reject({ code: 'ConditionalCheckFailedException' })
+          );
+        });
+        afterAll(() => {
+          upcomingCirculationCreateSpy.mockImplementation(() =>
             Promise.resolve(true)
           );
         });
+
         it('Should call UpcomingCirculationModel.update(3x) for each member', async () => {
           await handler(MockInsertEvent, null, null);
           expect(upcomingCirculationUpdateSpy).toHaveBeenNthCalledWith(
@@ -118,9 +109,13 @@ describe('buildCirculationTable', () => {
       });
       describe('When the Upcoming Circulation does not exist', () => {
         beforeEach(() => {
-          upcomingCirculationGetSpy.mockImplementation(() =>
-            Promise.resolve(false)
+          upcomingCirculationCreateSpy.mockImplementation(() =>
+            Promise.resolve(true)
           );
+        });
+        it('Should NOT call UpcomingCirculationModel.update', async () => {
+          await handler(MockInsertEvent, null, null);
+          expect(upcomingCirculationUpdateSpy).not.toHaveBeenCalled();
         });
         it('Should call UpcomingCirculationModel.create(3x) for each member that exists', async () => {
           await handler(MockInsertEvent, null, null);

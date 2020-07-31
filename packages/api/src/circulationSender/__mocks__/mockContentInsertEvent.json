@@ -51,6 +51,58 @@
         "StreamViewType": "NEW_AND_OLD_IMAGES"
       },
       "eventSourceARN": "arn:aws:dynamodb:us-east-1:441799942923:table/content-prod/stream/2020-07-18T17:50:36.234"
+    },
+    {
+      "eventID": "9be1dae42004f0564305338dc83ced88",
+      "eventName": "INSERT",
+      "eventVersion": "1.1",
+      "eventSource": "aws:dynamodb",
+      "awsRegion": "us-east-1",
+      "dynamodb": {
+        "ApproximateCreationDateTime": 1595094853,
+        "Keys": {
+          "id": {
+            "S": "3278f0bc-6d49-44c0-aa88-4d2e9edf3636"
+          }
+        },
+        "NewImage": {
+          "circleIds": {
+            "L": [
+              {
+                "S": "3278f0bc-6d49-44c0-aa88-4d2e9edf3636"
+              }
+            ]
+          },
+          "createdAt": {
+            "N": "1595094853460"
+          },
+          "createdBy": {
+            "S": "51356193-19e0-46eb-b566-1c3410e15b2c"
+          },
+          "link": {
+            "S": "https://www.reuters.com/news/world"
+          },
+          "description": {
+            "S": "Just some things to see"
+          },
+          "privacy": {
+            "S": "private"
+          },
+          "id": {
+            "S": "3278f0bc-6d49-44c0-aa88-4d2e9edf3636"
+          },
+          "title": {
+            "S": "World politics lol"
+          },
+          "updatedAt": {
+            "N": "1595094853460"
+          }
+        },
+        "SequenceNumber": "129505700000000069153716483",
+        "SizeBytes": 313,
+        "StreamViewType": "NEW_AND_OLD_IMAGES"
+      },
+      "eventSourceARN": "arn:aws:dynamodb:us-east-1:441799942923:table/content-prod/stream/2020-07-18T17:50:36.234"
     }
   ]
 }
