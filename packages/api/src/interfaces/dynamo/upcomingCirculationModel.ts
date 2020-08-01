@@ -16,6 +16,10 @@ const CirculationSchema = new dynamoose.Schema(
       type: String,
       required: true,
     },
+    frequency: {
+      type: String,
+      required: true,
+    },
     circles: {
       // @ts-expect-error
       type: Set,

@@ -37,6 +37,7 @@ export async function updateOrCreateCirculation(
       urn,
       circulationId: uuidv4(),
       userId: memberId,
+      frequency,
       circles: [circleId],
     });
 

@@ -125,18 +125,21 @@ describe('buildCirculationTable', () => {
             circulationId: expect.any(String),
             urn: 'dev-id:daily',
             userId: 'dev-id',
+            frequency: 'daily',
           });
           expect(upcomingCirculationCreateSpy).toHaveBeenNthCalledWith(2, {
             circles: ['mock-circle-id-2'],
             circulationId: expect.any(String),
             urn: 'dev-id, someOtherId:weekly',
             userId: 'dev-id, someOtherId',
+            frequency: 'weekly',
           });
           expect(upcomingCirculationCreateSpy).toHaveBeenNthCalledWith(3, {
             circles: ['mock-circle-id-3'],
             circulationId: expect.any(String),
             urn: 'NOT-dev-id:weekly',
             userId: 'NOT-dev-id',
+            frequency: 'weekly',
           });
         });
       });
