@@ -1,13 +1,13 @@
 import log from 'lambda-log';
 import { v4 as uuidv4 } from 'uuid';
-import { Circle, Content } from '@circulate/types';
+import { Circle } from '@circulate/types';
 
 import CircleModel from '../../../interfaces/dynamo/circlesModel';
 import UpcomingCirculationModel from '../../../interfaces/dynamo/upcomingCirculationModel';
 
-export async function fetchCircles(insertEvents: Content[]): Promise<Circle[]> {
-  const circleIdsToFetch = insertEvents.flatMap((content) => content.circleIds);
-
+export async function fetchCircles(
+  circleIdsToFetch: string[]
+): Promise<Circle[]> {
   let circles: Circle[];
   try {
     circles = JSON.parse(
@@ -71,7 +71,6 @@ interface CirculationToConstruct {
   circleId: string;
   frequency: Circle['frequency'];
 }
-
 export function constructCirculationArray(
   circles: Circle[]
 ): CirculationToConstruct[] {

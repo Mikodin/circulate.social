@@ -38,9 +38,11 @@ export const handler: DynamoDBStreamHandler = async (
     return;
   }
 
+  const circleIdsToFetch = insertEvents.flatMap((content) => content.circleIds);
+
   let circles;
   try {
-    circles = await fetchCircles(insertEvents);
+    circles = await fetchCircles(circleIdsToFetch);
   } catch (error) {
     log.error('Failed to fetch circles', { insertEvents, error });
     throw error;
