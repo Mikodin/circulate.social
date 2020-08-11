@@ -59,7 +59,7 @@
     "typescript": "^3.9.3",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
-    "webpack-node-externals": "^2.5.0"
+    "webpack-node-externals": "^2.5.1"
   },
   "author": "Mike Alicea",
   "license": "MIT"
