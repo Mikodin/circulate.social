@@ -5,6 +5,7 @@ export interface Circulation {
   circulationId: string;
   userId: string;
   circles: string[];
+  circleDetails: Map<string, Circle>;
   frequency: Circle['frequency'];
 }
 // export interface UpcomingCirculation extends Circulation {}

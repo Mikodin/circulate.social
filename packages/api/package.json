@@ -12,6 +12,7 @@
     "alertSwitchAwsAccount": "sh ./AWS_ACCOUNT_ALERT.sh",
     "invoke:postAuthenticationTrigger": "serverless invoke local --function cognitoDynamoUserSyncTrigger --path src/triggers/postCognitoAuthentication/mockPostCognitoAuthenticationEvent.json",
     "invoke:buildCirculationTable": "serverless invoke local --function buildCirculationTable --path src/circulationSender/__mocks__/mockContentInsertEvent.json",
+    "invoke:circulationSender": "serverless invoke local --function circulationSender",
     "dev": "AWS_PROFILE=circulate serverless offline --stage dev --is_local true",
     "deploy:dev": "serverless deploy --stage dev",
     "deploy:prod": "serverless deploy --stage prod",
@@ -31,6 +32,7 @@
     "aws-sdk": "^2.707.0",
     "dynamoose": "^2.2.1",
     "lambda-log": "^2.4.0",
+    "mailgun-js": "^0.22.0",
     "source-map-support": "^0.5.16",
     "uuid": "^8.2.0"
   },
