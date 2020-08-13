@@ -48,17 +48,18 @@ export const handler: ScheduledHandler = async () => {
   const fullEmailsToSend = Array.from(filledOutCirculationsMap).map(
     // eslint-disable-next-line
     ([_, value]) => {
-      const circulationToSend = createCirculationHtmlForUser(value);
+      const usersFirstName = usersMap.get(value.userId).firstName;
+
+      const circulationToSend = createCirculationHtmlForUser(
+        usersFirstName,
+        value
+      );
+
       const emailParams = {
         from: 'Test <milkman@circulate.social>',
         to: 'mfalicea58@gmail.com',
         subject: 'Your Circulation for today',
-        html: `
-        <h1>Heya ${
-          usersMap.get(value.userId).firstName
-        }, this is your Circulation</h1>
-        ${circulationToSend}
-        `,
+        html: circulationToSend,
       };
 
       return emailParams;

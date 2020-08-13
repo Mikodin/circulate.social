@@ -1,23 +1,20 @@
-import { Circulation, Content } from '@circulate/types';
+import { Circulation } from '@circulate/types';
+import Handlebars from 'handlebars';
 
-export const createContentHtml = (content: Content): string => `
-        <p>
-        ${content.title} | ${content.createdBy}
-        </p>
-        <span>  ${content.description}</span>
-        `;
+import circulationHtmlTemplate from './circulationTemplate';
+
+const template = Handlebars.compile(circulationHtmlTemplate);
 
 export const createCirculationHtmlForUser = (
+  usersFirstName: string,
   circulation: Circulation
-): string[] => {
-  const circlesInfo: string[] = [];
-  circulation.circleDetails.forEach((circle) => {
-    circlesInfo.push(`
-      <h3>${circle.name}<h3>
-      <h4>Content</h4>
-      ${circle.contentDetails.map((content) => createContentHtml(content))}
-      <hr />
-      `);
+): string => {
+  const circleDetailsArray = Array.from(circulation.circleDetails).map(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ([_, val]) => val
+  );
+  return template({
+    usersFirstName,
+    circulation: { ...circulation, circleDetails: circleDetailsArray },
   });
-  return circlesInfo;
 };
