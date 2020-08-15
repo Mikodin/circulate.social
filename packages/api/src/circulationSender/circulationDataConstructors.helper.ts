@@ -4,35 +4,50 @@ import CircleModel from '../interfaces/dynamo/circlesModel';
 import ContentModel from '../interfaces/dynamo/contentModel';
 import UserModel from '../interfaces/dynamo/userModel';
 
-export async function getAllContentAndUsersFromCircles(
+export async function getAllContentAndUsersFromAllCircles(
   circles: Circle[]
 ): Promise<{ content: Content[]; users: User[] }> {
   let content: Content[];
   let users: User[];
 
-  const contentIds = Array.from(
-    new Set(circles.flatMap((circle) => circle.content))
+  const allUpcomingContentIds = Array.from(
+    new Set(circles.flatMap((circle) => circle.upcomingContentIds))
   );
 
-  const userIds = Array.from(
+  if (!allUpcomingContentIds.length) {
+    return { content: [], users: [] };
+  }
+
+  if (allUpcomingContentIds.length > 100) {
+    log.warn('Trying to fetch more than 100 items');
+    // @TODO get an alert on this
+    throw new Error(
+      'Trying to fetch more than 100 ContentIds.  This will fail on Dynamos side'
+    );
+  }
+
+  const allUserIds = Array.from(
     new Set(circles.flatMap((circle) => circle.members))
   );
 
   try {
-    content = (await ContentModel.batchGet(contentIds)).map((document) =>
-      JSON.parse(JSON.stringify(document.original()))
-    );
+    content = (
+      await ContentModel.batchGet(allUpcomingContentIds)
+    ).map((document) => JSON.parse(JSON.stringify(document.original())));
   } catch (fetchContentError) {
-    log.warn('Failed to fetch Content', { contentIds, fetchContentError });
+    log.warn('Failed to fetch Content', {
+      allUpcomingContentIds,
+      fetchContentError,
+    });
     throw fetchContentError;
   }
 
   try {
-    users = (await UserModel.batchGet(userIds)).map((document) =>
+    users = (await UserModel.batchGet(allUserIds)).map((document) =>
       JSON.parse(JSON.stringify(document.original()))
     );
   } catch (fetchUsersError) {
-    log.warn('Failed to fetch Users', { userIds, fetchUsersError });
+    log.warn('Failed to fetch Users', { allUserIds, fetchUsersError });
     throw fetchUsersError;
   }
 
@@ -53,7 +68,7 @@ export async function getAllCirclesContentAndUsers(
     throw fetchCirclesError;
   }
 
-  const { content, users } = await getAllContentAndUsersFromCircles(circles);
+  const { content, users } = await getAllContentAndUsersFromAllCircles(circles);
 
   return {
     circles,
@@ -116,17 +131,24 @@ export function constructFilledOutCirculations(
       (circleDetailsAcc, circleId) => {
         const circle = circlesMap.get(circleId);
 
-        circle.contentDetails = circle.content.map((contentId) => {
-          const content = contentMap.get(contentId);
-          const createdByUser = usersMap.get(content.createdBy);
-          if (createdByUser) {
-            content.createdBy = `${createdByUser.firstName} ${
-              (createdByUser.lastName || '')[0]
-            }`;
-          }
+        circle.contentDetails = circle.content.reduce(
+          (contentDetailsAcc, contentId) => {
+            const content = contentMap.get(contentId);
+            if (!content) {
+              return contentDetailsAcc;
+            }
 
-          return content;
-        });
+            const createdByUser = usersMap.get(content.createdBy || '');
+            if (createdByUser) {
+              content.createdBy = `${createdByUser.firstName} ${
+                (createdByUser.lastName || '')[0]
+              }`;
+            }
+            contentDetailsAcc.push(content);
+            return contentDetailsAcc;
+          },
+          []
+        );
 
         circleDetailsAcc.set(circle.id, circle);
         return circleDetailsAcc;
@@ -140,4 +162,18 @@ export function constructFilledOutCirculations(
     });
     return acc;
   }, new Map());
+}
+
+export async function clearUpcomingContentFromCircles(
+  circleIds: string[]
+): Promise<void> {
+  if (!circleIds.length) {
+    return;
+  }
+
+  await Promise.all(
+    circleIds.map((circleId) =>
+      CircleModel.update({ id: circleId }, { $SET: { upcomingContentIds: [] } })
+    )
+  );
 }

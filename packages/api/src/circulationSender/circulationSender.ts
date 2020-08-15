@@ -7,6 +7,7 @@ import { Circulation } from '@circulate/types';
 import {
   constructFilledOutCirculations,
   constructCirculationComponentMaps,
+  clearUpcomingContentFromCircles,
 } from './circulationDataConstructors.helper';
 import { createCirculationHtmlForUser } from './circulationHtmlConstructor.helper';
 import UpcomingCirculationModel from '../interfaces/dynamo/upcomingCirculationModel';
@@ -21,10 +22,8 @@ const mailgun = mailgunSetup({
 async function fetchUpcomingDailyCirculations(): Promise<Circulation[]> {
   const dailyFilter = new Condition('frequency').contains('');
   return (
-    (await UpcomingCirculationModel.scan(dailyFilter).exec())
-      // @ts-expect-error
-      .map((doc) => JSON.parse(JSON.stringify(doc.original())))
-  );
+    await UpcomingCirculationModel.scan(dailyFilter).all().exec()
+  ).map((doc) => JSON.parse(JSON.stringify(doc.original())));
 }
 
 export const handler: ScheduledHandler = async () => {
@@ -37,6 +36,11 @@ export const handler: ScheduledHandler = async () => {
     usersMap,
     contentMap,
   } = await constructCirculationComponentMaps(upcomingDailyCirculations);
+
+  if (!circlesMap.size || !usersMap.size || !contentMap.size) {
+    log.info('No data to send, returning');
+    return;
+  }
 
   const filledOutCirculationsMap = constructFilledOutCirculations(
     upcomingDailyCirculations,
@@ -70,15 +74,28 @@ export const handler: ScheduledHandler = async () => {
     log.info(`Sending [${fullEmailsToSend.length}] Circulations`, {
       idsToSend: Array.from(filledOutCirculationsMap.keys()),
     });
-    const sentMessages = await Promise.all(
+    const sentEmails = await Promise.all(
       fullEmailsToSend.map((emailParams) => {
         return mailgun.messages().send(emailParams);
       })
     );
 
-    log.info('Sent messages', { sentMessages });
+    log.info(`Sent [${sentEmails.length}] Circulations`, { sentEmails });
   } catch (error) {
     log.error('Failed to send messages', { error, fullEmailsToSend });
+    throw error;
+  }
+
+  // Clear out every Circles upcomingContentIds array
+  const allCircleIds = Array.from(circlesMap).map(([key]) => key);
+  try {
+    log.info(`Clearing out [${allCircleIds.length}] circles upcoming content`);
+    await clearUpcomingContentFromCircles(allCircleIds);
+  } catch (error) {
+    log.error('Failed to clear upcoming content from Circles', {
+      allCircleIds,
+      error,
+    });
     throw error;
   }
 };

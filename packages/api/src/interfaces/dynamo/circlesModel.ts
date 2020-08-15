@@ -18,20 +18,21 @@ const CircleSchema = new dynamoose.Schema(
       enum: ['daily', 'weekly', 'biweekly', 'monthly'],
     },
     members: {
-      // @ts-expect-error
       type: Set,
-      // @ts-expect-error
       schema: [String],
     },
     creatorId: String,
     events: {
       type: Array,
-      // @ts-expect-error
       schema: [String],
     },
     content: {
       type: Array,
-      // @ts-expect-error
+      schema: [String],
+      default: [],
+    },
+    upcomingContentIds: {
+      type: Array,
       schema: [String],
       default: [],
     },

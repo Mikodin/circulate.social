@@ -15,7 +15,6 @@ export const ContentSchema = new dynamoose.Schema(
     circleIds: {
       required: true,
       type: Array,
-      // @ts-expect-error
       schema: [String],
       default: [],
     },
@@ -30,13 +29,11 @@ export const ContentSchema = new dynamoose.Schema(
     categories: {
       // @ts-expect-error
       type: Set,
-      // @ts-expect-error
       schema: [String],
     },
     tags: {
       // @ts-expect-error
       type: Set,
-      // @ts-expect-error
       schema: [String],
     },
   },

@@ -96,7 +96,12 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       circlesUserIsMemberOf.map((circle) =>
         CircleModel.update(
           { id: circle.id },
-          { $ADD: { content: insertedContent.id } }
+          {
+            $ADD: {
+              content: insertedContent.id,
+              upcomingContentIds: insertedContent.id,
+            },
+          }
         )
       )
     );
