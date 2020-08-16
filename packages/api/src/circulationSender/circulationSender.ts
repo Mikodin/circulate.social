@@ -20,7 +20,7 @@ const mailgun = mailgunSetup({
 });
 
 async function fetchUpcomingDailyCirculations(): Promise<Circulation[]> {
-  const dailyFilter = new Condition('frequency').contains('');
+  const dailyFilter = new Condition('frequency').contains('Daily');
   return (
     await UpcomingCirculationModel.scan(dailyFilter).all().exec()
   ).map((doc) => JSON.parse(JSON.stringify(doc.original())));
@@ -60,9 +60,9 @@ export const handler: ScheduledHandler = async () => {
       );
 
       const emailParams = {
-        from: 'Test <milkman@circulate.social>',
+        from: 'Circulator <milkman@circulate.social>',
         to: 'mfalicea58@gmail.com',
-        subject: 'Your Circulation for today',
+        subject: `${usersFirstName}, your Circulation for today`,
         html: circulationToSend,
       };
 
