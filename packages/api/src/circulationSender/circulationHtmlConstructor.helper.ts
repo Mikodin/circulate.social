@@ -12,7 +12,9 @@ export const createCirculationHtmlForUser = (
   // TODO This should be moved elsewhere.  It's too hidden and happens in one place.
   // Code is hard to understand
   // Should events be seperate from posts?
-  const upcomingEvents = Array.from(circulation.circleDetails).flatMap(
+  const upcomingEventsFromAllCircles = Array.from(
+    circulation.circleDetails
+  ).flatMap(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ([_, circle]) =>
       circle.contentDetails
@@ -35,7 +37,7 @@ export const createCirculationHtmlForUser = (
     circulation: {
       ...circulation,
       circleDetails: circleDetailsArray,
-      upcomingEvents,
+      upcomingEventsFromAllCircles,
     },
   });
 };

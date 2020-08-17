@@ -1,38 +1,62 @@
 export default `
 <div>
-<p>Here are today's curation from your Circles.</p>
-<p>Click the ☆ to save to your Circulate Event and Post Archive and have it automatically go to your calendar</p>
-<p>Submit a Post</p>
-<p>Leave a Circle</p>
-<p>Pause all Emails</p>
+<p style="font-size: 10px; margin: 0">Here is today's curation from all of your Circles.</p>
+<br />
+<p style="font-size: 10px; margin: 0">Click the ☆ to save to your Circulate Event and Post Archive and have it automatically go to your calendar</p>
+<p style="font-size: 10px; margin: 0">Submit a Post</p>
+<p style="font-size: 10px; margin: 0">Leave a Circle</p>
+<p style="font-size: 10px; margin: 0">Pause all Emails</p>
 
     {{#with circulation}}
-        <h4>Events</h4>
-        {{#each upcomingEvents}}
-            <div>
-                <p style="margin: 0; margin-bottom: 5px">
-                    {{title}} | #{{circle.name}} | {{createdBy}}
-                </p>
-                <span style="margin-left: 5px;">{{description}}</span>
-            </div>
-        {{/each}}
+        {{#if upcomingEventsFromAllCircles}}
+            <h3>Upcoming events</h3>
+            {{#each upcomingEventsFromAllCircles}}
+                <div>
+                    {{#if link}}
+                        <p style="margin: 0; margin-bottom: 5px">
+                            ☆ <a href={{{link}}}>{{title}}</a> | {{createdBy}}
+                        </p>
+                    {{/if}}
+                    {{#unless link}}
+                        <p style="margin: 0; margin-bottom: 5px">
+                            ☆ {{title}} | {{createdBy}}
+                        </p>
+                    {{/unless}}
 
+                    {{#if description}}
+                        <span style="margin-left: 5px;">{{description}}</span>
+                    {{/if}}
+                </div>
+            {{/each}}
+        {{/if}}
+        <hr />
+
+        <h3>Your Circles posts</h3>
         {{#each circleDetails}}
-            <h3 style="margin: 0; padding: 0; margin-bottom: 5px;">
-                {{name}}
-            </h3>
+            <h4 style="margin: 0; padding: 0; margin-bottom: 5px;">
+                <a href=https://beta.circulate.social/circles/{{id}}>{{name}}</a>
+            </h4>
             <div style="margin-left: 5px;">
-                <h4>Posts</h4>
+                <h5>Posts</h5>
                 {{#each upcomingPosts}}
                     <div>
-                        <p style="margin: 0; margin-bottom: 5px">
-                            {{title}} | {{createdBy}}
-                        </p>
-                        <span style="margin-left: 5px;">{{description}}</span>
+                        {{#if link}}
+                            <p style="margin: 0; margin-bottom: 5px">
+                               ☆ <a href={{{link}}}>{{title}}</a> | {{createdBy}}
+                            </p>
+                        {{/if}}
+                        {{#unless link}}
+                            <p style="margin: 0; margin-bottom: 5px">
+                               ☆ {{title}} | {{createdBy}}
+                            </p>
+                        {{/unless}}
+
+                        {{#if description}}
+                            <span style="margin-left: 5px;">{{description}}</span>
+                        {{/if}}
                     </div>
                 {{/each}}
             </div>
-            <hr />
         {{/each}}
     {{/with}}
 </div>`;
