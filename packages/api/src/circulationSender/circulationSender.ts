@@ -20,7 +20,7 @@ const mailgun = mailgunSetup({
 });
 
 async function fetchUpcomingDailyCirculations(): Promise<Circulation[]> {
-  const dailyFilter = new Condition('frequency').contains('Daily');
+  const dailyFilter = new Condition('frequency').contains('daily');
   return (
     await UpcomingCirculationModel.scan(dailyFilter).all().exec()
   ).map((doc) => JSON.parse(JSON.stringify(doc.original())));
@@ -30,7 +30,7 @@ export const handler: ScheduledHandler = async () => {
   log.info('Incoming event');
 
   const upcomingDailyCirculations = await fetchUpcomingDailyCirculations();
-  if (!upcomingDailyCirculations || upcomingDailyCirculations.length) {
+  if (!upcomingDailyCirculations || !upcomingDailyCirculations.length) {
     log.info('No Circulations in the table, returning');
     return;
   }
@@ -90,7 +90,6 @@ export const handler: ScheduledHandler = async () => {
     throw error;
   }
 
-  // Clear out every Circles upcomingContentIds array
   const allCircleIds = Array.from(circlesMap).map(([key]) => key);
   try {
     log.info(`Clearing out [${allCircleIds.length}] circles upcoming content`);

@@ -26,10 +26,6 @@ export async function getAllContentAndUsersFromAllCircles(
     );
   }
 
-  const allUserIds = Array.from(
-    new Set(circles.flatMap((circle) => circle.members))
-  );
-
   try {
     content = (
       await ContentModel.batchGet(allUpcomingContentIds)
@@ -40,6 +36,16 @@ export async function getAllContentAndUsersFromAllCircles(
       fetchContentError,
     });
     throw fetchContentError;
+  }
+
+  const allUserIds = Array.from(
+    new Set(circles.flatMap((circle) => circle.members))
+  );
+
+  if (!allUserIds.length) {
+    log.warn('Somehow no Circles have any members - how am I here?');
+    // @TODO get an alert on this
+    throw new Error('Somehow no Circles have any members - how am I here?');
   }
 
   try {

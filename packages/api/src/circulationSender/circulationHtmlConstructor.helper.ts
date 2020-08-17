@@ -11,7 +11,16 @@ export const createCirculationHtmlForUser = (
 ): string => {
   const circleDetailsArray = Array.from(circulation.circleDetails).map(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    ([_, val]) => val
+    ([_, val]) => {
+      const upcomingPosts = val.contentDetails.filter(
+        (content) => !content.dateTime
+      );
+      const upcomingEvents = val.contentDetails.filter((content) =>
+        Boolean(content.dateTime)
+      );
+
+      return { ...val, upcomingPosts, upcomingEvents };
+    }
   );
   return template({
     usersFirstName,
