@@ -30,6 +30,10 @@ export const handler: ScheduledHandler = async () => {
   log.info('Incoming event');
 
   const upcomingDailyCirculations = await fetchUpcomingDailyCirculations();
+  if (!upcomingDailyCirculations || upcomingDailyCirculations.length) {
+    log.info('No Circulations in the table, returning');
+    return;
+  }
 
   const {
     circlesMap,
