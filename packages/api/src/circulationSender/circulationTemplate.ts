@@ -8,25 +8,28 @@ export default `
 <p style="font-size: 10px; margin: 0">Pause all Emails</p>
 
     {{#with circulation}}
-        {{#if upcomingEventsFromAllCircles}}
+        {{#if upcomingEvents}}
             <h3>Upcoming events</h3>
-            {{#each upcomingEventsFromAllCircles}}
-                <div>
-                    {{#if link}}
-                        <p style="margin: 0; margin-bottom: 5px">
-                            ☆ <a href={{{link}}}>{{title}}</a> | {{createdBy}}
-                        </p>
-                    {{/if}}
-                    {{#unless link}}
-                        <p style="margin: 0; margin-bottom: 5px">
-                            ☆ {{title}} | {{createdBy}}
-                        </p>
-                    {{/unless}}
+            {{#each upcomingEvents}}
+                <h4>{{dateTime}}</h4>
+                {{#each events}}
+                    <div>
+                        {{#if link}}
+                            <p style="margin: 0; margin-bottom: 5px">
+                                ☆ <a href={{{link}}}>{{title}}</a> | {{createdBy}} | {{circle.name}}
+                            </p>
+                        {{/if}}
+                        {{#unless link}}
+                            <p style="margin: 0; margin-bottom: 5px">
+                                ☆ {{title}} | {{createdBy}}
+                            </p>
+                        {{/unless}}
 
-                    {{#if description}}
-                        <span style="margin-left: 5px;">{{description}}</span>
-                    {{/if}}
-                </div>
+                        {{#if description}}
+                            <span style="margin-left: 5px;">{{description}}</span>
+                        {{/if}}
+                    </div>
+                {{/each}}
             {{/each}}
         {{/if}}
         <hr />

@@ -20,7 +20,7 @@ const mailgun = mailgunSetup({
 });
 
 async function fetchUpcomingDailyCirculations(): Promise<Circulation[]> {
-  const dailyFilter = new Condition('frequency').contains('daily');
+  const dailyFilter = new Condition('frequency').contains('');
   return (
     await UpcomingCirculationModel.scan(dailyFilter).all().exec()
   ).map((doc) => JSON.parse(JSON.stringify(doc.original())));
