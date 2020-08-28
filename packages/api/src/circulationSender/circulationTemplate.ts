@@ -21,7 +21,7 @@ export default `
                         {{/if}}
                         {{#unless link}}
                             <p style="margin: 0; margin-bottom: 5px">
-                                ☆ {{title}} | {{createdBy}}
+                                ☆ {{title}} | {{createdBy}} | {{circle.name}}
                             </p>
                         {{/unless}}
 
