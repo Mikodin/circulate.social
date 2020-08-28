@@ -1,4 +1,4 @@
-import { ZoneId, ZonedDateTime } from '@js-joda/core';
+import { ZoneId, ZonedDateTime, LocalDate } from '@js-joda/core';
 import { Circulation, Content } from '@circulate/types';
 import Handlebars from 'handlebars';
 
@@ -64,7 +64,13 @@ export const createCirculationHtmlForUser = (
         }))
   );
 
-  const eventsByDateArray = groupEventsByDate(upcomingEventsFromAllCircles);
+  const eventsByDateArray = groupEventsByDate(
+    upcomingEventsFromAllCircles
+  ).sort((postA, postB) => {
+    const epochA = LocalDate.parse(postA.dateTime).toEpochDay();
+    const epochB = LocalDate.parse(postB.dateTime).toEpochDay();
+    return epochB - epochA;
+  });
 
   const circleDetailsArray = Array.from(circulation.circleDetails).map(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -76,6 +82,7 @@ export const createCirculationHtmlForUser = (
       return { ...val, upcomingPosts };
     }
   );
+
   return template({
     usersFirstName,
     circulation: {
