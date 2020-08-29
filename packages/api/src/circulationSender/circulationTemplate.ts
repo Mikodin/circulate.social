@@ -11,51 +11,53 @@ export default `
         {{#if upcomingEvents}}
             <h3>Upcoming events</h3>
             {{#each upcomingEvents}}
-                <h4>{{dateTime}}</h4>
-                {{#each events}}
-                    <div>
-                        {{#if link}}
-                            <p style="margin: 0; margin-bottom: 5px">
-                                ☆ <a href={{{link}}}>{{title}}</a> | {{createdBy}} | {{circle.name}}
-                            </p>
-                        {{/if}}
-                        {{#unless link}}
-                            <p style="margin: 0; margin-bottom: 5px">
-                                ☆ {{title}} | {{createdBy}} | {{circle.name}}
-                            </p>
-                        {{/unless}}
+                <div style="margin-bottom: 10px;">
+                    <h4 style="margin:0; margin-bottom: 5px;">{{dateTime}}</h4>
+                    {{#each events}}
+                        <div style="margin-bottom:5px;>
+                            {{#if link}}
+                                <p style="margin: 0;">
+                                    ☆ <a href={{{link}}}>{{title}}</a> | {{createdBy}} | <a href=https://beta.circulate.social/circles/{{circle.id}}>{{circle.name}}</a> | {{dateTime}}
+                                </p>
+                            {{/if}}
+                            {{#unless link}}
+                                <p style="margin: 0;">
+                                    ☆ {{title}} | {{createdBy}} | <a href=https://beta.circulate.social/circles/{{circle.id}}>{{circle.name}}</a> | {{dateTime}}
+                                </p>
+                            {{/unless}}
 
-                        {{#if description}}
-                            <span style="margin-left: 5px;">{{description}}</span>
-                        {{/if}}
-                    </div>
-                {{/each}}
+                            {{#if description}}
+                                <span style="margin-left: 25px;">{{description}}</span>
+                            {{/if}}
+                        </div>
+                    {{/each}}
+                </div>
             {{/each}}
         {{/if}}
         <hr />
 
         <h3>Your Circles posts</h3>
         {{#each circleDetails}}
-            <h4 style="margin: 0; padding: 0; margin-bottom: 5px;">
+            <h4 style="margin: 0; margin-bottom: 5px;">
                 <a href=https://beta.circulate.social/circles/{{id}}>{{name}}</a>
             </h4>
             <div style="margin-left: 5px;">
-                <h5>Posts</h5>
+                <h5 style="margin: 0;">Posts</h5>
                 {{#each upcomingPosts}}
-                    <div>
+                    <div style="margin-bottom: 5px;">
                         {{#if link}}
-                            <p style="margin: 0; margin-bottom: 5px">
+                            <p style="margin:0;">
                                ☆ <a href={{{link}}}>{{title}}</a> | {{createdBy}}
                             </p>
                         {{/if}}
                         {{#unless link}}
-                            <p style="margin: 0; margin-bottom: 5px">
+                            <p style="margin:0;">
                                ☆ {{title}} | {{createdBy}}
                             </p>
                         {{/unless}}
 
                         {{#if description}}
-                            <span style="margin-left: 5px;">{{description}}</span>
+                            <span style="margin-left: 25px;">{{description}}</span>
                         {{/if}}
                     </div>
                 {{/each}}
