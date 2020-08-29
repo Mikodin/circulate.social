@@ -2,7 +2,7 @@ import mailgunSetup from 'mailgun-js';
 import { ScheduledHandler } from 'aws-lambda';
 import log from 'lambda-log';
 import { Condition } from 'dynamoose';
-import { Circulation } from '@circulate/types';
+import { Circulation, Circle } from '@circulate/types';
 
 import {
   constructFilledOutCirculations,
@@ -25,6 +25,42 @@ async function fetchUpcomingDailyCirculations(): Promise<Circulation[]> {
   return (
     await UpcomingCirculationModel.scan(dailyFilter).all().exec()
   ).map((doc) => JSON.parse(JSON.stringify(doc.original())));
+}
+
+async function cleanup(
+  circlesMap: Map<string, Circle>,
+  upcomingCirculations: Circulation[]
+): Promise<boolean> {
+  const allCircleIds = Array.from(circlesMap).map(([key]) => key);
+  try {
+    log.info(`Clearing out [${allCircleIds.length}] circles upcoming content`);
+    await clearUpcomingContentFromCircles(allCircleIds);
+  } catch (error) {
+    log.warn('Failed to clear upcoming content from Circles', {
+      allCircleIds,
+      error,
+    });
+    throw error;
+  }
+
+  const upcomingDailyCirculationUrns = upcomingCirculations.map(
+    (circulation) => circulation.urn
+  );
+
+  try {
+    log.info(`Removing [${upcomingDailyCirculationUrns.length}] Circulations`, {
+      upcomingDailyCirculationUrns,
+    });
+    await CirculationModel.batchDelete(upcomingDailyCirculationUrns);
+  } catch (error) {
+    log.warn('Failed to remove Circulations', {
+      upcomingDailyCirculationUrns,
+      error,
+    });
+    throw error;
+  }
+
+  return true;
 }
 
 export const handler: ScheduledHandler = async () => {
@@ -56,19 +92,20 @@ export const handler: ScheduledHandler = async () => {
 
   const fullEmailsToSend = Array.from(filledOutCirculationsMap).map(
     // eslint-disable-next-line
-    ([_, value]) => {
-      const usersFirstName = usersMap.get(value.userId).firstName;
+    ([_, circulation]) => {
+      const usersFirstName = usersMap.get(circulation.userId).firstName;
 
       const circulationToSend = createCirculationHtmlForUser(
         usersFirstName,
-        value
+        circulation
       );
 
       const emailParams = {
-        from: 'Circulator <milkman@circulate.social>',
+        from: 'Circulator <postman@circulate.social>',
         to: 'mfalicea58@gmail.com',
         subject: `${usersFirstName}, your Circulation for today`,
         html: circulationToSend,
+        'o:tag': ['circulations'],
       };
 
       return emailParams;
@@ -91,33 +128,14 @@ export const handler: ScheduledHandler = async () => {
     throw error;
   }
 
-  const allCircleIds = Array.from(circlesMap).map(([key]) => key);
   try {
-    log.info(`Clearing out [${allCircleIds.length}] circles upcoming content`);
-    await clearUpcomingContentFromCircles(allCircleIds);
+    await cleanup(circlesMap, upcomingDailyCirculations);
   } catch (error) {
-    log.error('Failed to clear upcoming content from Circles', {
-      allCircleIds,
+    log.error('Failed to Cleanup!', {
+      circlesMap,
+      upcomingDailyCirculations,
       error,
     });
-    throw error;
-  }
-
-  const upcomingDailyCirculationUrns = upcomingDailyCirculations.map(
-    (circulation) => circulation.urn
-  );
-
-  try {
-    log.info(`Removing [${upcomingDailyCirculationUrns.length}] Circulations`, {
-      upcomingDailyCirculationUrns,
-    });
-    await CirculationModel.batchDelete(upcomingDailyCirculationUrns);
-  } catch (error) {
-    log.info('Failed to remove Circulations', {
-      upcomingDailyCirculationUrns,
-      error,
-    });
-
     throw error;
   }
 };
