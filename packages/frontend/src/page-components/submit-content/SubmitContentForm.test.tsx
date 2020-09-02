@@ -272,9 +272,9 @@ describe('SubmitContentForm', () => {
 
         // @TODO - Make this adaptive to the current month
         const expectedDateTime =
-          userTimeZone === 'America/Los_Angeles'
-            ? '2020-08-15T07:00-07:00[America/Los_Angeles]'
-            : '2020-08-15T07:00Z[UTC]';
+          userTimeZone === 'America/New_York'
+            ? '2020-09-15T07:00-04:00[America/New_York]'
+            : '2020-09-15T07:00Z[UTC]';
         expect(mockedAxios.post).toHaveBeenCalledWith(
           SUBMIT_CONTENT_ENDPOINT,
           {
