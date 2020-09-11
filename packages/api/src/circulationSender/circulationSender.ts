@@ -11,7 +11,6 @@ import {
 } from './circulationDataConstructors.helper';
 import { createCirculationHtmlForUser } from './circulationHtmlConstructor.helper';
 import UpcomingCirculationModel from '../interfaces/dynamo/upcomingCirculationModel';
-import CirculationModel from '../interfaces/dynamo/upcomingCirculationModel';
 
 const MAILGUN_API_KEY = process.env.MAILGUN_API_KEY || 'test';
 const MAILGUN_DOMAIN = 'mg.circulate.social';
@@ -51,7 +50,7 @@ async function cleanup(
     log.info(`Removing [${upcomingDailyCirculationUrns.length}] Circulations`, {
       upcomingDailyCirculationUrns,
     });
-    await CirculationModel.batchDelete(upcomingDailyCirculationUrns);
+    await UpcomingCirculationModel.batchDelete(upcomingDailyCirculationUrns);
   } catch (error) {
     log.warn('Failed to remove Circulations', {
       upcomingDailyCirculationUrns,
