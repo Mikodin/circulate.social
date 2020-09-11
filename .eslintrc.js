@@ -49,7 +49,10 @@ module.exports = {
     'import/no-cycle': 0,
     'prettier/prettier': 'error',
     'import/prefer-default-export': 0,
-    '@typescript-eslint/no-unused-vars': ['error'],
+    // https://github.com/typescript-eslint/typescript-eslint/issues/2287
+    '@typescript-eslint/no-unused-vars': ['off'],
+    // https://github.com/typescript-eslint/typescript-eslint/issues/1856
+    '@typescript-eslint/no-unused-vars-experimental': ['error'],
     'import/extensions': [
       'error',
       'ignorePackages',
