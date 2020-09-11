@@ -1,23 +1,37 @@
-import { ZoneId, ZonedDateTime, LocalDate } from '@js-joda/core';
-import { Circulation, Content } from '@circulate/types';
+import {
+  ZoneId,
+  ZonedDateTime,
+  LocalDate,
+  DateTimeFormatter,
+} from '@js-joda/core';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Locale } from '@js-joda/locale_en-us';
 import Handlebars from 'handlebars';
+import { Circulation, Content } from '@circulate/types';
 
 import circulationHtmlTemplate from './circulationTemplate';
 
 const template = Handlebars.compile(circulationHtmlTemplate);
 
-const convertDateTimeToSystemZone = (dateTime: string) => {
+function convertDateTimeToSystemZone(dateTime: string) {
   return ZonedDateTime.parse(dateTime)
-    .withZoneSameInstant(ZoneId.of('SYSTEM'))
+    .withZoneSameInstant(ZoneId.of('UTC'))
     .toString();
-};
+}
 
-const groupEventsByDate = (
+function convertDateTimeToSystemZoneTime(dateTime: string) {
+  return ZonedDateTime.parse(dateTime)
+    .withZoneSameInstant(ZoneId.of('UTC'))
+    .format(DateTimeFormatter.ofPattern('hh:mm a z x').withLocale(Locale.US))
+    .toString();
+}
+
+function groupEventsByDate(
   events: Content[]
 ): {
   dateTime: string;
   events: Content[];
-}[] => {
+}[] {
   const eventsByDate = {};
   events.forEach((event) => {
     if (!event.dateTime) {
@@ -41,12 +55,12 @@ const groupEventsByDate = (
       events: eventsByDate[dateKey],
     };
   });
-};
+}
 
-export const createCirculationHtmlForUser = (
+export function createCirculationHtmlForUser(
   usersFirstName: string,
   circulation: Circulation
-): string => {
+): string {
   // TODO This should be moved elsewhere.  It's too hidden and happens in one place.
   // Code is hard to understand
   // Should events be seperate from posts?
@@ -61,6 +75,7 @@ export const createCirculationHtmlForUser = (
           ...event,
           circle,
           dateTime: convertDateTimeToSystemZone(event.dateTime),
+          time: convertDateTimeToSystemZoneTime(event.dateTime),
         }))
   );
 
@@ -91,4 +106,4 @@ export const createCirculationHtmlForUser = (
       upcomingEvents: eventsByDateArray,
     },
   });
-};
+}

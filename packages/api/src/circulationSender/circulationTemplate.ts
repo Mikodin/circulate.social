@@ -17,17 +17,17 @@ export default `
                         <div style="margin-bottom:5px;>
                             {{#if link}}
                                 <p style="margin: 0;">
-                                    ☆ <a href={{{link}}}>{{title}}</a> | {{createdBy}} | <a href=https://beta.circulate.social/circles/{{circle.id}}>{{circle.name}}</a> | {{dateTime}}
+                                    ☆ <a href={{{link}}}>{{title}}</a> | {{createdBy}} | <a href=https://beta.circulate.social/circles/{{circle.id}}>{{circle.name}}</a> | {{time}}
                                 </p>
                             {{/if}}
                             {{#unless link}}
                                 <p style="margin: 0;">
-                                    ☆ {{title}} | {{createdBy}} | <a href=https://beta.circulate.social/circles/{{circle.id}}>{{circle.name}}</a> | {{dateTime}}
+                                    ☆ {{title}} | {{createdBy}} | <a href=https://beta.circulate.social/circles/{{circle.id}}>{{circle.name}}</a> | {{time}}
                                 </p>
                             {{/unless}}
 
                             {{#if description}}
-                                <span style="margin-left: 25px;">{{description}}</span>
+                                <p style="margin:0; margin-left: 25px;">{{description}}?</p>
                             {{/if}}
                         </div>
                     {{/each}}
@@ -57,7 +57,7 @@ export default `
                         {{/unless}}
 
                         {{#if description}}
-                            <span style="margin-left: 25px;">{{description}}</span>
+                            <p style="margin:0; margin-left: 25px;">{{description}}</p>
                         {{/if}}
                     </div>
                 {{/each}}
