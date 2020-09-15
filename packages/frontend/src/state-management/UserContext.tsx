@@ -1,6 +1,5 @@
 import { createContext } from 'react';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
-import type CognitoUser from 'aws-amplify';
+import { CognitoUser } from '@aws-amplify/auth';
 import type { ConfirmSignUp } from '../types/amplify.d';
 
 export type UserContextType = {
