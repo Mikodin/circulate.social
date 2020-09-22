@@ -4619,10 +4619,25 @@ aws-lambda@^1.0.6:
     js-yaml "^3.13.1"
     watchpack "^2.0.0-beta.10"
 
-aws-sdk@*, aws-sdk@^2.387.0, aws-sdk@^2.488.0, aws-sdk@^2.499.0, aws-sdk@^2.668.0, aws-sdk@^2.702.0, aws-sdk@^2.739.0, aws-sdk@^2.752.0:
+aws-sdk@*, aws-sdk@^2.387.0, aws-sdk@^2.488.0, aws-sdk@^2.499.0, aws-sdk@^2.668.0, aws-sdk@^2.702.0, aws-sdk@^2.752.0:
   version "2.752.0"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.752.0.tgz#0d6e38bd43f023f44ad5db66be6f6afc0d9a1278"
   integrity sha512-0/8Pt8/qEgxt02IEvRjinR3cEj1YmmPlJqie4NhCWmmXmI4wDmEb5Em3A2XvU1dNwS0fpQEcuRcaQ/pWi/mScg==
+  dependencies:
+    buffer "4.9.2"
+    events "1.1.1"
+    ieee754 "1.1.13"
+    jmespath "0.15.0"
+    querystring "0.2.0"
+    sax "1.2.1"
+    url "0.10.3"
+    uuid "3.3.2"
+    xml2js "0.4.19"
+
+aws-sdk@^2.749.0:
+  version "2.757.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.757.0.tgz#2523b7a78fa3d439dd62d97dfa64f436b3438013"
+  integrity sha512-umJ4/kzQZll4TB7ePBi68vLN7aAD01+FElqA7/7hiZrzSchXoL4/T3tY0vAsBzXAT8b71Ha9SzhIygB3Qr+/OA==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -7763,10 +7778,10 @@ fork-ts-checker-webpack-plugin@3.1.1:
     tapable "^1.0.0"
     worker-rpc "^0.1.0"
 
-fork-ts-checker-webpack-plugin@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/fork-ts-checker-webpack-plugin/-/fork-ts-checker-webpack-plugin-5.1.0.tgz#586fbee24aeea950c53bab529e32017f543e71cf"
-  integrity sha512-vuKyEjSLGbhQbEr5bifXXOkr9iV73L6n72mHoHIv7okvrf7O7z6RKeplM6C6ATPsukoQivij+Ba1vcptL60Z2g==
+fork-ts-checker-webpack-plugin@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/fork-ts-checker-webpack-plugin/-/fork-ts-checker-webpack-plugin-5.2.0.tgz#780a14fb0da02a892baedd7aa0d089a1eda7b3e5"
+  integrity sha512-NEKcI0+osT5bBFZ1SFGzJMQETjQWZrSvMO1g0nAR/w0t328Z41eN8BJEIZyFCl2HsuiJpa9AN474Nh2qLVwGLQ==
   dependencies:
     "@babel/code-frame" "^7.8.3"
     "@types/json-schema" "^7.0.5"
