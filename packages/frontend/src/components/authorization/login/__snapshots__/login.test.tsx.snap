@@ -93,7 +93,7 @@ exports[`Login should render 1`] = `
             class="ant-form-item-control-input-content"
           >
             <span
-              class="ant-input-password ant-input-affix-wrapper ant-input-affix-wrapper-lg"
+              class="ant-input-affix-wrapper ant-input-affix-wrapper-lg ant-input-password"
             >
               <span
                 class="ant-input-prefix"
