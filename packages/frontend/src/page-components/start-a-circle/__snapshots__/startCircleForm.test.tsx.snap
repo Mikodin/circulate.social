@@ -149,12 +149,14 @@ Object {
                         readonly=""
                         role="combobox"
                         style="opacity: 0;"
+                        type="search"
                         unselectable="on"
                         value=""
                       />
                     </span>
                     <span
                       class="ant-select-selection-item"
+                      title="Weekly"
                     >
                       Weekly
                     </span>
@@ -167,7 +169,7 @@ Object {
                   >
                     <span
                       aria-label="down"
-                      class="anticon anticon-down"
+                      class="anticon anticon-down ant-select-suffix"
                       role="img"
                     >
                       <svg
@@ -245,7 +247,7 @@ Object {
                   id="horizontal_login_privacy"
                 >
                   <label
-                    class="verticalRadioButton ant-radio-wrapper ant-radio-wrapper-checked"
+                    class="ant-radio-wrapper ant-radio-wrapper-checked verticalRadioButton"
                   >
                     <span
                       class="ant-radio ant-radio-checked"
@@ -265,7 +267,7 @@ Object {
                     </span>
                   </label>
                   <label
-                    class="verticalRadioButton ant-radio-wrapper"
+                    class="ant-radio-wrapper verticalRadioButton"
                   >
                     <span
                       class="ant-radio"
@@ -462,12 +464,14 @@ Object {
                       readonly=""
                       role="combobox"
                       style="opacity: 0;"
+                      type="search"
                       unselectable="on"
                       value=""
                     />
                   </span>
                   <span
                     class="ant-select-selection-item"
+                    title="Weekly"
                   >
                     Weekly
                   </span>
@@ -480,7 +484,7 @@ Object {
                 >
                   <span
                     aria-label="down"
-                    class="anticon anticon-down"
+                    class="anticon anticon-down ant-select-suffix"
                     role="img"
                   >
                     <svg
@@ -558,7 +562,7 @@ Object {
                 id="horizontal_login_privacy"
               >
                 <label
-                  class="verticalRadioButton ant-radio-wrapper ant-radio-wrapper-checked"
+                  class="ant-radio-wrapper ant-radio-wrapper-checked verticalRadioButton"
                 >
                   <span
                     class="ant-radio ant-radio-checked"
@@ -578,7 +582,7 @@ Object {
                   </span>
                 </label>
                 <label
-                  class="verticalRadioButton ant-radio-wrapper"
+                  class="ant-radio-wrapper verticalRadioButton"
                 >
                   <span
                     class="ant-radio"

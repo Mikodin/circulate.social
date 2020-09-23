@@ -93,7 +93,7 @@ exports[`Register should render 1`] = `
             class="ant-form-item-control-input-content"
           >
             <span
-              class="ant-input-password ant-input-affix-wrapper ant-input-affix-wrapper-lg"
+              class="ant-input-affix-wrapper ant-input-affix-wrapper-lg ant-input-password"
             >
               <span
                 class="ant-input-prefix"
@@ -164,6 +164,7 @@ exports[`Register should render 1`] = `
     <div
       class="ant-alert ant-alert-info ant-alert-banner ant-alert-closable"
       data-show="true"
+      role="alert"
       style="margin-bottom: 10px; margin-top: -10px;"
     >
       <span
