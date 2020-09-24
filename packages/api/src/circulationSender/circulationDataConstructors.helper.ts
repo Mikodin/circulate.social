@@ -1,8 +1,70 @@
 import log from 'lambda-log';
+import { LocalDate } from '@js-joda/core';
 import { Circulation, Circle, Content, User } from '@circulate/types';
+import { Condition } from 'dynamoose';
+
 import CircleModel from '../interfaces/dynamo/circlesModel';
 import ContentModel from '../interfaces/dynamo/contentModel';
 import UserModel from '../interfaces/dynamo/userModel';
+import UpcomingCirculationModel from '../interfaces/dynamo/upcomingCirculationModel';
+
+export function calculateFrequenciesToFetch(): {
+  isWeeklyTimeToSend: boolean;
+  isBiWeeklyTimeToSend: boolean;
+  isMonthlyTimeToSend: boolean;
+} {
+  const today = LocalDate.now();
+  const isWeeklyTimeToSend = Boolean(today.dayOfWeek().value() === 5);
+  const isBiWeeklyTimeToSend = Boolean(
+    isWeeklyTimeToSend &&
+      today.dayOfMonth() === Math.round(today.lengthOfMonth() / 2)
+  );
+
+  const isMonthlyTimeToSend = Boolean(
+    today.dayOfMonth() === today.lengthOfMonth()
+  );
+
+  const frequenciesToFetch = {
+    isWeeklyTimeToSend,
+    isBiWeeklyTimeToSend,
+    isMonthlyTimeToSend,
+  };
+
+  log.info('Calculated frequencies to fetch', frequenciesToFetch);
+
+  return frequenciesToFetch;
+}
+
+export async function fetchUpcomingCirculations(frequenciesToFetch: {
+  isWeeklyTimeToSend: boolean;
+  isBiWeeklyTimeToSend: boolean;
+  isMonthlyTimeToSend: boolean;
+}): Promise<Circulation[]> {
+  const {
+    isWeeklyTimeToSend,
+    isBiWeeklyTimeToSend,
+    isMonthlyTimeToSend,
+  } = frequenciesToFetch;
+  // Always fetch daily
+  let filter = new Condition('frequency').contains('daily');
+
+  // Allow the filter to build on itself through each if statement
+  if (isWeeklyTimeToSend) {
+    filter = filter.or().where('frequency').contains('weekly');
+  }
+
+  if (isBiWeeklyTimeToSend) {
+    filter = filter.or().where('frequency').contains('biWeekly');
+  }
+
+  if (isMonthlyTimeToSend) {
+    filter = filter.or().where('frequency').contains('monthly');
+  }
+
+  return (await UpcomingCirculationModel.scan(filter).all().exec()).map((doc) =>
+    JSON.parse(JSON.stringify(doc.original()))
+  );
+}
 
 export async function getAllContentAndUsersFromAllCircles(
   circles: Circle[]

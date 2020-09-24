@@ -1,10 +1,11 @@
 import mailgunSetup from 'mailgun-js';
 import { ScheduledHandler } from 'aws-lambda';
 import log from 'lambda-log';
-import { Condition } from 'dynamoose';
 import { Circulation, Circle } from '@circulate/types';
 
 import {
+  calculateFrequenciesToFetch,
+  fetchUpcomingCirculations,
   constructFilledOutCirculations,
   constructCirculationComponentMaps,
   clearUpcomingContentFromCircles,
@@ -18,13 +19,6 @@ const mailgun = mailgunSetup({
   apiKey: MAILGUN_API_KEY,
   domain: MAILGUN_DOMAIN,
 });
-
-async function fetchUpcomingDailyCirculations(): Promise<Circulation[]> {
-  const dailyFilter = new Condition('frequency').contains('');
-  return (
-    await UpcomingCirculationModel.scan(dailyFilter).all().exec()
-  ).map((doc) => JSON.parse(JSON.stringify(doc.original())));
-}
 
 async function cleanup(
   circlesMap: Map<string, Circle>,
@@ -42,18 +36,18 @@ async function cleanup(
     throw error;
   }
 
-  const upcomingDailyCirculationUrns = upcomingCirculations.map(
+  const upcomingCirculationUrns = upcomingCirculations.map(
     (circulation) => circulation.urn
   );
 
   try {
-    log.info(`Removing [${upcomingDailyCirculationUrns.length}] Circulations`, {
-      upcomingDailyCirculationUrns,
+    log.info(`Removing [${upcomingCirculationUrns.length}] Circulations`, {
+      upcomingCirculationUrns,
     });
-    await UpcomingCirculationModel.batchDelete(upcomingDailyCirculationUrns);
+    await UpcomingCirculationModel.batchDelete(upcomingCirculationUrns);
   } catch (error) {
     log.warn('Failed to remove Circulations', {
-      upcomingDailyCirculationUrns,
+      upcomingCirculationUrns,
       error,
     });
     throw error;
@@ -65,8 +59,11 @@ async function cleanup(
 export const handler: ScheduledHandler = async () => {
   log.info('Incoming event');
 
-  const upcomingDailyCirculations = await fetchUpcomingDailyCirculations();
-  if (!upcomingDailyCirculations || !upcomingDailyCirculations.length) {
+  const upcomingCirculations = await fetchUpcomingCirculations(
+    calculateFrequenciesToFetch()
+  );
+
+  if (!upcomingCirculations || !upcomingCirculations.length) {
     log.info('No Circulations in the table, returning');
     return;
   }
@@ -75,7 +72,7 @@ export const handler: ScheduledHandler = async () => {
     circlesMap,
     usersMap,
     contentMap,
-  } = await constructCirculationComponentMaps(upcomingDailyCirculations);
+  } = await constructCirculationComponentMaps(upcomingCirculations);
 
   if (!circlesMap.size || !usersMap.size || !contentMap.size) {
     log.info('No data to send, returning');
@@ -83,17 +80,15 @@ export const handler: ScheduledHandler = async () => {
   }
 
   const filledOutCirculationsMap = constructFilledOutCirculations(
-    upcomingDailyCirculations,
+    upcomingCirculations,
     circlesMap,
     contentMap,
     usersMap
   );
 
   const fullEmailsToSend = Array.from(filledOutCirculationsMap).map(
-    // eslint-disable-next-line
     ([_, circulation]) => {
       const usersFirstName = usersMap.get(circulation.userId).firstName;
-
       const circulationToSend = createCirculationHtmlForUser(
         usersFirstName,
         circulation
@@ -128,11 +123,11 @@ export const handler: ScheduledHandler = async () => {
   }
 
   try {
-    await cleanup(circlesMap, upcomingDailyCirculations);
+    await cleanup(circlesMap, upcomingCirculations);
   } catch (error) {
     log.error('Failed to Cleanup!', {
       circlesMap,
-      upcomingDailyCirculations,
+      upcomingCirculations,
       error,
     });
     throw error;
