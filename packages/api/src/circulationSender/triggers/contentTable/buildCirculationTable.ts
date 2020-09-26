@@ -10,6 +10,7 @@ import {
   constructCirculationArray,
 } from './buildCirculationHelpers';
 
+// TODO:  This NEEDS to happen when a user JOINS a Circle as well </3
 async function handleUpdatingAllUsersCirculation(circles: Circle[]) {
   const circulationsToMake = constructCirculationArray(circles);
 

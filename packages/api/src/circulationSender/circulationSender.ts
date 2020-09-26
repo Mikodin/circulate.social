@@ -56,17 +56,49 @@ async function cleanup(
   return true;
 }
 
+export function createOneCirculationPerUser(
+  circulations: Circulation[]
+): Circulation[] {
+  const userCirculationMap = circulations.reduce((acc, circulation) => {
+    if (acc[circulation.userId]) {
+      acc[circulation.userId].circles = [
+        ...acc[circulation.userId].circles,
+        ...circulation.circles,
+      ];
+    } else {
+      acc[circulation.userId] = {
+        ...circulation,
+        urn: `${circulation.userId}:allFrequencies`,
+        circulationId: 'temp',
+        frequency: 'all',
+      };
+    }
+    return acc;
+  }, {});
+
+  return Object.values(userCirculationMap);
+}
+
 export const handler: ScheduledHandler = async () => {
   log.info('Incoming event');
 
-  const upcomingCirculations = await fetchUpcomingCirculations(
+  const allUpcomingCirculations = await fetchUpcomingCirculations(
     calculateFrequenciesToFetch()
+    // {
+    //   isBiWeeklyTimeToSend: true,
+    //   isMonthlyTimeToSend: true,
+    //   isWeeklyTimeToSend: true,
+    // }
   );
 
-  if (!upcomingCirculations || !upcomingCirculations.length) {
+  if (!allUpcomingCirculations || !allUpcomingCirculations.length) {
     log.info('No Circulations in the table, returning');
     return;
   }
+
+  const upcomingCirculations = createOneCirculationPerUser(
+    allUpcomingCirculations
+  );
 
   const {
     circlesMap,
@@ -123,7 +155,7 @@ export const handler: ScheduledHandler = async () => {
   }
 
   try {
-    await cleanup(circlesMap, upcomingCirculations);
+    await cleanup(circlesMap, allUpcomingCirculations);
   } catch (error) {
     log.error('Failed to Cleanup!', {
       circlesMap,
