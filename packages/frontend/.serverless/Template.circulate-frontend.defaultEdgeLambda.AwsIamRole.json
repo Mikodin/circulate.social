@@ -6,7 +6,26 @@
     "lambda.amazonaws.com"
   ],
   "policy": {
-    "arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Resource": "*",
+        "Action": [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+      },
+      {
+        "Effect": "Allow",
+        "Resource": "arn:aws:s3:::circulate-frontend/*",
+        "Action": [
+          "s3:GetObject",
+          "s3:PutObject"
+        ]
+      }
+    ]
   },
   "region": "us-east-1"
 }
