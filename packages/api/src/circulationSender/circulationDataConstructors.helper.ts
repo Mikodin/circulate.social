@@ -66,6 +66,29 @@ export async function fetchUpcomingCirculations(frequenciesToFetch: {
   );
 }
 
+export function createOneCirculationPerUser(
+  circulations: Circulation[]
+): Circulation[] {
+  const userCirculationMap = circulations.reduce((acc, circulation) => {
+    if (acc[circulation.userId]) {
+      acc[circulation.userId].circles = [
+        ...acc[circulation.userId].circles,
+        ...circulation.circles,
+      ];
+    } else {
+      acc[circulation.userId] = {
+        ...circulation,
+        urn: `${circulation.userId}:allFrequencies`,
+        circulationId: 'temp',
+        frequency: 'all',
+      };
+    }
+    return acc;
+  }, {});
+
+  return Object.values(userCirculationMap);
+}
+
 export async function getAllContentAndUsersFromAllCircles(
   circles: Circle[]
 ): Promise<{ content: Content[]; users: User[] }> {

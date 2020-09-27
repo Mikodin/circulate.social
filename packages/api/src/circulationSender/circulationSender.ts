@@ -6,6 +6,7 @@ import { Circulation, Circle } from '@circulate/types';
 import {
   calculateFrequenciesToFetch,
   fetchUpcomingCirculations,
+  createOneCirculationPerUser,
   constructFilledOutCirculations,
   constructCirculationComponentMaps,
   clearUpcomingContentFromCircles,
@@ -54,29 +55,6 @@ async function cleanup(
   }
 
   return true;
-}
-
-export function createOneCirculationPerUser(
-  circulations: Circulation[]
-): Circulation[] {
-  const userCirculationMap = circulations.reduce((acc, circulation) => {
-    if (acc[circulation.userId]) {
-      acc[circulation.userId].circles = [
-        ...acc[circulation.userId].circles,
-        ...circulation.circles,
-      ];
-    } else {
-      acc[circulation.userId] = {
-        ...circulation,
-        urn: `${circulation.userId}:allFrequencies`,
-        circulationId: 'temp',
-        frequency: 'all',
-      };
-    }
-    return acc;
-  }, {});
-
-  return Object.values(userCirculationMap);
 }
 
 export const handler: ScheduledHandler = async () => {
