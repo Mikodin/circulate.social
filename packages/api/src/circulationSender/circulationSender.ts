@@ -9,7 +9,7 @@ import {
   constructCirculationComponentMaps,
   constructFilledOutCirculations,
   cleanup,
-} from './circulationDataConstructors.helper';
+} from './circulationSender.helper';
 import { createCirculationHtmlForUser } from './circulationHtmlConstructor.helper';
 
 const MAILGUN_API_KEY = process.env.MAILGUN_API_KEY || 'test';

@@ -1,11 +1,11 @@
 import { handler } from './circulationSender';
 import { generateUpcomingCirculation } from './__mocks__/generateModels';
-import * as circulationDataConstructorsHelper from './circulationDataConstructors.helper';
+import * as circulationDataConstructorsHelper from './circulationSender.helper';
 import * as circulationHtmlConstructor from './circulationHtmlConstructor.helper';
 
 const mockCirculation = generateUpcomingCirculation();
 const mockContentId = 'zzz-123';
-jest.mock('./circulationDataConstructors.helper', () => ({
+jest.mock('./circulationSender.helper', () => ({
   calculateFrequenciesToFetch: jest.fn(() => ({
     isWeeklyTimeToSend: false,
     isBiWeeklyTimeToSend: false,
