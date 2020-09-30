@@ -21,9 +21,8 @@ const CirculationSchema = new dynamoose.Schema(
       required: true,
     },
     circles: {
-      // @ts-expect-error
+      // @ts-ignore
       type: Set,
-      // @ts-expect-error
       schema: [String],
     },
   },
