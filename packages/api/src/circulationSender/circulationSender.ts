@@ -1,18 +1,16 @@
 import mailgunSetup from 'mailgun-js';
 import { ScheduledHandler } from 'aws-lambda';
 import log from 'lambda-log';
-import { Circulation, Circle } from '@circulate/types';
 
 import {
   calculateFrequenciesToFetch,
   fetchUpcomingCirculations,
   createOneCirculationPerUser,
-  constructFilledOutCirculations,
   constructCirculationComponentMaps,
-  clearUpcomingContentFromCircles,
+  constructFilledOutCirculations,
+  cleanup,
 } from './circulationDataConstructors.helper';
 import { createCirculationHtmlForUser } from './circulationHtmlConstructor.helper';
-import UpcomingCirculationModel from '../interfaces/dynamo/upcomingCirculationModel';
 
 const MAILGUN_API_KEY = process.env.MAILGUN_API_KEY || 'test';
 const MAILGUN_DOMAIN = 'mg.circulate.social';
@@ -21,52 +19,11 @@ const mailgun = mailgunSetup({
   domain: MAILGUN_DOMAIN,
 });
 
-async function cleanup(
-  circlesMap: Map<string, Circle>,
-  upcomingCirculations: Circulation[]
-): Promise<boolean> {
-  const allCircleIds = Array.from(circlesMap).map(([key]) => key);
-  try {
-    log.info(`Clearing out [${allCircleIds.length}] circles upcoming content`);
-    await clearUpcomingContentFromCircles(allCircleIds);
-  } catch (error) {
-    log.warn('Failed to clear upcoming content from Circles', {
-      allCircleIds,
-      error,
-    });
-    throw error;
-  }
-
-  const upcomingCirculationUrns = upcomingCirculations.map(
-    (circulation) => circulation.urn
-  );
-
-  try {
-    log.info(`Removing [${upcomingCirculationUrns.length}] Circulations`, {
-      upcomingCirculationUrns,
-    });
-    await UpcomingCirculationModel.batchDelete(upcomingCirculationUrns);
-  } catch (error) {
-    log.warn('Failed to remove Circulations', {
-      upcomingCirculationUrns,
-      error,
-    });
-    throw error;
-  }
-
-  return true;
-}
-
 export const handler: ScheduledHandler = async () => {
   log.info('Incoming event');
 
   const allUpcomingCirculations = await fetchUpcomingCirculations(
     calculateFrequenciesToFetch()
-    // {
-    //   isBiWeeklyTimeToSend: true,
-    //   isMonthlyTimeToSend: true,
-    //   isWeeklyTimeToSend: true,
-    // }
   );
 
   if (!allUpcomingCirculations || !allUpcomingCirculations.length) {
@@ -85,7 +42,7 @@ export const handler: ScheduledHandler = async () => {
   } = await constructCirculationComponentMaps(upcomingCirculations);
 
   if (!circlesMap.size || !usersMap.size || !contentMap.size) {
-    log.info('No data to send, returning');
+    log.info('A Circulation map returned empty, no data to send, returning');
     return;
   }
 

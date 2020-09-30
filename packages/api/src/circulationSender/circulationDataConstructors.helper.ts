@@ -268,3 +268,39 @@ export async function clearUpcomingContentFromCircles(
     )
   );
 }
+
+export async function cleanup(
+  circlesMap: Map<string, Circle>,
+  upcomingCirculations: Circulation[]
+): Promise<boolean> {
+  const allCircleIds = Array.from(circlesMap).map(([key]) => key);
+  try {
+    log.info(`Clearing out [${allCircleIds.length}] circles upcoming content`);
+    await clearUpcomingContentFromCircles(allCircleIds);
+  } catch (error) {
+    log.warn('Failed to clear upcoming content from Circles', {
+      allCircleIds,
+      error,
+    });
+    throw error;
+  }
+
+  const upcomingCirculationUrns = upcomingCirculations.map(
+    (circulation) => circulation.urn
+  );
+
+  try {
+    log.info(`Removing [${upcomingCirculationUrns.length}] Circulations`, {
+      upcomingCirculationUrns,
+    });
+    await UpcomingCirculationModel.batchDelete(upcomingCirculationUrns);
+  } catch (error) {
+    log.warn('Failed to remove Circulations', {
+      upcomingCirculationUrns,
+      error,
+    });
+    throw error;
+  }
+
+  return true;
+}
