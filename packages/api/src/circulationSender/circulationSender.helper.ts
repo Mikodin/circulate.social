@@ -10,15 +10,10 @@ import UpcomingCirculationModel from '../interfaces/dynamo/upcomingCirculationMo
 
 export function calculateFrequenciesToFetch(): {
   isWeeklyTimeToSend: boolean;
-  isBiWeeklyTimeToSend: boolean;
   isMonthlyTimeToSend: boolean;
 } {
   const today = LocalDate.now();
   const isWeeklyTimeToSend = Boolean(today.dayOfWeek().value() === 5);
-  const isBiWeeklyTimeToSend = Boolean(
-    isWeeklyTimeToSend &&
-      today.dayOfMonth() === Math.round(today.lengthOfMonth() / 2)
-  );
 
   const isMonthlyTimeToSend = Boolean(
     today.dayOfMonth() === today.lengthOfMonth()
@@ -26,7 +21,6 @@ export function calculateFrequenciesToFetch(): {
 
   const frequenciesToFetch = {
     isWeeklyTimeToSend,
-    isBiWeeklyTimeToSend,
     isMonthlyTimeToSend,
   };
 
@@ -37,24 +31,15 @@ export function calculateFrequenciesToFetch(): {
 
 export async function fetchUpcomingCirculations(frequenciesToFetch: {
   isWeeklyTimeToSend: boolean;
-  isBiWeeklyTimeToSend: boolean;
   isMonthlyTimeToSend: boolean;
 }): Promise<Circulation[]> {
-  const {
-    isWeeklyTimeToSend,
-    isBiWeeklyTimeToSend,
-    isMonthlyTimeToSend,
-  } = frequenciesToFetch;
+  const { isWeeklyTimeToSend, isMonthlyTimeToSend } = frequenciesToFetch;
   // Always fetch daily
   let filter = new Condition('frequency').contains('daily');
 
   // Allow the filter to build on itself through each if statement
   if (isWeeklyTimeToSend) {
     filter = filter.or().where('frequency').contains('weekly');
-  }
-
-  if (isBiWeeklyTimeToSend) {
-    filter = filter.or().where('frequency').contains('biWeekly');
   }
 
   if (isMonthlyTimeToSend) {
