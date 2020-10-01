@@ -1,19 +1,22 @@
 import { LocalDate } from '@js-joda/core';
 import { Condition } from 'dynamoose';
+import { generateUpcomingCirculation } from './__mocks__/generateModels';
 
 import {
   calculateFrequenciesToFetch,
   fetchUpcomingCirculations,
+  createOneCirculationPerUser,
 } from './circulationSender.helper';
 import UpcomingCirculationModel from '../interfaces/dynamo/upcomingCirculationModel';
 
+const mockUpcomingCirculation = generateUpcomingCirculation();
 jest.mock('../interfaces/dynamo/upcomingCirculationModel', () => ({
   scan: jest.fn(() => ({
     all: jest.fn(() => ({
       exec: jest.fn(() =>
         Promise.resolve([
           {
-            original: () => ({}),
+            original: () => mockUpcomingCirculation,
           },
         ])
       ),
@@ -80,7 +83,15 @@ describe('fetchUpcomingCirculations', () => {
     upcomingCirculationModelScanSpy.mockClear();
   });
 
-  describe('Deciding what Circulations should be fetched', () => {
+  it('Should return an array of  Circulations from the DB', async () => {
+    const upcomingCirculations = await fetchUpcomingCirculations({
+      isWeeklyTimeToSend: false,
+      isMonthlyTimeToSend: false,
+    });
+    expect(upcomingCirculations).toEqual([mockUpcomingCirculation]);
+  });
+
+  describe('Deciding which frequency of Circulations should be fetched', () => {
     describe('When isWeeklyTimeToSend and isMonthlyTimeToSend are false', () => {
       it('Should call UpcomingCirculationModel.scan( with only daily filter', async () => {
         const dailyFilter = new Condition('frequency').contains('daily');
@@ -153,7 +164,94 @@ describe('fetchUpcomingCirculations', () => {
 });
 
 describe('createOneCirculationPerUser', () => {
-  test.todo('it should');
+  describe('When given multiple frequency circulations for the same user', () => {
+    const userId = 'abc-123';
+    const dailyCirculation = generateUpcomingCirculation({
+      urn: `${userId}:daily`,
+      userId,
+    });
+    const weeklyCirculation = generateUpcomingCirculation({
+      urn: `${userId}:weekly`,
+      userId,
+    });
+    const monthlyCirculation = generateUpcomingCirculation({
+      urn: `${userId}:monthly`,
+      userId,
+    });
+    const circulations = [
+      dailyCirculation,
+      weeklyCirculation,
+      monthlyCirculation,
+    ];
+    it('Should combine them into one circulation', () => {
+      expect(createOneCirculationPerUser(circulations)).toEqual([
+        {
+          circles: [
+            ...dailyCirculation.circles,
+            ...weeklyCirculation.circles,
+            ...monthlyCirculation.circles,
+          ],
+          circulationId: 'temp',
+          frequency: 'all',
+          urn: `${userId}:allFrequencies`,
+          userId,
+        },
+      ]);
+    });
+  });
+
+  describe('Handling multiple users', () => {
+    const userIdA = 'abc-123';
+    const dailyCirculationA = generateUpcomingCirculation({
+      urn: `${userIdA}:daily`,
+      userId: userIdA,
+    });
+    const weeklyCirculationA = generateUpcomingCirculation({
+      urn: `${userIdA}:weekly`,
+      userId: userIdA,
+    });
+
+    const userIdB = 'def-123';
+    const dailyCirculationB = generateUpcomingCirculation({
+      urn: `${userIdB}:daily`,
+      userId: userIdB,
+    });
+    const weeklyCirculationB = generateUpcomingCirculation({
+      urn: `${userIdB}:weekly`,
+      userId: userIdB,
+    });
+    it('Should return 1 circulation per user', () => {
+      const circulations = [
+        dailyCirculationA,
+        weeklyCirculationA,
+        dailyCirculationB,
+        weeklyCirculationB,
+      ];
+      expect(createOneCirculationPerUser(circulations)).toEqual([
+        {
+          circles: [
+            ...dailyCirculationA.circles,
+            ...weeklyCirculationA.circles,
+          ],
+          circulationId: 'temp',
+          frequency: 'all',
+          urn: `${userIdA}:allFrequencies`,
+          userId: userIdA,
+        },
+        {
+          circleDetails: undefined,
+          circles: [
+            ...dailyCirculationB.circles,
+            ...weeklyCirculationB.circles,
+          ],
+          circulationId: 'temp',
+          frequency: 'all',
+          urn: `${userIdB}:allFrequencies`,
+          userId: userIdB,
+        },
+      ]);
+    });
+  });
 });
 
 describe('constructCirculationComponentMaps', () => {

@@ -1,7 +1,7 @@
 import { Circulation } from '@circulate/types';
 
 export function generateUpcomingCirculation(
-  overrideValues?: Circulation
+  overrideValues?: Partial<Circulation>
 ): Circulation {
   const { urn, circulationId, userId, circles, circleDetails, frequency } =
     overrideValues || {};
