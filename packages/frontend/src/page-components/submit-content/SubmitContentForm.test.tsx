@@ -6,7 +6,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import axios from 'axios';
-import { ZonedDateTime } from '@js-joda/core';
+import { LocalDate, ZonedDateTime } from '@js-joda/core';
 
 import SubmitContentForm, {
   SUBMIT_CONTENT_ENDPOINT,
@@ -270,11 +270,12 @@ describe('SubmitContentForm', () => {
           fireEvent.submit(submitButton);
         });
 
-        // @TODO - Make this adaptive to the current month
+        const thisMonth = LocalDate.now().monthValue();
+
         const expectedDateTime =
           userTimeZone === 'America/Los_Angeles'
-            ? '2020-10-15T07:00-07:00[America/Los_Angeles]'
-            : '2020-10-15T07:00Z[UTC]';
+            ? `2020-${thisMonth}-15T07:00-07:00[America/Los_Angeles]`
+            : `2020-${thisMonth}-15T07:00Z[UTC]`;
         expect(mockedAxios.post).toHaveBeenCalledWith(
           SUBMIT_CONTENT_ENDPOINT,
           {
