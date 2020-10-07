@@ -55,7 +55,7 @@
     "jest": "^26.1.0",
     "node-sass": "^4.13.1",
     "prettier": "^2.1.1",
-    "sass": "^1.26.10",
+    "sass": "^1.26.12",
     "serverless": "^2.4.0",
     "serverless-next.js": "^1.15.0-alpha.2",
     "typed-css-modules-webpack-plugin": "^0.2.0",
