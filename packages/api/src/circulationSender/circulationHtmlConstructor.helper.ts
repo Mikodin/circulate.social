@@ -4,24 +4,25 @@ import {
   LocalDate,
   DateTimeFormatter,
 } from '@js-joda/core';
+import '@js-joda/timezone';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Locale } from '@js-joda/locale_en-us';
 import Handlebars from 'handlebars';
-import { Circulation, Content } from '@circulate/types';
+import { Circulation, Content, User } from '@circulate/types';
 
 import circulationHtmlTemplate from './circulationTemplate';
 
 const template = Handlebars.compile(circulationHtmlTemplate);
 
-function convertDateTimeToSystemZone(dateTime: string) {
+function convertDateToUserTimezone(dateTime: string, timezone: string) {
   return ZonedDateTime.parse(dateTime)
-    .withZoneSameInstant(ZoneId.of('UTC'))
+    .withZoneSameInstant(ZoneId.of(timezone))
     .toString();
 }
 
-function convertDateTimeToSystemZoneTime(dateTime: string) {
+function convertTimeToUserTimezone(dateTime: string, timezone: string) {
   return ZonedDateTime.parse(dateTime)
-    .withZoneSameInstant(ZoneId.of('UTC'))
+    .withZoneSameInstant(ZoneId.of(timezone))
     .format(DateTimeFormatter.ofPattern('hh:mm a z x').withLocale(Locale.US))
     .toString();
 }
@@ -58,12 +59,13 @@ function groupEventsByDate(
 }
 
 export function createCirculationHtmlForUser(
-  usersFirstName: string,
+  user: User,
   circulation: Circulation
 ): string {
   // TODO This should be moved elsewhere.  It's too hidden and happens in one place.
   // Code is hard to understand
   // Should events be seperate from posts?
+  const usersTimezone = user.timezone;
   const upcomingEventsFromAllCircles = Array.from(
     circulation.circleDetails
   ).flatMap(
@@ -74,8 +76,8 @@ export function createCirculationHtmlForUser(
         .map((event) => ({
           ...event,
           circle,
-          dateTime: convertDateTimeToSystemZone(event.dateTime),
-          time: convertDateTimeToSystemZoneTime(event.dateTime),
+          dateTime: convertDateToUserTimezone(event.dateTime, usersTimezone),
+          time: convertTimeToUserTimezone(event.dateTime, usersTimezone),
         }))
   );
 
@@ -99,7 +101,7 @@ export function createCirculationHtmlForUser(
   );
 
   return template({
-    usersFirstName,
+    usersFirstName: user.firstName,
     circulation: {
       ...circulation,
       circleDetails: circleDetailsArray,

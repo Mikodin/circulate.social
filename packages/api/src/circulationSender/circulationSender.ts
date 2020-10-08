@@ -55,11 +55,9 @@ export const handler: ScheduledHandler = async () => {
 
   const fullEmailsToSend = Array.from(filledOutCirculationsMap).map(
     ([_, circulation]) => {
-      const usersFirstName = usersMap.get(circulation.userId).firstName;
-      const circulationToSend = createCirculationHtmlForUser(
-        usersFirstName,
-        circulation
-      );
+      const user = usersMap.get(circulation.userId);
+      const circulationToSend = createCirculationHtmlForUser(user, circulation);
+      const usersFirstName = user.firstName;
 
       const emailParams = {
         from: 'Circulator <postman@circulate.social>',
