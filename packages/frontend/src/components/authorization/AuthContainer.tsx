@@ -1,6 +1,8 @@
 import { Fragment, PureComponent } from 'react';
 import { withRouter } from 'next/router';
 import type { NextRouter } from 'next/router';
+import { ZonedDateTime } from '@js-joda/core';
+import '@js-joda/timezone';
 
 import Register, {
   FormValues as RegisterFormValues,
@@ -125,6 +127,7 @@ class AuthContainer extends PureComponent<Props, State> {
     formValues: ConfirmEmailFormValues
   ): Promise<void> => {
     const { email, firstName, lastName } = formValues;
+    const userTimezone = ZonedDateTime.now().zone().toString();
     const { seedPassword } = this.state;
     const { onConfirmEmailRedirectTo, router, onRegisterSuccess } = this.props;
     if (seedPassword) {
@@ -132,7 +135,11 @@ class AuthContainer extends PureComponent<Props, State> {
         // This is GROSS.  But it happens because the PostAuthentication trigger happens on login
         // And updateUserAttributes needs a user in local storage, which Login gives
         await this.context.signIn(email, seedPassword);
-        await this.context.updateUserAttributes(firstName, lastName);
+        await this.context.updateUserAttributes(
+          firstName,
+          lastName,
+          userTimezone
+        );
         await this.context.signIn(email, seedPassword);
       } catch (error) {
         console.error(error);

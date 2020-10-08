@@ -49,7 +49,7 @@ const SubmitContentForm = (props: Props): JSX.Element => {
     false
   );
 
-  const userTimeZone = ZonedDateTime.now().zone().toString();
+  const userTimezone = ZonedDateTime.now().zone().toString();
 
   interface FormValues {
     title: string;
@@ -64,7 +64,7 @@ const SubmitContentForm = (props: Props): JSX.Element => {
     if (!isEventForm) {
       form.setFieldsValue({ date: '' });
       form.setFieldsValue({ time: '' });
-      form.setFieldsValue({ timezone: userTimeZone });
+      form.setFieldsValue({ timezone: userTimezone });
     }
   }, [isEventForm]);
 
@@ -131,7 +131,7 @@ const SubmitContentForm = (props: Props): JSX.Element => {
             date: '',
             time: '',
             whyShare: '',
-            timezone: userTimeZone,
+            timezone: userTimezone,
           } as FormValues
         }
         onValuesChange={(formValues: FormValues): void => {

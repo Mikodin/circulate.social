@@ -64,7 +64,8 @@ class UserContextProvider extends Component<Props, State> {
 
   updateUserAttributes = async (
     firstName: string,
-    lastName: string
+    lastName: string,
+    timezone: string
   ): Promise<string> => {
     const { cognitoUser } = this.state;
     try {
@@ -73,6 +74,7 @@ class UserContextProvider extends Component<Props, State> {
         resp = await Auth.updateUserAttributes(cognitoUser, {
           'custom:first_name': firstName,
           'custom:last_name': lastName,
+          'custom:time_zone': timezone,
         });
 
         this.setState({
@@ -104,9 +106,6 @@ class UserContextProvider extends Component<Props, State> {
       return auth;
     } catch (error) {
       console.error('confirmEmail', error);
-      // if (error.code !== 'CodeMismatchException') {
-      //   alert(`confirmEmail: ${error.message}`);
-      // }
       throw error;
     }
   };

@@ -39,7 +39,8 @@ export type UserContextType = {
 
   updateUserAttributes: (
     firstName: string,
-    lastName: string
+    lastName: string,
+    timezone: string
   ) => Promise<string>;
 };
 
