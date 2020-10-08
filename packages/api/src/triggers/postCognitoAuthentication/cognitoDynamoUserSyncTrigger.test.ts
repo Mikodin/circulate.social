@@ -28,6 +28,7 @@ describe('cognitoDynamoUserSyncTrigger', async () => {
           firstName: 'Michael',
           id: '51356193-19e0-46eb-b566-1c3410e15b2c',
           lastName: 'A',
+          timezone: 'America/Los_Angeles',
         },
         { overwrite: true }
       );

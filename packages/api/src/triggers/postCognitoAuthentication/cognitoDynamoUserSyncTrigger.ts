@@ -16,6 +16,7 @@ export const handler: CognitoUserPoolTriggerHandler = async (
     email: userAttributes.email,
     firstName: userAttributes['custom:first_name'],
     lastName: userAttributes['custom:last_name'],
+    timezone: userAttributes['custom:time_zone'],
   };
 
   try {

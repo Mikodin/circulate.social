@@ -16,6 +16,7 @@
       "cognito:user_status": "CONFIRMED",
       "cognito:email_alias": "mike@circulate.social",
       "custom:first_name": "Michael",
+      "custom:time_zone": "America/Los_Angeles",
       "email": "mike@circulate.social"
     },
     "newDeviceUsed": false

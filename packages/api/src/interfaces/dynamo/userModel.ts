@@ -19,6 +19,10 @@ const UserSchema = new dynamoose.Schema(
       type: String,
       required: true,
     },
+    timezone: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: {
