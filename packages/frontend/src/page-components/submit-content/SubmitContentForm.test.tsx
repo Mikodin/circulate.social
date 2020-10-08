@@ -33,7 +33,7 @@ jest.mock('next/router', () => ({
 
 const mockOnFormCompletion = jest.fn();
 
-const userTimeZone = ZonedDateTime.now().zone().toString();
+const userTimezone = ZonedDateTime.now().zone().toString();
 
 const defaultProps = {
   jwtToken: '123-asd',
@@ -53,7 +53,7 @@ function getAllFields(container: RenderResult) {
   const inputLink = queryByPlaceholderText(/Link/i);
   const selectDate = queryByPlaceholderText(/Select date/i);
   const selectTime = queryByPlaceholderText(/Select time/i);
-  const selectTimezone = queryByText(userTimeZone);
+  const selectTimezone = queryByText(userTimezone);
   const inputWhyShare = queryByPlaceholderText(/Why are you sharing this?/i);
 
   const buttonSubmit = queryByPlaceholderText(/Submit/i);
@@ -106,7 +106,7 @@ async function selectTimezoneFromTimezonePicker(
   });
 
   await act(async () => {
-    await fireEvent.click(queryAllByText(userTimeZone)[0]);
+    await fireEvent.click(queryAllByText(userTimezone)[0]);
   });
 
   return container;
@@ -164,7 +164,7 @@ describe('SubmitContentForm', () => {
 
       await selectADateFromDatePicker(container);
 
-      expect(queryByText(userTimeZone)).toBeTruthy();
+      expect(queryByText(userTimezone)).toBeTruthy();
     });
   });
 
@@ -273,7 +273,7 @@ describe('SubmitContentForm', () => {
         const thisMonth = LocalDate.now().monthValue();
 
         const expectedDateTime =
-          userTimeZone === 'America/Los_Angeles'
+          userTimezone === 'America/Los_Angeles'
             ? `2020-${thisMonth}-15T07:00-07:00[America/Los_Angeles]`
             : `2020-${thisMonth}-15T07:00Z[UTC]`;
         expect(mockedAxios.post).toHaveBeenCalledWith(
