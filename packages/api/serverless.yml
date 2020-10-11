@@ -15,7 +15,7 @@ custom:
       alarm: ${self:service}-${opt:stage}-alerts-alarm
       notifications:
         - protocol: sms
-          endpoint: ${ssm:mikes_phones_number~true}
+          endpoint: ${ssm:mikes_phone_number~true}
 
     definitions: # these defaults are merged with your definitions
       functionErrors:
