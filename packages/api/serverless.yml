@@ -13,7 +13,6 @@ custom:
     topics:
       ok: ${self:service}-${opt:stage}-alerts-ok
       alarm: ${self:service}-${opt:stage}-alerts-alarm
-      insufficientData: ${self:service}-${opt:stage}-alerts-insufficientData
       notifications:
         - protocol: sms
           endpoint: ${ssm:mikes_phones_number~true}
