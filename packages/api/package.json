@@ -34,6 +34,7 @@
     "handlebars": "^4.7.6",
     "lambda-log": "^2.4.0",
     "mailgun-js": "^0.22.0",
+    "serverless-plugin-aws-alerts": "^1.6.1",
     "source-map-support": "^0.5.16",
     "uuid": "^8.3.1"
   },
