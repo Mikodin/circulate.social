@@ -9,33 +9,24 @@ custom:
     stages:
       - prod
     dashboards: true
+
     topics:
       ok: ${self:service}-${opt:stage}-alerts-ok
       alarm: ${self:service}-${opt:stage}-alerts-alarm
       insufficientData: ${self:service}-${opt:stage}-alerts-insufficientData
+
     definitions: # these defaults are merged with your definitions
       functionErrors:
         period: 300 # override period
-      lambdaLogErrors:
-        metric: lambdaLogErrors
+      lambdaLogErrors: # When an explicit log.error() happens
+        metric: GenericErrors
         threshold: 1
-        statistic: Minimum
+        statistic: Sum
         period: 60
         evaluationPeriods: 1
-        comparisonOperator: GreaterThanThreshold
-        pattern: '{$._logLevel = error}'
-      customAlarm:
-        description: 'LogErrors'
-        namespace: 'AWS/Lambda'
-        nameTemplate: $[functionName]-log-errors # Optionally - naming template for the alarms, overwrites globally defined one
-        prefixTemplate: $[stackName] # Optionally - override the alarm name prefix, overwrites globally defined one
-        metric: duration
-        threshold: 200
-        statistic: Average
-        period: 300
-        evaluationPeriods: 1
-        datapointsToAlarm: 1
         comparisonOperator: GreaterThanOrEqualToThreshold
+        pattern: '{$._logLevel = error}'
+        treatMissingData: notBreaching
     alarms:
       - lambdaLogErrors
       - functionThrottles
@@ -178,6 +169,8 @@ functions:
   alarmTest:
     name: 'alarmTest-${self:provider.stage}'
     handler: src/endpoints/alarmTest/alarmTest.handler
+    alarms:
+      - lambdaLogErrors
 resources:
   Resources:
     circlesTable:
