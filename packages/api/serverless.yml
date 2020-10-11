@@ -175,6 +175,9 @@ functions:
       - schedule:
           rate: cron(0 12 * * ? *)
           enabled: true
+  alarmTest:
+    name: 'alarmTest-${self:provider.stage}'
+    handler: src/endpoints/alarmTest/alarmTest.handler
 resources:
   Resources:
     circlesTable:
