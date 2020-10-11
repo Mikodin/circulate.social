@@ -91,6 +91,16 @@ functions:
           cors: true
           authorizer:
             arn: ${self:custom.cognitoArn}
+  leaveCircle:
+    name: 'leaveCircle-${self:provider.stage}'
+    handler: src/endpoints/leaveCircle/leaveCircle.handler
+    events:
+      - http:
+          method: post
+          path: circles/{circleId}/leave
+          cors: true
+          authorizer:
+            arn: ${self:custom.cognitoArn}
   createEvent:
     name: 'createEvent-${self:provider.stage}'
     handler: src/endpoints/createEvent/createEvent.handler

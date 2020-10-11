@@ -26,9 +26,11 @@ export function getMemberFromAuthorizer(
   event: APIGatewayProxyEvent
 ): { memberId: string; isEmailVerified: boolean } {
   const isInLocal = process.env.IS_LOCAL === 'true';
+
   const memberId = isInLocal
     ? 'dev-id'
     : event.requestContext.authorizer.claims['cognito:username'];
+
   const isEmailVerified = isInLocal
     ? true
     : event.requestContext.authorizer.claims.email_verified;
