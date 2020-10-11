@@ -12,7 +12,13 @@ custom:
 
     topics:
       ok: ${self:service}-${opt:stage}-alerts-ok
+      notifications:
+        - protocol: sms
+          endpoint: ${ssm:mikes_phones_number~true}
       alarm: ${self:service}-${opt:stage}-alerts-alarm
+      notifications:
+        - protocol: sms
+          endpoint: ${ssm:mikes_phones_number~true}
       insufficientData: ${self:service}-${opt:stage}-alerts-insufficientData
 
     definitions: # these defaults are merged with your definitions
