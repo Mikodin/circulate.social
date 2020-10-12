@@ -5,7 +5,7 @@ import { FileAddOutlined, SettingOutlined } from '@ant-design/icons';
 
 import LeaveCircle from './leaveCircle/LeaveCircle';
 import CopyCircleInviteToClipboard from './copyCircleInviteToClipboard/CopyCircleInviteToClipboard';
-import styles from './circleActions.module.scss';
+import styles from './circleActionsContainer.module.scss';
 
 export interface Props {
   circle: Circle;

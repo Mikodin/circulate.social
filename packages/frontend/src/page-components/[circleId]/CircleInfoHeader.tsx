@@ -1,7 +1,7 @@
 import { Circle } from '@circulate/types';
 import { Skeleton } from 'antd';
 
-import CircleActions from '../../components/circleActions/CircleActions';
+import CircleActionsContainer from '../../components/circleActions/CircleActionsContainer';
 import styles from './circleInfoHeader.module.scss';
 
 export interface Props {
@@ -22,7 +22,7 @@ const CircleInfoHeader = (props: Props): JSX.Element => {
       <h4>Members: {circle.members.length}</h4>
       <h4>Sends: {circle.frequency}</h4>
       {circle.description && <p>{circle.description}</p>}
-      <CircleActions circle={circle} />
+      <CircleActionsContainer circle={circle} />
     </div>
   );
 };

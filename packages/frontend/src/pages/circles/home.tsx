@@ -10,7 +10,7 @@ import '@js-joda/timezone';
 import UserContext from '../../state-management/UserContext';
 
 import Layout from '../../components/layout/Layout';
-import CircleActions from '../../components/circleActions/CircleActions';
+import CircleActionsContainer from '../../components/circleActions/CircleActionsContainer';
 
 import { API_ENDPOINT } from '../../util/constants';
 
@@ -89,7 +89,7 @@ class CircleHome extends PureComponent<Props, State> {
           <p>{circle.frequency}</p>
 
           <div className={styles.circleActionContainer}>
-            <CircleActions circle={circle} />
+            <CircleActionsContainer circle={circle} />
           </div>
         </div>
         <Divider className={styles.divider} />
