@@ -13,9 +13,6 @@ custom:
     topics:
       ok:
         topic: ${self:service}-${opt:stage}-alerts-ok
-        notifications:
-          - protocol: email
-            endpoint: mfalicea58@gmail.com
       alarm:
         topic: ${self:service}-${opt:stage}-alerts-alarm
         notifications:
