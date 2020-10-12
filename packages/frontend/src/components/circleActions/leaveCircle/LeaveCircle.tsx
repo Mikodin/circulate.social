@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Axios from 'axios';
-import { Button } from 'antd';
+import { Button, Modal } from 'antd';
 import { ExportOutlined, LoadingOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 
@@ -18,6 +18,7 @@ const LeaveCircle = ({ circle, jwtToken }: Props): JSX.Element => {
 
   const router = useRouter();
   const [isLeaveCircleInFlight, setIsLeaveCircleInFlight] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const fetchLeaveCircle = async () => {
     setIsLeaveCircleInFlight(true);
@@ -37,16 +38,47 @@ const LeaveCircle = ({ circle, jwtToken }: Props): JSX.Element => {
       }
     }
   };
+  const isCircleDelete = circle.members.length === 1;
+
   return (
-    <Button
-      size="middle"
-      type="default"
-      icon={isLeaveCircleInFlight ? <LoadingOutlined /> : <ExportOutlined />}
-      disabled={isLeaveCircleInFlight}
-      onClick={fetchLeaveCircle}
-    >
-      {circle.members.length > 1 ? 'Leave Circle' : 'Delete Circle'}
-    </Button>
+    <>
+      <Modal
+        title="Confirm Leave Circle"
+        visible={showConfirmModal}
+        onOk={fetchLeaveCircle}
+        confirmLoading={isLeaveCircleInFlight}
+        onCancel={() => setShowConfirmModal(false)}
+      >
+        {isCircleDelete ? (
+          <>
+            <p>
+              Are you sure you want to <strong>DELETE</strong> &quot;
+              {circle.name}&quot;?
+            </p>
+            <p>
+              This action is permanent, everything from the Circle is erased.
+            </p>
+          </>
+        ) : (
+          <>
+            <p>Are you sure you want to leave {circle.name}?</p>
+            <p>
+              This action is permanent, and you will need to ask to join the
+              Circle to rejoin it
+            </p>
+          </>
+        )}
+      </Modal>
+      <Button
+        size="middle"
+        type="default"
+        icon={isLeaveCircleInFlight ? <LoadingOutlined /> : <ExportOutlined />}
+        disabled={isLeaveCircleInFlight}
+        onClick={() => setShowConfirmModal(true)}
+      >
+        {circle.members.length > 1 ? 'Leave Circle' : 'Delete Circle'}
+      </Button>
+    </>
   );
 };
 
