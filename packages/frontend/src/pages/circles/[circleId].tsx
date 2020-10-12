@@ -242,4 +242,10 @@ class CirclePage extends PureComponent<Props, State> {
   }
 }
 
+export async function getServerSideProps(): Promise<{
+  props: Record<string, unknown>;
+}> {
+  return { props: {} };
+}
+
 export default withRouter(CirclePage);
