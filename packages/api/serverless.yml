@@ -11,11 +11,16 @@ custom:
     dashboards: true
 
     topics:
-      ok: ${self:service}-${opt:stage}-alerts-ok
-      alarm: ${self:service}-${opt:stage}-alerts-alarm
-      notifications:
-        - protocol: email
-          endpoint: mfalicea58@gmail.com
+      ok:
+        topic: ${self:service}-${opt:stage}-alerts-ok
+        notifications:
+          - protocol: email
+            endpoint: mfalicea58@gmail.com
+      alarm:
+        topic: ${self:service}-${opt:stage}-alerts-alarm
+        notifications:
+          - protocol: email
+            endpoint: mfalicea58@gmail.com
     definitions: # these defaults are merged with your definitions
       functionErrors:
         period: 300 # override period
