@@ -20,7 +20,7 @@ const CircleActions = ({ circle }: Props): JSX.Element => (
     </Link>
 
     <CopyCircleInviteToClipboard circleId={circle.id} />
-    <LeaveCircle circleId={circle.id} />
+    <LeaveCircle circle={circle} />
 
     <Link href={`${circle.id}`}>
       <Button size="middle" type="default" icon={<SettingOutlined />} disabled>

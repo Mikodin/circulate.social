@@ -31,16 +31,28 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       (member) => member !== memberId
     );
 
+    if (updatedMembers.length === 0) {
+      await CircleModel.delete(circleId);
+      return generateReturn(200, {
+        message: 'Successfully left the Circle',
+        left: { success: true, circleId, deleted: true },
+      });
+    }
+
     const updatedCircle = (
       await CircleModel.update(
         { id: circleId },
-        { $SET: { members: [...updatedMembers] } }
+        {
+          $SET: {
+            members: [...updatedMembers],
+          },
+        }
       )
     ).original() as Circle;
 
     return generateReturn(200, {
       message: 'Successfully left the Circle',
-      left: { success: true, circleId: updatedCircle.id },
+      left: { success: true, circleId: updatedCircle.id, deleted: false },
     });
   } catch (error) {
     log.error('Failed to leave circle', {

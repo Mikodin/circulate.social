@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react';
 import Axios from 'axios';
-import { Button, Modal } from 'antd';
+import { Button } from 'antd';
 import { ExportOutlined, LoadingOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 
