@@ -89,7 +89,10 @@ class CircleHome extends PureComponent<Props, State> {
           <p>{circle.frequency}</p>
 
           <div className={styles.circleActionContainer}>
-            <CircleActionsContainer circle={circle} />
+            <CircleActionsContainer
+              circle={circle}
+              jwtToken={this.context.jwtToken}
+            />
           </div>
         </div>
         <Divider className={styles.divider} />

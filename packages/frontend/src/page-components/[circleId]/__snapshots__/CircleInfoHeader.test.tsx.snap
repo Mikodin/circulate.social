@@ -17,7 +17,7 @@ Object {
         </h4>
         <h4>
           Members: 
-          1
+          2
         </h4>
         <h4>
           Sends: 
@@ -89,7 +89,6 @@ Object {
           </div>
           <button
             class="ant-btn ant-btn-default"
-            disabled=""
             type="button"
           >
             <span
@@ -162,7 +161,7 @@ Object {
       </h4>
       <h4>
         Members: 
-        1
+        2
       </h4>
       <h4>
         Sends: 
@@ -234,7 +233,6 @@ Object {
         </div>
         <button
           class="ant-btn ant-btn-default"
-          disabled=""
           type="button"
         >
           <span

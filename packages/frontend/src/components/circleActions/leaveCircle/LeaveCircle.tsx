@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import Axios from 'axios';
 import { Button } from 'antd';
 import { ExportOutlined, LoadingOutlined } from '@ant-design/icons';
@@ -6,18 +6,17 @@ import { useRouter } from 'next/router';
 
 import { Circle } from '@circulate/types';
 
-import UserContext from '../../../state-management/UserContext';
 import { API_ENDPOINT } from '../../../util/constants';
 
 export interface Props {
   circle: Circle;
+  jwtToken: string;
 }
 
-const LeaveCircle = ({ circle }: Props): JSX.Element => {
+const LeaveCircle = ({ circle, jwtToken }: Props): JSX.Element => {
   const LEAVE_CIRCLE_ENDPOINT = `${API_ENDPOINT}/circles/${circle.id}/leave`;
 
   const router = useRouter();
-  const { jwtToken } = useContext(UserContext);
   const [isLeaveCircleInFlight, setIsLeaveCircleInFlight] = useState(false);
 
   const fetchLeaveCircle = async () => {

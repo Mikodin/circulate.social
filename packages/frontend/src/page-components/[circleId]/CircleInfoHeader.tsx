@@ -7,10 +7,11 @@ import styles from './circleInfoHeader.module.scss';
 export interface Props {
   circle: Circle;
   isLoading: boolean;
+  jwtToken: string;
 }
 
 const CircleInfoHeader = (props: Props): JSX.Element => {
-  const { circle, isLoading } = props;
+  const { circle, isLoading, jwtToken } = props;
   return isLoading || !circle ? (
     <div data-testid="skeleton">
       <Skeleton active={isLoading} />
@@ -22,7 +23,7 @@ const CircleInfoHeader = (props: Props): JSX.Element => {
       <h4>Members: {circle.members.length}</h4>
       <h4>Sends: {circle.frequency}</h4>
       {circle.description && <p>{circle.description}</p>}
-      <CircleActionsContainer circle={circle} />
+      <CircleActionsContainer circle={circle} jwtToken={jwtToken} />
     </div>
   );
 };

@@ -9,9 +9,10 @@ import styles from './circleActionsContainer.module.scss';
 
 export interface Props {
   circle: Circle;
+  jwtToken: string;
 }
 
-const CircleActions = ({ circle }: Props): JSX.Element => (
+const CircleActions = ({ circle, jwtToken }: Props): JSX.Element => (
   <div className={styles.circleActions}>
     <Link href={`/submit-content?circleId=${circle.id}`}>
       <Button size="middle" type="primary" icon={<FileAddOutlined />}>
@@ -20,7 +21,7 @@ const CircleActions = ({ circle }: Props): JSX.Element => (
     </Link>
 
     <CopyCircleInviteToClipboard circleId={circle.id} />
-    <LeaveCircle circle={circle} />
+    <LeaveCircle circle={circle} jwtToken={jwtToken} />
 
     <Link href={`${circle.id}`}>
       <Button size="middle" type="default" icon={<SettingOutlined />} disabled>

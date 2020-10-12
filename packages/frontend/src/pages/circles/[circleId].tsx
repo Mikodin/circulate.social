@@ -228,6 +228,7 @@ class CirclePage extends PureComponent<Props, State> {
                 <CircleInfoHeader
                   circle={circle}
                   isLoading={isFetchingCircle}
+                  jwtToken={this.context.jwtToken}
                 />
               </div>
               <Divider className={styles.divider} orientation="left">

@@ -6,7 +6,7 @@ const DEFAULT_PROPS = {
     id: 'asdf-123',
     createdAt: '1234',
     updatedAt: '12345',
-    members: ['Mike A'],
+    members: ['Mike A', 'Bill Nye'],
     creatorId: '1234-asdf',
     name: 'The greatest Circle ever',
     description: 'A circle for amazing things',
@@ -15,6 +15,7 @@ const DEFAULT_PROPS = {
     privacy: 'private' as const,
   },
   isLoading: false,
+  jwtToken: 'some-token',
 };
 
 function renderCircleInfoHeader(props?: Partial<Props>): RenderResult {
@@ -32,7 +33,7 @@ describe('CircleInfoHeader', () => {
   });
   it('Should contain the count of Members', () => {
     const { queryByText } = renderCircleInfoHeader();
-    expect(queryByText(/Members: 1/i)).toBeTruthy();
+    expect(queryByText(/Members: 2/i)).toBeTruthy();
   });
   it('Should contain the description from the Circle', () => {
     const { queryByText } = renderCircleInfoHeader();
