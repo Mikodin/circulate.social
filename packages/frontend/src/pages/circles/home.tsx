@@ -3,15 +3,14 @@ import { withRouter, Router } from 'next/router';
 import Link from 'next/link';
 import axios from 'axios';
 import { Circle } from '@circulate/types';
-import { Button, Divider, Skeleton } from 'antd';
-import { FileAddOutlined } from '@ant-design/icons';
+import { Divider, Skeleton } from 'antd';
 import { ZoneId, ZonedDateTime, Instant } from '@js-joda/core';
 import '@js-joda/timezone';
 
 import UserContext from '../../state-management/UserContext';
 
 import Layout from '../../components/layout/Layout';
-import CopyCircleInviteToClipboard from '../../components/copyCircleInviteToClipboard/CopyCircleInviteToClipboard';
+import CircleActions from '../../components/circleActions/CircleActions';
 
 import { API_ENDPOINT } from '../../util/constants';
 
@@ -90,16 +89,7 @@ class CircleHome extends PureComponent<Props, State> {
           <p>{circle.frequency}</p>
 
           <div className={styles.circleActionContainer}>
-            <Link href={`/submit-content?circleId=${circle.id}`}>
-              <Button size="middle" type="primary" icon={<FileAddOutlined />}>
-                Submit a post
-              </Button>
-            </Link>
-
-            <CopyCircleInviteToClipboard circleId={circle.id} />
-            <Button type="ghost" disabled>
-              Leave
-            </Button>
+            <CircleActions circle={circle} />
           </div>
         </div>
         <Divider className={styles.divider} />

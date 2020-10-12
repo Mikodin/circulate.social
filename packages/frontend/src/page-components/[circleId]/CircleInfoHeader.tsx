@@ -1,7 +1,7 @@
 import { Circle } from '@circulate/types';
 import { Skeleton } from 'antd';
 
-import { CircleActions } from '../../components/circleActions/circleActions';
+import CircleActions from '../../components/circleActions/CircleActions';
 import styles from './circleInfoHeader.module.scss';
 
 export interface Props {

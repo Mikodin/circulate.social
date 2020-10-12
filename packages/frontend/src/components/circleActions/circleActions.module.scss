@@ -1,5 +1,7 @@
 .circleActions {
-  margin-top: 10px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  button {
+    margin-right: 15px;
+  }
 }
