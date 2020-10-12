@@ -13,6 +13,9 @@ custom:
     topics:
       ok: ${self:service}-${opt:stage}-alerts-ok
       alarm: ${self:service}-${opt:stage}-alerts-alarm
+      notifications:
+        - protocol: email
+          endpoint: mfalicea58@gmail.com
     definitions: # these defaults are merged with your definitions
       functionErrors:
         period: 300 # override period
@@ -177,8 +180,7 @@ functions:
   alarmTest:
     name: 'alarmTest-${self:provider.stage}'
     handler: src/endpoints/alarmTest/alarmTest.handler
-    alarms:
-      - lambdaLogErrors
+
 resources:
   Resources:
     circlesTable:
