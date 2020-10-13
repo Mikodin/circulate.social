@@ -43,31 +43,37 @@ const LeaveCircle = ({ circle, jwtToken }: Props): JSX.Element => {
   return (
     <>
       <Modal
-        title="Confirm Leave Circle"
+        title={
+          isCircleDelete ? 'Confirm Delete Circle' : 'Confirm Leave Circle'
+        }
         visible={showConfirmModal}
         onOk={fetchLeaveCircle}
         confirmLoading={isLeaveCircleInFlight}
         onCancel={() => setShowConfirmModal(false)}
       >
-        {isCircleDelete ? (
-          <>
-            <p>
-              Are you sure you want to <strong>DELETE</strong> &quot;
-              {circle.name}&quot;?
-            </p>
-            <p>
-              This action is permanent, everything from the Circle is erased.
-            </p>
-          </>
-        ) : (
-          <>
-            <p>Are you sure you want to leave {circle.name}?</p>
-            <p>
-              This action is permanent, and you will need to ask to join the
-              Circle to rejoin it
-            </p>
-          </>
-        )}
+        <div data-testid="leave-circle-modal">
+          {isCircleDelete ? (
+            <>
+              <p data-testid="delete-text">
+                Are you sure you want to <strong>DELETE</strong> &quot;
+                {circle.name}&quot;?
+              </p>
+              <p>
+                This action is permanent, everything from the Circle is erased.
+              </p>
+            </>
+          ) : (
+            <>
+              <p data-testid="leave-text">
+                Are you sure you want to leave {circle.name}?
+              </p>
+              <p>
+                This action is permanent, and you will need to ask to join the
+                Circle to rejoin it
+              </p>
+            </>
+          )}
+        </div>
       </Modal>
       <Button
         size="middle"
