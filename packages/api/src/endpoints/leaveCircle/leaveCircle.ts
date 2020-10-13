@@ -21,7 +21,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     const isUserInCircle = circle.members.includes(memberId);
 
     if (!isUserInCircle) {
-      return generateReturn(400, {
+      return generateReturn(401, {
         message: 'Sorry, you are not a member of this circle',
         left: { success: false, circleId },
       });
@@ -34,7 +34,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     if (updatedMembers.length === 0) {
       await CircleModel.delete(circleId);
       return generateReturn(200, {
-        message: 'Successfully left the Circle',
+        message: 'Successfully deleted the Circle',
         left: { success: true, circleId, deleted: true },
       });
     }
@@ -59,7 +59,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       error,
     });
     return generateReturn(500, {
-      message: 'Something went wrong trying to leave the circle',
+      message: 'Something went wrong trying to leave or delete the circle',
     });
   }
 };
