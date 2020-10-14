@@ -17,7 +17,7 @@ import {
 } from 'antd';
 
 import { API_ENDPOINT } from '../../util/constants';
-import css from './SubmitContentForm.module.scss';
+import styles from './SubmitContentForm.module.scss';
 
 export const SUBMIT_CONTENT_ENDPOINT = `${API_ENDPOINT}/content`;
 
@@ -118,7 +118,7 @@ const SubmitContentForm = (props: Props): JSX.Element => {
   return (
     <Fragment>
       <Form
-        className={css.form}
+        className={styles.form}
         form={form}
         name="horizontal_login"
         size="large"
@@ -153,7 +153,11 @@ const SubmitContentForm = (props: Props): JSX.Element => {
           <Input placeholder="Link" type="text" />
         </Form.Item>
 
-        <Form.Item name="date" label="Event date">
+        <Form.Item
+          name="date"
+          label="Event date"
+          className={styles.eventDateLabel}
+        >
           <DatePicker
             use12Hours={true}
             open={isDatePickerOpen}
