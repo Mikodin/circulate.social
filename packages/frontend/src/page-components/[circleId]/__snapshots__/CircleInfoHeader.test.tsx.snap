@@ -27,7 +27,7 @@ Object {
           A circle for amazing things
         </p>
         <div
-          class="circleActions"
+          class="circleActionsContainer"
         >
           <button
             class="ant-btn ant-btn-primary"
@@ -171,7 +171,7 @@ Object {
         A circle for amazing things
       </p>
       <div
-        class="circleActions"
+        class="circleActionsContainer"
       >
         <button
           class="ant-btn ant-btn-primary"

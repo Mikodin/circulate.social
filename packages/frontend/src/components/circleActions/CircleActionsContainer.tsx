@@ -13,7 +13,7 @@ export interface Props {
 }
 
 const CircleActions = ({ circle, jwtToken }: Props): JSX.Element => (
-  <div className={styles.circleActions}>
+  <div className={styles.circleActionsContainer}>
     <Link href={`/submit-content?circleId=${circle.id}`}>
       <Button size="middle" type="primary" icon={<FileAddOutlined />}>
         Submit a post

@@ -1,5 +1,11 @@
-.circleActions {
+.circleActionsContainer {
+  width: 100%;
+  max-width: 100%;
+  height: 45px;
+  overflow: scroll;
+  margin: 8px 0px;
   display: flex;
+  flex-direction: row;
   justify-content: flex-start;
   button {
     margin-right: 15px;

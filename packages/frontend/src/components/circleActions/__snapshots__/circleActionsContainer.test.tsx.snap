@@ -6,7 +6,7 @@ Object {
   "baseElement": <body>
     <div>
       <div
-        class="circleActions"
+        class="circleActionsContainer"
       >
         <button
           class="ant-btn ant-btn-primary"
@@ -128,7 +128,7 @@ Object {
   </body>,
   "container": <div>
     <div
-      class="circleActions"
+      class="circleActionsContainer"
     >
       <button
         class="ant-btn ant-btn-primary"
