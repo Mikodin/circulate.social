@@ -12,6 +12,7 @@ import CopyCircleInviteToClipboard, {
 
 const DEFAULT_PROPS = {
   circleId: 'asdf-123',
+  circleName: 'The greatest circle',
 };
 function renderCopyCircleInviteToClipboard(
   props?: Partial<Props>
@@ -62,7 +63,9 @@ describe('CopyCircleInviteToClipboard', () => {
         const { queryByText } = renderWithModalOpen();
 
         const copyButton = queryByText(/Copy To Clipboard/i);
-        const textArea = queryByText(/Hey, you should come join our Circle!/i);
+        const textArea = queryByText(
+          /Hey, I'd love for you to join our Circle/i
+        );
         const mockTextToInput = 'Come join the greatest circle ever';
         act(() => {
           fireEvent.input(textArea, {

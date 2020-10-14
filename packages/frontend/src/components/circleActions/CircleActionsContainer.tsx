@@ -20,7 +20,10 @@ const CircleActions = ({ circle, jwtToken }: Props): JSX.Element => (
       </Button>
     </Link>
 
-    <CopyCircleInviteToClipboard circleId={circle.id} />
+    <CopyCircleInviteToClipboard
+      circleId={circle.id}
+      circleName={circle.name}
+    />
     <LeaveCircle circle={circle} jwtToken={jwtToken} />
 
     <Link href={`${circle.id}`}>

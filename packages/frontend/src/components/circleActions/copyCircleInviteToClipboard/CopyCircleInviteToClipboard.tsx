@@ -11,12 +11,14 @@ import styles from './copyCircleInviteToClipboard.module.scss';
 
 export interface Props {
   circleId: string;
+  circleName: string;
 }
 const domain = 'beta.circulate.social';
 
 const CopyCircleInviteToClipboard = (props: Props): JSX.Element => {
-  const { circleId } = props;
-  const baseInviteText = `Hey, you should come join our Circle!\n\nhttps://${domain}/circles/${circleId}?join=true`;
+  const { circleId, circleName } = props;
+  const baseInviteText = `Hey, I'd love for you to join our Circle "${circleName}".\n\nhttps://${domain}/circles/${circleId}?join=true`;
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTextCopied, setIsTextCopied] = useState(false);
   const [inviteText, setInviteText] = useState(baseInviteText);
@@ -46,9 +48,6 @@ const CopyCircleInviteToClipboard = (props: Props): JSX.Element => {
       <Button
         onClick={() => {
           setIsModalOpen(true);
-          // setTimeout(() => {
-          //   copyText();
-          // }, 500);
         }}
         icon={<UserAddOutlined />}
       >
@@ -74,7 +73,6 @@ const CopyCircleInviteToClipboard = (props: Props): JSX.Element => {
           }}
         />
       </Modal>
-      {/* {inviteButton} */}
     </div>
   );
 };
