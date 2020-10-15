@@ -260,7 +260,9 @@ export async function cleanup(
 ): Promise<boolean> {
   const allCircleIds = Array.from(circlesMap).map(([key]) => key);
   try {
-    log.info(`Clearing out [${allCircleIds.length}] circles upcoming content`);
+    log.info(`Clearing out [${allCircleIds.length}] circles upcoming content`, {
+      allCircleIds,
+    });
     await clearUpcomingContentFromCircles(allCircleIds);
   } catch (error) {
     log.warn('Failed to clear upcoming content from Circles', {
