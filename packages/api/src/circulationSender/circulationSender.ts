@@ -61,7 +61,7 @@ export const handler: ScheduledHandler = async () => {
 
       const emailParams = {
         from: 'Circulator <postman@circulate.social>',
-        to: 'mfalicea58@gmail.com, newyork1@gmail.com',
+        to: user.email,
         subject: `${usersFirstName}, your Circulation for today`,
         html: circulationToSend,
         'o:tag': ['circulations'],
