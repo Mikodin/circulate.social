@@ -4,7 +4,7 @@ import axios from 'axios';
 import { ZoneId, ZonedDateTime, LocalDateTime } from '@js-joda/core';
 import '@js-joda/timezone';
 
-import { AntdMoment } from '@circulate/types';
+import { AntdMoment, Circle } from '@circulate/types';
 
 import {
   Form,
@@ -25,6 +25,18 @@ export interface Props {
   jwtToken: string;
   seedCircleId?: string;
   onFormCompletion: (title: string) => void;
+  myCircles: Circle[];
+  isFetchingMyCircles: boolean;
+}
+
+interface FormValues {
+  title: string;
+  link: string;
+  date: AntdMoment & string;
+  time: AntdMoment & string;
+  whyShare: string;
+  timezone: string;
+  circleIds: string[];
 }
 
 export const AVAILABLE_TIMEZONES = ZoneId.getAvailableZoneIds();
@@ -34,9 +46,23 @@ const TimezoneSelects = AVAILABLE_TIMEZONES.map((timeZone) => (
   </Select.Option>
 ));
 
+function createJodaDateTime(
+  date: FormValues['date'],
+  time: FormValues['time'],
+  timezone: FormValues['timezone']
+): ZonedDateTime {
+  const dateObject = date.toObject();
+  const timeObject = time.toObject();
+
+  const { years, months, date: dateStr } = dateObject;
+  const { hours, minutes } = timeObject;
+  const ldt = LocalDateTime.of(years, months + 1, dateStr, hours, minutes);
+  return ZonedDateTime.of(ldt, ZoneId.of(timezone));
+}
+
 const SubmitContentForm = (props: Props): JSX.Element => {
   const [form] = Form.useForm();
-  const { seedCircleId } = props;
+  const { seedCircleId, myCircles, isFetchingMyCircles } = props;
 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [isEventForm, setIsEventForm] = useState(false);
@@ -51,15 +77,6 @@ const SubmitContentForm = (props: Props): JSX.Element => {
 
   const userTimezone = ZonedDateTime.now().zone().toString();
 
-  interface FormValues {
-    title: string;
-    link: string;
-    date: AntdMoment & string;
-    time: AntdMoment & string;
-    whyShare: string;
-    timezone: string;
-  }
-
   useEffect(() => {
     if (!isEventForm) {
       form.setFieldsValue({ date: '' });
@@ -68,22 +85,23 @@ const SubmitContentForm = (props: Props): JSX.Element => {
     }
   }, [isEventForm]);
 
-  function createJodaDateTime(
-    date: FormValues['date'],
-    time: FormValues['time'],
-    timezone: FormValues['timezone']
-  ): ZonedDateTime {
-    const dateObject = date.toObject();
-    const timeObject = time.toObject();
-
-    const { years, months, date: dateStr } = dateObject;
-    const { hours, minutes } = timeObject;
-    const ldt = LocalDateTime.of(years, months + 1, dateStr, hours, minutes);
-    return ZonedDateTime.of(ldt, ZoneId.of(timezone));
-  }
+  useEffect(() => {
+    const seedCircle = myCircles.find((circle) => circle.id === seedCircleId);
+    if (seedCircle) {
+      form.setFieldsValue({ circleIds: [seedCircle.id] });
+    }
+  }, [myCircles]);
 
   async function onFinish(formValues: FormValues): Promise<void> {
-    const { title, whyShare, date, time, timezone, link } = formValues;
+    const {
+      title,
+      whyShare,
+      date,
+      time,
+      timezone,
+      link,
+      circleIds,
+    } = formValues;
 
     let dateTimeStr: undefined | ZonedDateTime;
     if (date && time) {
@@ -98,7 +116,7 @@ const SubmitContentForm = (props: Props): JSX.Element => {
           link,
           title,
           description: whyShare,
-          circleId: [seedCircleId],
+          circleIds,
           dateTime: dateTimeStr && dateTimeStr.toString(),
         },
         { headers: { Authorization: props.jwtToken } }
@@ -131,6 +149,7 @@ const SubmitContentForm = (props: Props): JSX.Element => {
             date: '',
             time: '',
             whyShare: '',
+            circleIds: [],
             timezone: userTimezone,
           } as FormValues
         }
@@ -224,6 +243,19 @@ const SubmitContentForm = (props: Props): JSX.Element => {
             // onFocus={(): void => setShowDescriptionPopover(true)}
             style={{ fontSize: '16px' }}
           />
+        </Form.Item>
+        <Form.Item name="circleIds" label="Where are you sharing this to?">
+          <Select
+            mode="tags"
+            loading={isFetchingMyCircles}
+            disabled={isFetchingMyCircles}
+          >
+            {props.myCircles.map((circle) => (
+              <Select.Option key={circle.id} value={circle.id}>
+                {circle.name}
+              </Select.Option>
+            ))}
+          </Select>
         </Form.Item>
 
         {isFetchCreateContentError && (

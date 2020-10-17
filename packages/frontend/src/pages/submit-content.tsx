@@ -2,11 +2,16 @@ import { PureComponent } from 'react';
 import { withRouter, NextRouter } from 'next/router';
 import Link from 'next/link';
 import { Result, Button } from 'antd';
+import { Circle } from '@circulate/types';
+import Axios from 'axios';
 
 import Layout from '../components/layout/Layout';
 import SubmitContentForm from '../page-components/submit-content/SubmitContentForm';
+import { API_ENDPOINT } from '../util/constants';
 
 import UserContext from '../state-management/UserContext';
+
+const GET_MY_CIRCLES_ENDPOINT = `${API_ENDPOINT}/circles/me`;
 
 interface Props {
   router: NextRouter;
@@ -14,6 +19,8 @@ interface Props {
 
 interface State {
   showContentForm: boolean;
+  isFetchingMyCircles: boolean;
+  myCircles: Circle[];
 }
 class SubmitContent extends PureComponent<Props, State> {
   static contextType = UserContext;
@@ -22,13 +29,35 @@ class SubmitContent extends PureComponent<Props, State> {
 
   state = {
     showContentForm: true,
+    isFetchingMyCircles: true,
+    myCircles: [],
   };
 
-  componentDidMount(): void {
+  async componentDidMount(): Promise<void> {
     if (!this.context.getIsUserLoggedIn()) {
       this.props.router.push('/');
     }
+
+    const myCircles = await this.fetchMyCircles();
+    this.setState({ myCircles });
   }
+
+  fetchMyCircles = async (): Promise<Circle[]> => {
+    const { jwtToken } = this.context;
+    this.setState({
+      isFetchingMyCircles: true,
+    });
+    const myCircles = (
+      await Axios.get(GET_MY_CIRCLES_ENDPOINT, {
+        headers: { Authorization: jwtToken },
+      })
+    ).data.circles as Circle[];
+
+    this.setState({
+      isFetchingMyCircles: false,
+    });
+    return myCircles;
+  };
 
   onSubmitContentFormCompletion = (): void => {
     this.setState({ showContentForm: false });
@@ -36,7 +65,7 @@ class SubmitContent extends PureComponent<Props, State> {
 
   render(): JSX.Element {
     const { getIsUserLoggedIn } = this.context;
-    const { showContentForm } = this.state;
+    const { showContentForm, myCircles, isFetchingMyCircles } = this.state;
     const { router } = this.props;
 
     return getIsUserLoggedIn() ? (
@@ -48,6 +77,8 @@ class SubmitContent extends PureComponent<Props, State> {
             seedCircleId={`${router.query.circleId}`}
             jwtToken={this.context.jwtToken}
             onFormCompletion={this.onSubmitContentFormCompletion}
+            myCircles={myCircles}
+            isFetchingMyCircles={isFetchingMyCircles}
           />
         )}
         {!showContentForm && (

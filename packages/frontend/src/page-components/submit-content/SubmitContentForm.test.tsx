@@ -8,6 +8,7 @@ import {
 import axios from 'axios';
 import { LocalDate, ZonedDateTime } from '@js-joda/core';
 
+import { mockCircle } from '../../util/testUtils/mockModels';
 import SubmitContentForm, {
   SUBMIT_CONTENT_ENDPOINT,
   Props,
@@ -37,8 +38,10 @@ const userTimezone = ZonedDateTime.now().zone().toString();
 
 const defaultProps = {
   jwtToken: '123-asd',
-  seedCircleId: 'asdf-fdsa',
+  seedCircleId: mockCircle.id,
   onFormCompletion: mockOnFormCompletion,
+  isFetchingMyCircles: false,
+  myCircles: [mockCircle],
 };
 
 function renderContainer(props?: Props): RenderResult {
@@ -229,7 +232,7 @@ describe('SubmitContentForm', () => {
       expect(mockedAxios.post).toHaveBeenCalledWith(
         SUBMIT_CONTENT_ENDPOINT,
         {
-          circleId: [defaultProps.seedCircleId],
+          circleIds: [defaultProps.seedCircleId],
           title: inputtedTitleValue,
           description: inputtedWhyShareValue,
           link: inputtedLinkValue,
@@ -279,7 +282,7 @@ describe('SubmitContentForm', () => {
         expect(mockedAxios.post).toHaveBeenCalledWith(
           SUBMIT_CONTENT_ENDPOINT,
           {
-            circleId: [defaultProps.seedCircleId],
+            circleIds: [defaultProps.seedCircleId],
             title: inputtedTitleValue,
             description: inputtedWhyShareValue,
             dateTime: expectedDateTime,
