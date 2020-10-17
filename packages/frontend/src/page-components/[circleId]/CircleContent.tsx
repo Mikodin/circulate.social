@@ -45,17 +45,30 @@ const renderContent = (content: Content) => {
       <a href={content.link} target="_blank" rel="noreferrer">
         {content.title}
       </a>{' '}
-      | {content.createdBy}
+      | {content.createdBy} |{' '}
+      <small>
+        {ZonedDateTime.parse(content.createdAt)
+          .withZoneSameInstant(ZoneId.of('SYSTEM'))
+          .toLocalDate()
+          .toString()}
+      </small>
     </h4>
   ) : (
     <h4>
       <StarOutlined /> {''}
-      {content.title} | {content.createdBy}
+      {content.title} | {content.createdBy} |{' '}
+      <small>
+        {ZonedDateTime.parse(content.createdAt)
+          .withZoneSameInstant(ZoneId.of('SYSTEM'))
+          .toLocalDate()
+          .toString()}
+      </small>
     </h4>
   );
   return (
     <Fragment key={content.id}>
       {header}
+
       <p>{content.description}</p>
     </Fragment>
   );
