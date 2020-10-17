@@ -48,10 +48,11 @@ class CircleHome extends PureComponent<Props, State> {
     const { jwtToken, getIsUserLoggedIn } = this.context;
 
     try {
-      const createResponse = await axios.get(GET_MY_CIRCLES_ENDPOINT, {
-        headers: { Authorization: jwtToken },
-      });
-      const { circles } = createResponse.data;
+      const circles = (
+        await axios.get(GET_MY_CIRCLES_ENDPOINT, {
+          headers: { Authorization: jwtToken },
+        })
+      ).data.circles as Circle[];
       this.setState({ isFetchingCircles: false, isFetchCircleError: false });
       return circles;
     } catch (error) {
@@ -85,7 +86,6 @@ class CircleHome extends PureComponent<Props, State> {
           <p>Created: {createdAt.toString()}</p>
           <p>Members: {circle.members.length}</p>
           <p>Total Posts: {(circle.content || []).length} posts</p>
-          <p>Upcoming Circulation: TBA</p>
           <p>{circle.frequency}</p>
 
           <CircleActionsContainer
