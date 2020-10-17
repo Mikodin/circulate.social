@@ -38,30 +38,32 @@ export default `
 
         <h3>Your Circles posts</h3>
         {{#each circleDetails}}
-            <h4 style="margin: 0; margin-bottom: 5px;">
-                <a href=https://beta.circulate.social/circles/{{id}}>{{name}}</a>
-            </h4>
-            <div style="margin-left: 5px;">
-                <h5 style="margin: 0;">Posts</h5>
-                {{#each upcomingPosts}}
-                    <div style="margin-bottom: 5px;">
-                        {{#if link}}
-                            <p style="margin:0;">
-                               ☆ <a href={{{link}}}>{{title}}</a> | {{createdBy}}
-                            </p>
-                        {{/if}}
-                        {{#unless link}}
-                            <p style="margin:0;">
-                               ☆ {{title}} | {{createdBy}}
-                            </p>
-                        {{/unless}}
+            {{#if circleDetails.upcomingPosts}}
+                <h4 style="margin: 0; margin-bottom: 5px;">
+                    <a href=https://beta.circulate.social/circles/{{id}}>{{name}}</a>
+                </h4>
+                <div style="margin-left: 5px;">
+                    <h5 style="margin: 0;">Posts</h5>
+                    {{#each upcomingPosts}}
+                        <div style="margin-bottom: 5px;">
+                            {{#if link}}
+                                <p style="margin:0;">
+                                ☆ <a href={{{link}}}>{{title}}</a> | {{createdBy}}
+                                </p>
+                            {{/if}}
+                            {{#unless link}}
+                                <p style="margin:0;">
+                                ☆ {{title}} | {{createdBy}}
+                                </p>
+                            {{/unless}}
 
-                        {{#if description}}
-                            <p style="margin:0; margin-left: 25px;">{{description}}</p>
-                        {{/if}}
-                    </div>
-                {{/each}}
-            </div>
+                            {{#if description}}
+                                <p style="margin:0; margin-left: 25px;">{{description}}</p>
+                            {{/if}}
+                        </div>
+                    {{/each}}
+                </div>
+            {{/if}}
         {{/each}}
     {{/with}}
 </div>`;
