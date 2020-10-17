@@ -186,7 +186,7 @@ Object {
             class="ant-col ant-form-item-label"
           >
             <label
-              class=""
+              class="ant-form-item-required"
               for="horizontal_login_circleIds"
               title="Where are you sharing this to?"
             >
@@ -486,7 +486,7 @@ Object {
           class="ant-col ant-form-item-label"
         >
           <label
-            class=""
+            class="ant-form-item-required"
             for="horizontal_login_circleIds"
             title="Where are you sharing this to?"
           >

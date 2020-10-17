@@ -244,7 +244,16 @@ const SubmitContentForm = (props: Props): JSX.Element => {
             style={{ fontSize: '16px' }}
           />
         </Form.Item>
-        <Form.Item name="circleIds" label="Where are you sharing this to?">
+        <Form.Item
+          name="circleIds"
+          rules={[
+            {
+              required: true,
+              message: 'Please select a Circle to share this to',
+            },
+          ]}
+          label="Where are you sharing this to?"
+        >
           <Select
             mode="tags"
             loading={isFetchingMyCircles}
