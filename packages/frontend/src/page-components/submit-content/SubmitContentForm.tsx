@@ -255,9 +255,11 @@ const SubmitContentForm = (props: Props): JSX.Element => {
           label="Where are you sharing this to?"
         >
           <Select
-            mode="tags"
+            mode="multiple"
             loading={isFetchingMyCircles}
             disabled={isFetchingMyCircles}
+            showArrow
+            showSearch={false}
           >
             {props.myCircles.map((circle) => (
               <Select.Option key={circle.id} value={circle.id}>
