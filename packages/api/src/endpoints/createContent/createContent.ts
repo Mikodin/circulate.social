@@ -30,7 +30,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 
   const {
     title,
-    circleId,
+    circleIds,
     dateTime,
     description,
     link,
@@ -45,7 +45,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     isEmailVerified,
     memberId,
     title,
-    circleId,
+    circleIds,
   });
   if (requiredFieldsError) {
     return generateReturn(
@@ -70,12 +70,12 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   try {
     const circlesUserIsMemberOf = await fetchCirclesMemberIsIn(
       memberId,
-      circleId
+      circleIds
     );
 
     if (!circlesUserIsMemberOf.length) {
       return generateReturn(404, {
-        message: `circleId: [${circleId}] were not found, or you are not a member of them`,
+        message: `circleId: [${circleIds}] were not found, or you are not a member of them`,
       });
     }
 

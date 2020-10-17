@@ -5,12 +5,12 @@ interface requiredFields {
   isEmailVerified: boolean;
   memberId: string;
   title: string;
-  circleId: string;
+  circleIds: string;
 }
 export function checkRequiredFields(
   fields: requiredFields
 ): undefined | { statusCode: number; body: Record<string, unknown> } {
-  const { isEmailVerified, memberId, title, circleId } = fields;
+  const { isEmailVerified, memberId, title, circleIds } = fields;
   if (!isEmailVerified || !memberId) {
     return {
       statusCode: 401,
@@ -27,11 +27,11 @@ export function checkRequiredFields(
     };
   }
 
-  if (!circleId) {
+  if (!circleIds) {
     return {
       statusCode: 400,
       body: {
-        message: 'circleId field is required',
+        message: 'circleIds field is required',
       },
     };
   }
@@ -41,10 +41,8 @@ export function checkRequiredFields(
 
 export async function fetchCirclesMemberIsIn(
   memberId: string,
-  circleId: string | string[]
+  circleIds: string[]
 ): Promise<Circle[]> {
-  const circleIds = Array.isArray(circleId) ? [...circleId] : [circleId];
-
   const circlesToFetch = circleIds.map((id) => ({ id }));
   const circlesToSubmitEventTo = (
     await CircleModel.batchGet(circlesToFetch)

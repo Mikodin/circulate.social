@@ -38,7 +38,7 @@ const MOCK_EVENT_BODY = {
   title: 'Test',
   description: 'Test desc',
   privacy: 'private',
-  circleId: ['mock-circle-id-1', 'mock-circle-id-2'],
+  circleIds: ['mock-circle-id-1', 'mock-circle-id-2'],
   tags: ['test'],
   categories: ['TestCat'],
   dateTime: '2020-05-23T16:00-07:00[America/Los_Angeles]',
@@ -92,7 +92,7 @@ describe('createContent', () => {
       it('Should fetch all circles that are passed in', async () => {
         await handler(
           genMockEvent({
-            circleId: ['circle1', 'circle2'],
+            circleIds: ['circle1', 'circle2'],
           }),
           MOCK_CONTEXT,
           null
@@ -106,7 +106,7 @@ describe('createContent', () => {
       it('Should handle a single string circleId', async () => {
         await handler(
           genMockEvent({
-            circleId: 'circle1',
+            circleIds: ['circle1'],
           }),
           MOCK_CONTEXT,
           null
@@ -157,7 +157,7 @@ describe('createContent', () => {
       it('Should update _each Circle the member is in_ with the added Content', async () => {
         await handler(
           genMockEvent({
-            circleId: [
+            circleIds: [
               'mock-circle-id-1',
               'mock-circle-id-2',
               // Look at the mock, this id has no memberId that matches `dev-id`
@@ -260,7 +260,7 @@ describe('createContent', () => {
       it('Should return a 400 bad request', async () => {
         const resp = await handler(
           genMockEvent({
-            circleId: undefined,
+            circleIds: undefined,
           }),
           MOCK_CONTEXT,
           null
