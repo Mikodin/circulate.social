@@ -76,7 +76,15 @@ class CirclePage extends PureComponent<Props, State> {
   };
 
   async componentDidMount(): Promise<void> {
-    await this.fetchCircleData();
+    if (this.props.router.query.circleId) {
+      await this.fetchCircleData();
+    }
+  }
+
+  async componentDidUpdate(prevProps: Props) {
+    if (!prevProps.router.query.circleId && this.props.router.query.circleId) {
+      await this.fetchCircleData();
+    }
   }
 
   async fetchCircleData(): Promise<void> {
@@ -241,12 +249,6 @@ class CirclePage extends PureComponent<Props, State> {
       </Layout>
     );
   }
-}
-
-export async function getServerSideProps(): Promise<{
-  props: Record<string, unknown>;
-}> {
-  return { props: {} };
 }
 
 export default withRouter(CirclePage);
