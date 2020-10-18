@@ -1,7 +1,7 @@
 import { PureComponent } from 'react';
 import { withRouter, NextRouter } from 'next/router';
 import Link from 'next/link';
-import { Result, Button } from 'antd';
+import { Button, Alert, Divider } from 'antd';
 import { Circle } from '@circulate/types';
 import Axios from 'axios';
 
@@ -18,7 +18,7 @@ interface Props {
 }
 
 interface State {
-  showContentForm: boolean;
+  showSuccessAlert: boolean;
   isFetchingMyCircles: boolean;
   myCircles: Circle[];
 }
@@ -28,7 +28,7 @@ class SubmitContent extends PureComponent<Props, State> {
   context: React.ContextType<typeof UserContext>;
 
   state = {
-    showContentForm: true,
+    showSuccessAlert: false,
     isFetchingMyCircles: true,
     myCircles: [],
   };
@@ -60,50 +60,60 @@ class SubmitContent extends PureComponent<Props, State> {
   };
 
   onSubmitContentFormCompletion = (): void => {
-    this.setState({ showContentForm: false });
+    this.setState({ showSuccessAlert: true });
   };
 
   render(): JSX.Element {
     const { getIsUserLoggedIn } = this.context;
-    const { showContentForm, myCircles, isFetchingMyCircles } = this.state;
+    const { showSuccessAlert, myCircles, isFetchingMyCircles } = this.state;
     const { router } = this.props;
 
     return getIsUserLoggedIn() ? (
       <Layout>
         <h2>Submit content</h2>
         <h3>What should your Circle know about and why?</h3>
-        {showContentForm && (
-          <SubmitContentForm
-            seedCircleId={`${router.query.circleId}`}
-            jwtToken={this.context.jwtToken}
-            onFormCompletion={this.onSubmitContentFormCompletion}
-            myCircles={myCircles}
-            isFetchingMyCircles={isFetchingMyCircles}
-          />
+        {showSuccessAlert && (
+          <Alert
+            type="success"
+            closable
+            closeText="Hide"
+            banner
+            afterClose={() => {
+              this.setState({ showSuccessAlert: false });
+            }}
+            message="Success!"
+            description={
+              <>
+                <p>Your content will go out with the next Circulation</p>
+                <div>
+                  <Link
+                    key="GoToCircle"
+                    href="/circles/[cirleId]"
+                    as={`/circles/${router.query.circleId}`}
+                  >
+                    <a>Go to Circle</a>
+                  </Link>
+                  <Divider type="vertical" />
+                  <Button
+                    type="primary"
+                    onClick={(): void =>
+                      this.setState({ showSuccessAlert: false })
+                    }
+                  >
+                    Submit more content
+                  </Button>
+                </div>
+              </>
+            }
+          ></Alert>
         )}
-        {!showContentForm && (
-          <Result
-            status="success"
-            title="Success!"
-            subTitle="Your content will go out with the next Circulation"
-            extra={[
-              <Link
-                key="GoToCircle"
-                href="/circles/[cirleId]"
-                as={`/circles/${router.query.circleId}`}
-              >
-                <a>Go to Circle</a>
-              </Link>,
-              <Button
-                type="primary"
-                key="console"
-                onClick={(): void => this.setState({ showContentForm: true })}
-              >
-                Submit more content
-              </Button>,
-            ]}
-          />
-        )}
+        <SubmitContentForm
+          seedCircleId={`${router.query.circleId}`}
+          jwtToken={this.context.jwtToken}
+          onFormCompletion={this.onSubmitContentFormCompletion}
+          myCircles={myCircles}
+          isFetchingMyCircles={isFetchingMyCircles}
+        />
       </Layout>
     ) : (
       <div></div>
