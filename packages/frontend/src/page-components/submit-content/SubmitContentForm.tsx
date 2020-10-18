@@ -178,6 +178,7 @@ const SubmitContentForm = (props: Props): JSX.Element => {
           className={styles.eventDateLabel}
         >
           <DatePicker
+            format={'MMMM D'}
             use12Hours={true}
             open={isDatePickerOpen}
             onOpenChange={(isOpen): void => {
@@ -214,7 +215,11 @@ const SubmitContentForm = (props: Props): JSX.Element => {
                 },
               ]}
             >
-              <TimePicker showSecond={false} use12Hours={true} />
+              <TimePicker
+                showSecond={false}
+                use12Hours={true}
+                format={'h:mm a'}
+              />
             </Form.Item>
 
             <Form.Item name="timezone" label="Timezone">
