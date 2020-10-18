@@ -39,7 +39,7 @@ interface FormValues {
   circleIds: string[];
 }
 
-export const AVAILABLE_TIMEZONES = ZoneId.getAvailableZoneIds();
+export const AVAILABLE_TIMEZONES = ZoneId.getAvailableZoneIds().sort();
 const TimezoneSelects = AVAILABLE_TIMEZONES.map((timeZone) => (
   <Select.Option value={timeZone} key={timeZone}>
     {timeZone}
@@ -223,19 +223,7 @@ const SubmitContentForm = (props: Props): JSX.Element => {
             </Form.Item>
 
             <Form.Item name="timezone" label="Timezone">
-              <Select
-                showSearch
-                style={{ width: 200 }}
-                placeholder="Timezone"
-                optionFilterProp="children"
-                filterOption={(input, option) =>
-                  option &&
-                  option.children &&
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
-                    0
-                }
-              >
-                <Select.OptGroup>Americas</Select.OptGroup>
+              <Select showSearch style={{ width: 200 }} placeholder="Timezone">
                 {TimezoneSelects}
               </Select>
             </Form.Item>
