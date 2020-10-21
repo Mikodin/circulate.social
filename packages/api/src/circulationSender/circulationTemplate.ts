@@ -38,7 +38,7 @@ export default `
 
         <h3>Your Circles posts</h3>
         {{#each circleDetails}}
-            {{#if circleDetails.upcomingPosts}}
+            {{#if upcomingPosts}}
                 <h4 style="margin: 0; margin-bottom: 5px;">
                     <a href=https://beta.circulate.social/circles/{{id}}>{{name}}</a>
                 </h4>

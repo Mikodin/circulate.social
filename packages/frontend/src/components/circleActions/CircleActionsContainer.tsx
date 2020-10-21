@@ -24,6 +24,7 @@ const CircleActions = ({ circle, jwtToken }: Props): JSX.Element => (
       circleId={circle.id}
       circleName={circle.name}
     />
+
     <LeaveCircle circle={circle} jwtToken={jwtToken} />
 
     <Link href={`${circle.id}`}>
