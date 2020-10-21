@@ -124,8 +124,10 @@ const SubmitContentForm = (props: Props): JSX.Element => {
 
       setIsFetchCreateContentInFlight(false);
       setIsFetchCreateContentError(false);
+      setIsEventForm(false);
       props.onFormCompletion(title);
       form.resetFields();
+      form.setFieldsValue({ circleIds: [seedCircleId] });
     } catch (e) {
       console.error(e);
       setIsFetchCreateContentInFlight(false);
