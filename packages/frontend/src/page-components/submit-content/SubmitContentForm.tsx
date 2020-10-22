@@ -173,39 +173,42 @@ const SubmitContentForm = (props: Props): JSX.Element => {
           <Input placeholder="Link" type="text" />
         </Form.Item>
 
-        <Form.Item
-          name="date"
-          label="Event date"
-          className={styles.eventDateLabel}
-        >
-          <DatePicker
-            format={'MMMM D'}
-            use12Hours={true}
-            open={isDatePickerOpen}
-            onOpenChange={(isOpen): void => {
-              setIsDatePickerOpen(isOpen);
-              if (!isOpen && !form.getFieldValue('date')) {
-                setIsEventForm(false);
-              } else if (form.getFieldValue('date')) {
-                setIsEventForm(true);
-              }
-            }}
-            renderExtraFooter={(): JSX.Element => (
-              <Button
-                onClick={(): void => {
-                  setIsDatePickerOpen(false);
-                  setIsEventForm(false);
-                }}
-              >
-                Clear
-              </Button>
-            )}
-            allowClear={false}
-          />
-        </Form.Item>
-
+        <Button type="link" onClick={() => setIsEventForm(!isEventForm)}>
+          {isEventForm ? 'Not creating an event?' : 'Creating an event?'}
+        </Button>
         {isEventForm && (
           <>
+            <Form.Item
+              name="date"
+              label="Event date"
+              className={styles.eventDateLabel}
+            >
+              <DatePicker
+                format={'MMMM D'}
+                use12Hours={true}
+                open={isDatePickerOpen}
+                onOpenChange={(isOpen): void => {
+                  setIsDatePickerOpen(isOpen);
+                  if (!isOpen && !form.getFieldValue('date')) {
+                    setIsEventForm(false);
+                  } else if (form.getFieldValue('date')) {
+                    setIsEventForm(true);
+                  }
+                }}
+                renderExtraFooter={(): JSX.Element => (
+                  <Button
+                    onClick={(): void => {
+                      setIsDatePickerOpen(false);
+                      setIsEventForm(false);
+                    }}
+                  >
+                    Clear
+                  </Button>
+                )}
+                allowClear={false}
+              />
+            </Form.Item>
+
             <Form.Item
               name="time"
               label="Event time"

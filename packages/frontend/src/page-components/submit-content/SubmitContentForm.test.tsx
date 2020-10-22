@@ -54,6 +54,8 @@ function getAllFields(container: RenderResult) {
 
   const inputTitle = queryByPlaceholderText(/Title/i);
   const inputLink = queryByPlaceholderText(/Link/i);
+  const buttonCreatingAnEvent = queryByText(/Creating an event?/i);
+  const buttonNotCreatingAnEvent = queryByText(/Not creating an event?/i);
   const selectDate = queryByPlaceholderText(/Select date/i);
   const selectTime = queryByPlaceholderText(/Select time/i);
   const selectTimezone = queryByText(userTimezone);
@@ -64,6 +66,8 @@ function getAllFields(container: RenderResult) {
   return {
     inputTitle,
     inputLink,
+    buttonCreatingAnEvent,
+    buttonNotCreatingAnEvent,
     selectDate,
     selectTime,
     selectTimezone,
@@ -72,11 +76,21 @@ function getAllFields(container: RenderResult) {
   };
 }
 
+async function enableEventForm(container: RenderResult): Promise<RenderResult> {
+  const { buttonCreatingAnEvent } = getAllFields(container);
+  await act(async () => {
+    await fireEvent.click(buttonCreatingAnEvent);
+  });
+
+  return container;
+}
+
 async function selectADateFromDatePicker(
   container: RenderResult
 ): Promise<RenderResult> {
   const { queryByText } = container;
   const { selectDate } = getAllFields(container);
+
   await act(async () => {
     await fireEvent.mouseDown(selectDate);
     await fireEvent.click(queryByText(/15/i));
@@ -144,7 +158,10 @@ describe('SubmitContentForm', () => {
   describe('When there is no value in the date input', () => {
     it('Should not render selectTimezone,or selectTime', () => {
       const container = renderContainer();
-      const { selectTimezone, selectTime } = getAllFields(container);
+      const { selectTimezone, selectTime, selectDate } = getAllFields(
+        container
+      );
+      expect(selectDate).not.toBeTruthy();
       expect(selectTimezone).not.toBeTruthy();
       expect(selectTime).not.toBeTruthy();
     });
@@ -154,7 +171,8 @@ describe('SubmitContentForm', () => {
     it('should render the "event" flow. selectTimezone,and selectTime should all be visible', async () => {
       const container = renderContainer();
 
-      await selectADateFromDatePicker(container);
+      const eventContainer = await enableEventForm(container);
+      await selectADateFromDatePicker(eventContainer);
 
       const { selectTimezone, selectTime } = getAllFields(container);
       expect(selectTime).toBeTruthy();
@@ -162,10 +180,12 @@ describe('SubmitContentForm', () => {
     });
 
     it('should set the timezone by default to the users timezone returned by Joda', async () => {
-      const container = renderContainer();
-      const { queryByText } = container;
+      const baseContainer = renderContainer();
+      const eventContainer = await enableEventForm(baseContainer);
 
-      await selectADateFromDatePicker(container);
+      const { queryByText } = eventContainer;
+
+      await selectADateFromDatePicker(eventContainer);
 
       expect(queryByText(userTimezone)).toBeTruthy();
     });
@@ -197,10 +217,6 @@ describe('SubmitContentForm', () => {
           value: inputtedLinkValue,
         },
         {
-          element: fields.selectDate,
-          value: '15',
-        },
-        {
           element: fields.inputWhyShare,
           value: inputtedWhyShareValue,
         },
@@ -212,8 +228,9 @@ describe('SubmitContentForm', () => {
       );
 
       if (isEventForm) {
+        const eventContainer = await enableEventForm(populatedContentContainer);
         const populatedEventContainer = await selectADateFromDatePicker(
-          populatedContentContainer
+          eventContainer
         );
         return populatedEventContainer;
       }
@@ -278,9 +295,12 @@ describe('SubmitContentForm', () => {
 
       describe('When time is not inputted', () => {
         it('Should not fire off Axios.post on Submit', async () => {
-          const basicContainer = await renderCompleteForm(true);
-          const container = await selectADateFromDatePicker(basicContainer);
-          const { queryByText } = container;
+          const container = await renderCompleteForm(true);
+          // const eventContainer = await enableEventForm(basicContainer);
+          const dateChosenContainer = await selectADateFromDatePicker(
+            container
+          );
+          const { queryByText } = dateChosenContainer;
 
           const submitButton = queryByText(/Submit/i);
           mockedAxios.post.mockImplementationOnce(() => Promise.resolve(true));
