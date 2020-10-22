@@ -4,7 +4,7 @@ import axios from 'axios';
 import { ZoneId, ZonedDateTime, LocalDateTime } from '@js-joda/core';
 import '@js-joda/timezone';
 
-import { AntdMoment, Circle } from '@circulate/types';
+import { AntdMoment, Circle, Content } from '@circulate/types';
 
 import {
   Form,
@@ -24,7 +24,7 @@ export const SUBMIT_CONTENT_ENDPOINT = `${API_ENDPOINT}/content`;
 export interface Props {
   jwtToken: string;
   seedCircleId?: string;
-  onFormCompletion: (title: string) => void;
+  onFormCompletion: (content: Partial<Content>) => void;
   myCircles: Circle[];
   isFetchingMyCircles: boolean;
 }
@@ -110,22 +110,21 @@ const SubmitContentForm = (props: Props): JSX.Element => {
     try {
       setIsFetchCreateContentInFlight(true);
 
-      await axios.post(
-        SUBMIT_CONTENT_ENDPOINT,
-        {
-          link,
-          title,
-          description: whyShare,
-          circleIds,
-          dateTime: dateTimeStr && dateTimeStr.toString(),
-        },
-        { headers: { Authorization: props.jwtToken } }
-      );
+      const content = {
+        link,
+        title,
+        description: whyShare,
+        circleIds,
+        dateTime: dateTimeStr && dateTimeStr.toString(),
+      };
+      await axios.post(SUBMIT_CONTENT_ENDPOINT, content, {
+        headers: { Authorization: props.jwtToken },
+      });
 
       setIsFetchCreateContentInFlight(false);
       setIsFetchCreateContentError(false);
       setIsEventForm(false);
-      props.onFormCompletion(title);
+      props.onFormCompletion(content);
       form.resetFields();
       form.setFieldsValue({ circleIds: [seedCircleId] });
     } catch (e) {

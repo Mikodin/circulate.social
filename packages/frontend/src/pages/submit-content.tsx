@@ -1,8 +1,8 @@
 import { PureComponent } from 'react';
 import { withRouter, NextRouter } from 'next/router';
 import Link from 'next/link';
-import { Button, Alert, Divider } from 'antd';
-import { Circle } from '@circulate/types';
+import { Alert } from 'antd';
+import { Circle, Content } from '@circulate/types';
 import Axios from 'axios';
 
 import Layout from '../components/layout/Layout';
@@ -21,6 +21,7 @@ interface State {
   showSuccessAlert: boolean;
   isFetchingMyCircles: boolean;
   myCircles: Circle[];
+  submittedContentTitle?: string;
 }
 class SubmitContent extends PureComponent<Props, State> {
   static contextType = UserContext;
@@ -31,6 +32,7 @@ class SubmitContent extends PureComponent<Props, State> {
     showSuccessAlert: false,
     isFetchingMyCircles: true,
     myCircles: [],
+    submittedContentTitle: undefined,
   };
 
   async componentDidMount(): Promise<void> {
@@ -59,13 +61,25 @@ class SubmitContent extends PureComponent<Props, State> {
     return myCircles;
   };
 
-  onSubmitContentFormCompletion = (): void => {
-    this.setState({ showSuccessAlert: true });
+  onSubmitContentFormCompletion = (content: Partial<Content>): void => {
+    const { title } = content;
+    this.setState({ showSuccessAlert: true, submittedContentTitle: title });
+    setTimeout(() => {
+      this.setState({
+        showSuccessAlert: false,
+        submittedContentTitle: undefined,
+      });
+    }, 5000);
   };
 
   render(): JSX.Element {
     const { getIsUserLoggedIn } = this.context;
-    const { showSuccessAlert, myCircles, isFetchingMyCircles } = this.state;
+    const {
+      showSuccessAlert,
+      submittedContentTitle,
+      myCircles,
+      isFetchingMyCircles,
+    } = this.state;
     const { router } = this.props;
 
     return getIsUserLoggedIn() ? (
@@ -79,12 +93,17 @@ class SubmitContent extends PureComponent<Props, State> {
             closeText="Hide"
             banner
             afterClose={() => {
-              this.setState({ showSuccessAlert: false });
+              this.setState({
+                showSuccessAlert: false,
+                submittedContentTitle: undefined,
+              });
             }}
             message="Success!"
             description={
               <>
-                <p>Your content will go out with the next Circulation</p>
+                <p>
+                  Successfully submitted &quot;{submittedContentTitle}&quot;!
+                </p>
                 <div>
                   <Link
                     key="GoToCircle"
@@ -93,15 +112,6 @@ class SubmitContent extends PureComponent<Props, State> {
                   >
                     <a>Go to Circle</a>
                   </Link>
-                  <Divider type="vertical" />
-                  <Button
-                    type="primary"
-                    onClick={(): void =>
-                      this.setState({ showSuccessAlert: false })
-                    }
-                  >
-                    Submit more content
-                  </Button>
                 </div>
               </>
             }

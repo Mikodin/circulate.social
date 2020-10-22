@@ -221,27 +221,6 @@ describe('SubmitContentForm', () => {
       return populatedContentContainer;
     }
 
-    it('Should fire off Axios.post on Submit and route to the Circle', async () => {
-      const { queryByText } = await renderCompleteForm(false);
-      const submitButton = queryByText(/Submit/i);
-      mockedAxios.post.mockImplementationOnce(() => Promise.resolve(true));
-
-      await act(async () => {
-        fireEvent.submit(submitButton);
-      });
-      expect(mockedAxios.post).toHaveBeenCalledWith(
-        SUBMIT_CONTENT_ENDPOINT,
-        {
-          circleIds: [defaultProps.seedCircleId],
-          title: inputtedTitleValue,
-          description: inputtedWhyShareValue,
-          link: inputtedLinkValue,
-        },
-        { headers: { Authorization: defaultProps.jwtToken } }
-      );
-      expect(mockOnFormCompletion).toHaveBeenCalledWith(inputtedTitleValue);
-    });
-
     it('Should render a "Submitting..." loading component', async () => {
       const { queryByText } = await renderCompleteForm(false);
       const submitButton = queryByText(/Submit/i);
@@ -279,19 +258,22 @@ describe('SubmitContentForm', () => {
           userTimezone === 'America/Los_Angeles'
             ? `2020-${thisMonth}-15T07:00-07:00[America/Los_Angeles]`
             : `2020-${thisMonth}-15T07:00Z[UTC]`;
+        const expectedSubmittedContent = {
+          circleIds: [defaultProps.seedCircleId],
+          title: inputtedTitleValue,
+          description: inputtedWhyShareValue,
+          dateTime: expectedDateTime,
+          link: inputtedLinkValue,
+        };
         expect(mockedAxios.post).toHaveBeenCalledWith(
           SUBMIT_CONTENT_ENDPOINT,
-          {
-            circleIds: [defaultProps.seedCircleId],
-            title: inputtedTitleValue,
-            description: inputtedWhyShareValue,
-            dateTime: expectedDateTime,
-            link: inputtedLinkValue,
-          },
+          expectedSubmittedContent,
           { headers: { Authorization: defaultProps.jwtToken } }
         );
 
-        expect(mockOnFormCompletion).toHaveBeenCalledWith(inputtedTitleValue);
+        expect(mockOnFormCompletion).toHaveBeenCalledWith(
+          expectedSubmittedContent
+        );
       });
 
       describe('When time is not inputted', () => {
