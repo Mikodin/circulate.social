@@ -50,14 +50,14 @@ function renderContainer(props?: Props): RenderResult {
 
 // eslint-disable-next-line
 function getAllFields(container: RenderResult) {
-  const { queryByPlaceholderText, queryByText } = container;
+  const { queryByPlaceholderText, queryByText, queryByTestId } = container;
 
   const inputTitle = queryByPlaceholderText(/Title/i);
   const inputLink = queryByPlaceholderText(/Link/i);
   const buttonCreatingAnEvent = queryByText(/Creating an event?/i);
   const buttonNotCreatingAnEvent = queryByText(/Not creating an event?/i);
   const selectDate = queryByPlaceholderText(/Select date/i);
-  const selectTime = queryByPlaceholderText(/Select time/i);
+  const selectTime = queryByTestId('time-select');
   const selectTimezone = queryByText(userTimezone);
   const inputWhyShare = queryByPlaceholderText(/Why are you sharing this?/i);
 
@@ -102,12 +102,15 @@ async function selectADateFromDatePicker(
 async function selectATimeFromTimePicker(
   container: RenderResult
 ): Promise<RenderResult> {
-  const { queryAllByText, queryByText } = container;
+  const { queryAllByText } = container;
   const { selectTime } = getAllFields(container);
+
   await act(async () => {
-    await fireEvent.mouseDown(selectTime);
-    await fireEvent.click(queryAllByText(/07/i)[0]);
-    await fireEvent.click(queryByText(/Ok/i));
+    await fireEvent.click(selectTime);
+    await fireEvent.change(selectTime.querySelector('input'), {
+      target: { value: '5:00 PM' },
+    });
+    await fireEvent.click(queryAllByText('5:00 PM')[0]);
   });
 
   return container;
@@ -273,8 +276,8 @@ describe('SubmitContentForm', () => {
 
         const expectedDateTime =
           userTimezone === 'America/Los_Angeles'
-            ? `2020-${thisMonth}-15T07:00-07:00[America/Los_Angeles]`
-            : `2020-${thisMonth}-15T07:00Z[UTC]`;
+            ? `2020-${thisMonth}-15T17:00-07:00[America/Los_Angeles]`
+            : `2020-${thisMonth}-15T17:00Z[UTC]`;
         const expectedSubmittedContent = {
           circleIds: [defaultProps.seedCircleId],
           title: inputtedTitleValue,

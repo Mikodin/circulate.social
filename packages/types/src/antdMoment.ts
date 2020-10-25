@@ -1,4 +1,5 @@
 export interface AntdMoment {
+  format: (formatShape: string) => string;
   toObject: () => {
     date: number;
     hours: number;

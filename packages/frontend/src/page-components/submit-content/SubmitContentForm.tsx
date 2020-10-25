@@ -1,23 +1,23 @@
 import { Fragment, useState, useEffect } from 'react';
 import axios from 'axios';
 
-import { ZoneId, ZonedDateTime, LocalDateTime } from '@js-joda/core';
+import {
+  ZoneId,
+  ZonedDateTime,
+  LocalDateTime,
+  LocalTime,
+  LocalDate,
+} from '@js-joda/core';
 import '@js-joda/timezone';
 
 import { AntdMoment, Circle, Content } from '@circulate/types';
 
-import {
-  Form,
-  Input,
-  Button,
-  Alert,
-  DatePicker,
-  TimePicker,
-  Select,
-} from 'antd';
+import { Form, Input, Button, Alert, DatePicker, Select } from 'antd';
 
 import { API_ENDPOINT } from '../../util/constants';
 import styles from './SubmitContentForm.module.scss';
+
+import GenerateTimeSelect, { getValuesFromTimeValues } from './TimeSelect';
 
 export const SUBMIT_CONTENT_ENDPOINT = `${API_ENDPOINT}/content`;
 
@@ -48,16 +48,13 @@ const TimezoneSelects = AVAILABLE_TIMEZONES.map((timeZone) => (
 
 function createJodaDateTime(
   date: FormValues['date'],
-  time: FormValues['time'],
+  time: LocalTime,
   timezone: FormValues['timezone']
 ): ZonedDateTime {
-  const dateObject = date.toObject();
-  const timeObject = time.toObject();
-
-  const { years, months, date: dateStr } = dateObject;
-  const { hours, minutes } = timeObject;
-  const ldt = LocalDateTime.of(years, months + 1, dateStr, hours, minutes);
-  return ZonedDateTime.of(ldt, ZoneId.of(timezone));
+  const localDate = LocalDate.parse(date.format('YYYY-MM-DD'));
+  const ldt = LocalDateTime.of(localDate, time);
+  const zdt = ZonedDateTime.of(ldt, ZoneId.of(timezone));
+  return zdt;
 }
 
 const SubmitContentForm = (props: Props): JSX.Element => {
@@ -105,7 +102,11 @@ const SubmitContentForm = (props: Props): JSX.Element => {
 
     let dateTimeStr: undefined | ZonedDateTime;
     if (date && time) {
-      dateTimeStr = createJodaDateTime(date, time, timezone);
+      dateTimeStr = createJodaDateTime(
+        date,
+        getValuesFromTimeValues(time),
+        timezone
+      );
     }
     try {
       setIsFetchCreateContentInFlight(true);
@@ -134,6 +135,10 @@ const SubmitContentForm = (props: Props): JSX.Element => {
     }
   }
 
+  // const nowHour = new Date().toLocaleTimeString('en-US', {
+  //   hour12: true,
+  //   hour: 'numeric',
+  // });
   return (
     <Fragment>
       <Form
@@ -154,11 +159,8 @@ const SubmitContentForm = (props: Props): JSX.Element => {
             timezone: userTimezone,
           } as FormValues
         }
-        onValuesChange={(formValues: FormValues): void => {
+        onValuesChange={(): void => {
           setIsFetchCreateContentError(false);
-          if (formValues.date) {
-            setIsEventForm(true);
-          }
         }}
       >
         <Form.Item
@@ -219,11 +221,7 @@ const SubmitContentForm = (props: Props): JSX.Element => {
                 },
               ]}
             >
-              <TimePicker
-                showSecond={false}
-                use12Hours={true}
-                format={'h:mm a'}
-              />
+              {GenerateTimeSelect()}
             </Form.Item>
 
             <Form.Item name="timezone" label="Timezone">
