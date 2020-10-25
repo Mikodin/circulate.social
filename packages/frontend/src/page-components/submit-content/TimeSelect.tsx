@@ -10,10 +10,12 @@ export function generateSearchableTimeValues(
   minute: string,
   dayTime: 'AM' | 'PM'
 ): string {
-  return `${hour}:${minute} ${dayTime} | ${hour}:${minute}${dayTime} | ${hour}${minute}${dayTime} | ${hour}${minute} ${dayTime} | ${hour}${dayTime} | ${hour} ${dayTime} `;
+  return `${hour}:${minute} ${dayTime} | ${hour}:${minute}${dayTime} | ${hour}${minute}${dayTime} | ${hour}${minute} ${dayTime} | ${hour}${dayTime} | ${hour} ${dayTime}`;
 }
 
-export function getValuesFromTimeValues(timeValue: string): LocalTime {
+export function getValuesFromSearchableTimeValues(
+  timeValue: string
+): LocalTime {
   const mainString = timeValue.split('|')[0].trim(); // ex 12:30 pm
   const time = LocalTime.parse(
     mainString,

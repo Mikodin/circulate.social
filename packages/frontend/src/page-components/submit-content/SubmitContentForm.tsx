@@ -17,7 +17,9 @@ import { Form, Input, Button, Alert, DatePicker, Select } from 'antd';
 import { API_ENDPOINT } from '../../util/constants';
 import styles from './SubmitContentForm.module.scss';
 
-import GenerateTimeSelect, { getValuesFromTimeValues } from './TimeSelect';
+import GenerateTimeSelect, {
+  getValuesFromSearchableTimeValues,
+} from './TimeSelect';
 
 export const SUBMIT_CONTENT_ENDPOINT = `${API_ENDPOINT}/content`;
 
@@ -104,7 +106,7 @@ const SubmitContentForm = (props: Props): JSX.Element => {
     if (date && time) {
       dateTimeStr = createJodaDateTime(
         date,
-        getValuesFromTimeValues(time),
+        getValuesFromSearchableTimeValues(time),
         timezone
       );
     }
