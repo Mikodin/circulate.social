@@ -188,6 +188,20 @@ const SubmitContentForm = (props: Props): JSX.Element => {
               className={styles.eventDateLabel}
             >
               <DatePicker
+                disabledDate={(
+                  dateToCheckAgainstTodayMoment: moment.Moment
+                ) => {
+                  const dateToCheckAgainstToday = LocalDate.parse(
+                    dateToCheckAgainstTodayMoment.format('YYYY-MM-DD')
+                  );
+                  const today = LocalDate.now();
+
+                  const disableDateBecauseItIsBeforeToday = dateToCheckAgainstToday.isBefore(
+                    today
+                  );
+
+                  return disableDateBecauseItIsBeforeToday;
+                }}
                 format={'MMMM D'}
                 use12Hours={true}
                 open={isDatePickerOpen}
