@@ -28,9 +28,11 @@ function convertTimeToUserTimezone(dateTime: string, timezone: string) {
 }
 
 function groupEventsByDate(
-  events: Content[]
+  events: Content[],
+  userTimezone: string
 ): {
   dateTime: string;
+  dateTimeString: string;
   events: Content[];
 }[] {
   const eventsByDate = {};
@@ -40,7 +42,7 @@ function groupEventsByDate(
     }
 
     const date = ZonedDateTime.parse(event.dateTime)
-      .withZoneSameInstant(ZoneId.of('SYSTEM'))
+      .withZoneSameInstant(ZoneId.of(userTimezone))
       .toLocalDate()
       .toString();
 
@@ -50,12 +52,21 @@ function groupEventsByDate(
       eventsByDate[date] = [event];
     }
   });
-  return Object.keys(eventsByDate).map((dateKey) => {
-    return {
-      dateTime: dateKey,
-      events: eventsByDate[dateKey],
-    };
-  });
+  return Object.keys(eventsByDate)
+    .map((dateKey) => {
+      return {
+        dateTime: dateKey,
+        dateTimeString: LocalDate.parse(dateKey).format(
+          DateTimeFormatter.ofPattern('E, MMM d yyyy').withLocale(Locale.US)
+        ),
+        events: eventsByDate[dateKey],
+      };
+    })
+    .sort((postA, postB) => {
+      const epochA = LocalDate.parse(postA.dateTime).toEpochDay();
+      const epochB = LocalDate.parse(postB.dateTime).toEpochDay();
+      return epochA - epochB;
+    });
 }
 
 export function createCirculationHtmlForUser(
@@ -82,12 +93,9 @@ export function createCirculationHtmlForUser(
   );
 
   const eventsByDateArray = groupEventsByDate(
-    upcomingEventsFromAllCircles
-  ).sort((postA, postB) => {
-    const epochA = LocalDate.parse(postA.dateTime).toEpochDay();
-    const epochB = LocalDate.parse(postB.dateTime).toEpochDay();
-    return epochB - epochA;
-  });
+    upcomingEventsFromAllCircles,
+    usersTimezone
+  );
 
   const circleDetailsArray = Array.from(circulation.circleDetails).map(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -100,12 +108,23 @@ export function createCirculationHtmlForUser(
     }
   );
 
+  const hasPostsToSend = circleDetailsArray.reduce((acc, curr) => {
+    if (curr.upcomingPosts.length) {
+      return true;
+    }
+    return acc;
+  }, false);
+
+  const hasEventsToSend = Boolean(eventsByDateArray.length);
+
   return template({
     usersFirstName: user.firstName,
     circulation: {
       ...circulation,
       circleDetails: circleDetailsArray,
       upcomingEvents: eventsByDateArray,
+      hasPostsToSend,
+      hasEventsToSend,
     },
   });
 }

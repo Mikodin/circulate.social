@@ -8,11 +8,11 @@ export default `
 <p style="font-size: 10px; margin: 0">Pause all Emails</p>
 
     {{#with circulation}}
-        {{#if upcomingEvents}}
+        {{#if hasEventsToSend}}
             <h3>Upcoming events</h3>
             {{#each upcomingEvents}}
                 <div style="margin-bottom: 10px;">
-                    <h4 style="margin:0; margin-bottom: 5px;">{{dateTime}}</h4>
+                    <h4 style="margin:0; margin-bottom: 5px;">{{dateTimeString}}</h4>
                     {{#each events}}
                         <div style="margin-bottom:5px;>
                             {{#if link}}
@@ -36,34 +36,36 @@ export default `
         {{/if}}
         <hr />
 
+        {{#if hasPostsToSend}}
         <h3>Your Circles posts</h3>
-        {{#each circleDetails}}
-            {{#if upcomingPosts}}
-                <h4 style="margin: 0; margin-bottom: 5px;">
-                    <a href=https://beta.circulate.social/circles/{{id}}>{{name}}</a>
-                </h4>
-                <div style="margin-left: 5px;">
-                    <h5 style="margin: 0;">Posts</h5>
-                    {{#each upcomingPosts}}
-                        <div style="margin-bottom: 5px;">
-                            {{#if link}}
-                                <p style="margin:0;">
-                                ☆ <a href={{{link}}}>{{title}}</a> | {{createdBy}}
-                                </p>
-                            {{/if}}
-                            {{#unless link}}
-                                <p style="margin:0;">
-                                ☆ {{title}} | {{createdBy}}
-                                </p>
-                            {{/unless}}
+            {{#each circleDetails}}
+                {{#if upcomingPosts}}
+                    <h4 style="margin: 0; margin-bottom: 5px;">
+                        <a href=https://beta.circulate.social/circles/{{id}}>{{name}}</a>
+                    </h4>
+                    <div style="margin-left: 5px;">
+                        <h5 style="margin: 0;">Posts</h5>
+                        {{#each upcomingPosts}}
+                            <div style="margin-bottom: 5px;">
+                                {{#if link}}
+                                    <p style="margin:0;">
+                                    ☆ <a href={{{link}}}>{{title}}</a> | {{createdBy}}
+                                    </p>
+                                {{/if}}
+                                {{#unless link}}
+                                    <p style="margin:0;">
+                                    ☆ {{title}} | {{createdBy}}
+                                    </p>
+                                {{/unless}}
 
-                            {{#if description}}
-                                <p style="margin:0; margin-left: 25px;">{{description}}</p>
-                            {{/if}}
-                        </div>
-                    {{/each}}
-                </div>
-            {{/if}}
-        {{/each}}
+                                {{#if description}}
+                                    <p style="margin:0; margin-left: 25px;">{{description}}</p>
+                                {{/if}}
+                            </div>
+                        {{/each}}
+                    </div>
+                {{/if}}
+            {{/each}}
+        {{/if}}
     {{/with}}
 </div>`;
