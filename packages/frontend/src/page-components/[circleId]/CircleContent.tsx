@@ -89,6 +89,12 @@ const renderEvent = (event: Content) => {
   return (
     <Fragment key={event.id}>
       {header}
+      <small>
+        {ZonedDateTime.parse(event.createdAt)
+          .withZoneSameInstant(ZoneId.of('SYSTEM'))
+          .toLocalDate()
+          .toString()}
+      </small>
       {event.description && <p>{event.description}</p>}
     </Fragment>
   );
