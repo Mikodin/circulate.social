@@ -14,23 +14,20 @@ function generateLegend() {
 }
 
 function generatePost(isEvent: boolean) {
-  const circleName = isEvent ? '{{circle.name}}' : '{{name}}';
-  const circleId = isEvent ? '{{circle.id}}' : '{{id}}';
-
   return `
   <div style="margin-bottom:5px;>
     {{#if link}}
         <p style="margin: 0;">
-            ☆ <a href={{{link}}}>{{title}}</a> | {{createdBy}} | <a href=https://beta.circulate.social/circles/${circleId}>${circleName}</a>${
-    isEvent ? ' | {{time}}' : ''
-  }
+            ☆ <a href={{{link}}}>{{title}}</a> | {{createdBy}} | <a href=https://beta.circulate.social/circles/{{circle.id}}>{{circle.name}}</a>${
+              isEvent ? ' | {{time}}' : ''
+            }
         </p>
     {{/if}}
     {{#unless link}}
         <p style="margin: 0;">
-            ☆ {{title}} | {{createdBy}} | <a href=https://beta.circulate.social/circles/${circleId}>${circleName}</a>${
-    isEvent ? ' | {{time}}' : ''
-  }
+            ☆ {{title}} | {{createdBy}} | <a href=https://beta.circulate.social/circles/{{circle.id}}>{{circle.name}}</a>${
+              isEvent ? ' | {{time}}' : ''
+            }
         </p>
     {{/unless}}
 
