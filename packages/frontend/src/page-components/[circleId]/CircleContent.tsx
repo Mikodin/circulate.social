@@ -160,35 +160,39 @@ const CircleContent = (props: Props): JSX.Element => {
       bordered={false}
       className={styles.contentCollapse}
     >
-      <Panel header={<h4 className={styles.panelHeader}>Events</h4>} key="1">
-        <div className={styles.eventsPanel}>
-          {Object.keys(events)
-            .sort()
-            .reverse()
-            .map((dateTime) => {
-              return (
-                <div key={dateTime} className={styles.eventsDayContainer}>
-                  <h3 className={styles.eventDayHeader}>
-                    {LocalDate.parse(dateTime).format(
-                      DateTimeFormatter.ofPattern('E, MMM d yyyy').withLocale(
-                        Locale.US
-                      )
-                    )}
-                  </h3>
-                  <div className={styles.eventContainer}>
-                    {events[dateTime].map((event) => renderEvent(event))}
+      {Object.keys(events).length && (
+        <Panel header={<h4 className={styles.panelHeader}>Events</h4>} key="1">
+          <div className={styles.eventsPanel}>
+            {Object.keys(events)
+              .sort()
+              .reverse()
+              .map((dateTime) => {
+                return (
+                  <div key={dateTime} className={styles.eventsDayContainer}>
+                    <h3 className={styles.eventDayHeader}>
+                      {LocalDate.parse(dateTime).format(
+                        DateTimeFormatter.ofPattern('E, MMM d yyyy').withLocale(
+                          Locale.US
+                        )
+                      )}
+                    </h3>
+                    <div className={styles.eventContainer}>
+                      {events[dateTime].map((event) => renderEvent(event))}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-        </div>
-      </Panel>
+                );
+              })}
+          </div>
+        </Panel>
+      )}
 
-      <Panel header={<h4 className={styles.panelHeader}>Posts</h4>} key="2">
-        <div className={styles.contentPanel}>
-          <List dataSource={posts} renderItem={renderContent}></List>
-        </div>
-      </Panel>
+      {posts.length && (
+        <Panel header={<h4 className={styles.panelHeader}>Posts</h4>} key="2">
+          <div className={styles.contentPanel}>
+            <List dataSource={posts} renderItem={renderContent}></List>
+          </div>
+        </Panel>
+      )}
     </Collapse>
   );
 };
