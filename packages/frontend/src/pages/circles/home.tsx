@@ -4,8 +4,6 @@ import Link from 'next/link';
 import axios from 'axios';
 import { Circle } from '@circulate/types';
 import { Divider, Skeleton } from 'antd';
-import { ZoneId, ZonedDateTime, Instant } from '@js-joda/core';
-import '@js-joda/timezone';
 
 import UserContext from '../../state-management/UserContext';
 
@@ -68,12 +66,6 @@ class CircleHome extends PureComponent<Props, State> {
   // @TODO: Move to own component
   // eslint-disable-next-line
   renderCircle(circle: Circle): React.ReactElement {
-    const createdAt = ZonedDateTime.ofInstant(
-      Instant.ofEpochMilli(parseInt(circle.createdAt, 10)),
-      ZoneId.SYSTEM
-    )
-      .toLocalDate()
-      .toString();
     return (
       <div key={circle.id} className={styles.circleContainer}>
         <h2>

@@ -1,7 +1,12 @@
 import { Circle } from '@circulate/types';
-import { Button } from 'antd';
+import { Button, Popover, Divider } from 'antd';
+
 import Link from 'next/link';
-import { FileAddOutlined, SettingOutlined } from '@ant-design/icons';
+import {
+  FileAddOutlined,
+  SettingOutlined,
+  EllipsisOutlined,
+} from '@ant-design/icons';
 
 import LeaveCircle from './leaveCircle/LeaveCircle';
 import CopyCircleInviteToClipboard from './copyCircleInviteToClipboard/CopyCircleInviteToClipboard';
@@ -25,13 +30,28 @@ const CircleActions = ({ circle, jwtToken }: Props): JSX.Element => (
       circleName={circle.name}
     />
 
-    <LeaveCircle circle={circle} jwtToken={jwtToken} />
-
-    <Link href={`${circle.id}`}>
-      <Button size="middle" type="default" icon={<SettingOutlined />} disabled>
-        Settings
-      </Button>
-    </Link>
+    <Popover
+      trigger="click"
+      placement="bottom"
+      content={
+        <div>
+          <LeaveCircle circle={circle} jwtToken={jwtToken} />
+          <Divider type="vertical" />
+          <Link href={`${circle.id}`}>
+            <Button
+              size="middle"
+              type="default"
+              icon={<SettingOutlined />}
+              disabled
+            >
+              Settings
+            </Button>
+          </Link>
+        </div>
+      }
+    >
+      <Button icon={<EllipsisOutlined />} />
+    </Popover>
   </div>
 );
 
