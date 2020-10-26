@@ -83,10 +83,15 @@ class CircleHome extends PureComponent<Props, State> {
         </h2>
         <div className={styles.circleInfoContainer}>
           {circle.description && <h5>{circle.description.slice(0, 120)}...</h5>}
-          <p>Created: {createdAt.toString()}</p>
-          <p>Members: {circle.members.length}</p>
-          <p>Total Posts: {(circle.content || []).length} posts</p>
-          <p>{circle.frequency}</p>
+          <small>
+            <p>
+              Posts: {(circle.content || []).length} | Members:{' '}
+              {circle.members.length}
+            </p>
+          </small>
+          <small>
+            <p>Sends: {circle.frequency}</p>
+          </small>
 
           <CircleActionsContainer
             circle={circle}
