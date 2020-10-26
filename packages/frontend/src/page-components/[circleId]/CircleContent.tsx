@@ -2,7 +2,12 @@ import { Fragment, useEffect, useState } from 'react';
 import { Circle, Content } from '@circulate/types';
 import { Collapse, List, Skeleton } from 'antd';
 import { StarOutlined } from '@ant-design/icons';
-import { ZoneId, ZonedDateTime, DateTimeFormatter } from '@js-joda/core';
+import {
+  ZoneId,
+  ZonedDateTime,
+  DateTimeFormatter,
+  LocalDate,
+} from '@js-joda/core';
 import { Locale } from '@js-joda/locale_en-us';
 import '@js-joda/timezone';
 
@@ -163,7 +168,13 @@ const CircleContent = (props: Props): JSX.Element => {
             .map((dateTime) => {
               return (
                 <div key={dateTime} className={styles.eventsDayContainer}>
-                  <h3 className={styles.eventDayHeader}>{dateTime}</h3>
+                  <h3 className={styles.eventDayHeader}>
+                    {LocalDate.parse(dateTime).format(
+                      DateTimeFormatter.ofPattern('E, MMM d yyyy').withLocale(
+                        Locale.US
+                      )
+                    )}
+                  </h3>
                   <div className={styles.eventContainer}>
                     {events[dateTime].map((event) => renderEvent(event))}
                   </div>
