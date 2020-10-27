@@ -15,10 +15,14 @@ Object {
           Posts: 
           2
         </h4>
-        <h4>
-          Members: 
-          2
-        </h4>
+        <div>
+          <h4>
+            <a>
+              Members: 
+              2
+            </a>
+          </h4>
+        </div>
         <h4>
           Sends: 
           weekly
@@ -127,10 +131,14 @@ Object {
         Posts: 
         2
       </h4>
-      <h4>
-        Members: 
-        2
-      </h4>
+      <div>
+        <h4>
+          <a>
+            Members: 
+            2
+          </a>
+        </h4>
+      </div>
       <h4>
         Sends: 
         weekly
