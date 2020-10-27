@@ -77,12 +77,11 @@ class CircleHome extends PureComponent<Props, State> {
           {circle.description && <h5>{circle.description.slice(0, 120)}...</h5>}
           <small>
             <p>
-              Posts: {(circle.content || []).length} | Members:{' '}
-              {circle.members.length}
+              Posts: {(circle.content || []).length} | Sends: {circle.frequency}
             </p>
           </small>
           <small>
-            <p>Sends: {circle.frequency}</p>
+            <p>Members: {circle.members.length}</p>
           </small>
 
           <CircleActionsContainer
