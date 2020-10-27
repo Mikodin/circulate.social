@@ -88,13 +88,13 @@ async function enableEventForm(container: RenderResult): Promise<RenderResult> {
 async function selectADateFromDatePicker(
   container: RenderResult
 ): Promise<RenderResult> {
-  const { queryByText } = container;
+  const { queryAllByText } = container;
   const { selectDate } = getAllFields(container);
 
   const todayDayOfMonth = LocalDate.now().dayOfMonth();
   await act(async () => {
     await fireEvent.mouseDown(selectDate);
-    await fireEvent.click(queryByText(`${todayDayOfMonth}`));
+    await fireEvent.click(queryAllByText(`${todayDayOfMonth}`)[1]);
   });
 
   return container;
