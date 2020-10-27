@@ -71,7 +71,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       circle: {
         ...circle,
         members: members.map(
-          (member) => `${member.firstName} ${member.lastName}`
+          (member) => `${member.firstName} ${(member.lastName || '').charAt(0)}`
         ),
       },
     });
