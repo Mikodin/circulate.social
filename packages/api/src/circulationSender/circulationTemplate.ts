@@ -32,7 +32,7 @@ function generatePost(isEvent: boolean) {
     {{/unless}}
 
     {{#if description}}
-        <p style="margin:0; margin-left: 25px;">{{description}}?</p>
+        <p style="margin:0; margin-left: 25px;">{{description}}</p>
     {{/if}}
 </div>`;
 }
