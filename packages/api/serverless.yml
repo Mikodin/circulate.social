@@ -155,8 +155,6 @@ functions:
           method: get
           path: circles/{circleId}/preview
           cors: true
-          authorizer:
-            arn: ${self:custom.cognitoArn}
   getEventById:
     name: 'getEventById-${self:provider.stage}'
     handler: src/endpoints/getEventById/getEventById.handler

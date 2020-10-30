@@ -39,9 +39,6 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       (member) => member.id === circle.creatorId
     );
 
-    console.log(members);
-    console.log(creatorUser);
-
     const circlePreview: CirclePreview = {
       circleId: circle.id,
       createdAt: circle.createdAt,
