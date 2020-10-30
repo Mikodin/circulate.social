@@ -147,6 +147,16 @@ functions:
           cors: true
           authorizer:
             arn: ${self:custom.cognitoArn}
+  getCirclePreviewById:
+    name: 'getCirclePreviewById-${self:provider.stage}'
+    handler: src/endpoints/getCirclePreviewById/getCirclePreviewById.handler
+    events:
+      - http:
+          method: get
+          path: circles/{circleId}/preview
+          cors: true
+          authorizer:
+            arn: ${self:custom.cognitoArn}
   getEventById:
     name: 'getEventById-${self:provider.stage}'
     handler: src/endpoints/getEventById/getEventById.handler
