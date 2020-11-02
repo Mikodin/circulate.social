@@ -5,7 +5,7 @@ export interface Circle {
   createdAt: string;
   updatedAt: string;
   members: string[];
-  creatorId: string;
+  createdBy: string;
   name: string;
   description: string;
   content?: string[];
