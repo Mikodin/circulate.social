@@ -22,7 +22,6 @@ const CircleSchema = new dynamoose.Schema(
       type: Set,
       schema: [String],
     },
-    creatorId: String,
     events: {
       type: Array,
       schema: [String],
