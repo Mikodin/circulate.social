@@ -7,7 +7,7 @@ const DEFAULT_PROPS = {
     createdAt: '1234',
     updatedAt: '12345',
     members: ['Mike A', 'Bill Nye'],
-    creatorId: '1234-asdf',
+    createdBy: '1234-asdf',
     name: 'The greatest Circle ever',
     description: 'A circle for amazing things',
     content: ['content-1', 'content-2'],

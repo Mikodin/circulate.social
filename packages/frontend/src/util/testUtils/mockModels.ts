@@ -5,7 +5,7 @@ export const mockCircle = {
   createdAt: '123',
   updatedAt: '123',
   members: ['dev-id'],
-  creatorId: 'dev-id',
+  createdBy: 'dev-id',
   name: 'The greatest circle',
   description: 'Great things happen here',
   frequency: 'daily',
