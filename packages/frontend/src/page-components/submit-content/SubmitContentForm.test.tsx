@@ -94,7 +94,7 @@ async function selectADateFromDatePicker(
   const todayDayOfMonth = LocalDate.now().dayOfMonth();
   await act(async () => {
     await fireEvent.mouseDown(selectDate);
-    await fireEvent.click(queryAllByText(`${todayDayOfMonth}`)[1]);
+    await fireEvent.click(queryAllByText(`${todayDayOfMonth}`)[0]);
   });
 
   return container;
@@ -280,8 +280,8 @@ describe('SubmitContentForm', () => {
 
         const expectedDateTime =
           userTimezone === 'America/Los_Angeles'
-            ? `2020-${thisMonth}-${thisDay}T17:00-07:00[America/Los_Angeles]`
-            : `2020-${thisMonth}-${thisDay}T17:00Z[UTC]`;
+            ? `2020-${thisMonth}-0${thisDay}T17:00-08:00[America/Los_Angeles]`
+            : `2020-${thisMonth}-0${thisDay}T17:00Z[UTC]`;
         const expectedSubmittedContent = {
           circleIds: [defaultProps.seedCircleId],
           title: inputtedTitleValue,
