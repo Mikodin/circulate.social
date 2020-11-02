@@ -14,7 +14,11 @@ function getUsersName(user: User) {
 }
 
 export const handler: APIGatewayProxyHandler = async (event) => {
-  const { memberId } = getMemberFromAuthorizer(event);
+  log.info('Incoming request', { event });
+  let memberId;
+  if (event.requestContext.authorizer) {
+    memberId = getMemberFromAuthorizer(event).memberId;
+  }
 
   const { circleId } = event.pathParameters;
 
@@ -36,7 +40,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     ) as User[];
 
     const creatorUser = members.find(
-      (member) => member.id === circle.creatorId
+      (member) => member.id === circle.createdBy
     );
 
     const circlePreview: CirclePreview = {

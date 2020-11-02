@@ -17,7 +17,7 @@ jest.mock('../../interfaces/dynamo/circlesModel', () => ({
         createdAt: 1592687256669,
         description: 'Test desc',
         id: '8c03b5c6-829a-4d91-80d9-e3c386af6839',
-        creatorId: 'dev-id',
+        createdBy: 'dev-id',
         name: 'Test',
       }),
     })
