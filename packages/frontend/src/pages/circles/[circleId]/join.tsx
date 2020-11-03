@@ -63,7 +63,10 @@ export const joinCircle = (): JSX.Element => {
     setIsJoinCircleInFlight(true);
     try {
       await fetchJoinCircle(circleId, jwtToken);
-      setIsJoinCircleInFlight(false);
+      router.push({
+        pathname: '/circles/[circleId]',
+        query: { circleId },
+      });
     } catch (error) {
       console.error(error);
       setIsJoinCircleInFlight(false);
@@ -88,17 +91,13 @@ export const joinCircle = (): JSX.Element => {
     <Layout>
       <div>
         <h1>🎉 Welcome to to the party!</h1>
-        {!isUserLoggedIn && (
-          <>
-            <h2>This is a collaborative newsletter platform.</h2>
-            <h3>
-              Designed to empower communities of all sizes to quickly collect
-              and share curated content.
-            </h3>
-            <h3>All delivered as one relevant email digest.</h3>
-            <Divider />
-          </>
-        )}
+        <h2>This is a collaborative newsletter platform.</h2>
+        <h3>
+          Designed to empower communities of all sizes to quickly collect and
+          share curated content.
+        </h3>
+        <h3>All delivered as one relevant email digest.</h3>
+        <Divider />
 
         {circlePreview && <h2>You&lsquo;ve been invited to join:</h2>}
         <CircleInfoHeader
@@ -112,6 +111,7 @@ export const joinCircle = (): JSX.Element => {
             type="primary"
             onClick={handleFetchJoinCircle}
             disabled={!circlePreview}
+            size="large"
           >
             Join Circle
           </Button>
