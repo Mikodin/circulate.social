@@ -135,6 +135,7 @@ class UserContextProvider extends Component<Props, State> {
         firstName: attributes.given_name,
         lastName: attributes.family_name,
         email: attributes.email,
+        id: attributes.sub,
       };
 
       await this.restoreSession();
@@ -186,6 +187,7 @@ class UserContextProvider extends Component<Props, State> {
         firstName: attributes.given_name,
         lastName: attributes.family_name,
         email: attributes.email,
+        id: attributes.sub,
       };
       this.setState({
         user,

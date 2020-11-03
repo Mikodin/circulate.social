@@ -7,6 +7,7 @@ export type UserContextType = {
     email: string;
     firstName: string;
     lastName: string;
+    id: string;
   };
   userIsLoaded?: boolean;
   jwtToken?: string;
