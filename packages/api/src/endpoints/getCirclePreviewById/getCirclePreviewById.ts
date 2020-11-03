@@ -49,6 +49,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       updatedAt: circle.updatedAt,
       creatorName: getUsersName(creatorUser),
       memberNames: members.map((member) => getUsersName(member)),
+      memberIds: members.map((member) => member.id),
       name: circle.name,
       description: circle.description,
       totalContentCount: (circle.content || []).length,

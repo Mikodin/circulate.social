@@ -91,7 +91,7 @@ describe('getCirclePreviewById', () => {
         expect.objectContaining({
           statusCode: 200,
           body:
-            '{"circlePreview":{"circleId":"8c03b5c6-829a-4d91-80d9-e3c386af6839","createdAt":1592687256669,"updatedAt":1592688117024,"creatorName":"Mike A","memberNames":["Mike A","Bill N"],"name":"Test","description":"Test desc","totalContentCount":1,"upcomingContentCount":1,"privacy":"public"}}',
+            '{"circlePreview":{"circleId":"8c03b5c6-829a-4d91-80d9-e3c386af6839","createdAt":1592687256669,"updatedAt":1592688117024,"creatorName":"Mike A","memberNames":["Mike A","Bill N"],"memberIds":["dev-id","asdf-123"],"name":"Test","description":"Test desc","totalContentCount":1,"upcomingContentCount":1,"privacy":"public"}}',
         })
       );
     });

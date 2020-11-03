@@ -5,6 +5,7 @@ export interface CirclePreview {
   createdAt: string;
   updatedAt: string;
   memberNames: string[];
+  memberIds: string[];
   creatorName: string;
   name: string;
   description: string;
