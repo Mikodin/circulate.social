@@ -99,7 +99,7 @@ export const joinCircle = (): JSX.Element => {
         <h3>All delivered as one relevant email digest.</h3>
         <Divider />
 
-        {circlePreview && <h2>You&lsquo;ve been invited to join:</h2>}
+        <h2>Congrats - You&lsquo;ve been invited to join a Circle!</h2>
         <CircleInfoHeader
           circlePreview={circlePreview}
           isLoading={isGetCirclePreviewInFlight}
