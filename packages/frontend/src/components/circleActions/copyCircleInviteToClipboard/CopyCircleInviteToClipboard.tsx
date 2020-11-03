@@ -17,7 +17,7 @@ const domain = 'beta.circulate.social';
 
 const CopyCircleInviteToClipboard = (props: Props): JSX.Element => {
   const { circleId, circleName } = props;
-  const baseInviteText = `Hey, I'd love for you to join our Circle "${circleName}".\n\nhttps://${domain}/circles/${circleId}?join=true`;
+  const baseInviteText = `Hey, I'd love for you to join our Circle "${circleName}".\n\nhttps://${domain}/circles/${circleId}/join`;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTextCopied, setIsTextCopied] = useState(false);
