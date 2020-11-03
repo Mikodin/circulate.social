@@ -36,7 +36,7 @@ const fetchJoinCircle = async (
 };
 
 export const joinCircle = (): JSX.Element => {
-  const { getIsUserLoggedIn, jwtToken } = useContext(UserContext);
+  const { getIsUserLoggedIn, jwtToken, user } = useContext(UserContext);
   const router = useRouter();
   const [isGetCirclePreviewInFlight, setIsGetCirclePreviewInFlight] = useState(
     false
@@ -48,10 +48,16 @@ export const joinCircle = (): JSX.Element => {
     undefined
   );
 
+  const routeToCircle = () =>
+    router.push({
+      pathname: `/circles/${circleId}`,
+    });
+
   const handleFetchCirclePreview = async () => {
     setIsGetCirclePreviewInFlight(true);
     try {
       setCirclePreview(await fetchCirclePreview(circleId));
+
       setIsGetCirclePreviewInFlight(false);
     } catch (error) {
       console.error(error);
@@ -63,10 +69,7 @@ export const joinCircle = (): JSX.Element => {
     setIsJoinCircleInFlight(true);
     try {
       await fetchJoinCircle(circleId, jwtToken);
-      router.push({
-        pathname: '/circles/[circleId]',
-        query: { circleId },
-      });
+      routeToCircle();
     } catch (error) {
       console.error(error);
       setIsJoinCircleInFlight(false);
@@ -85,6 +88,12 @@ export const joinCircle = (): JSX.Element => {
       handleFetchCirclePreview();
     }
   }, [circleId]);
+
+  useEffect(() => {
+    if (user && circlePreview && circlePreview.memberIds.includes(user.id)) {
+      routeToCircle();
+    }
+  }, [circlePreview, user]);
 
   const isUserLoggedIn = getIsUserLoggedIn();
   return (
