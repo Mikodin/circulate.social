@@ -21,6 +21,7 @@ type State = {
     email: string;
     firstName: string;
     lastName: string;
+    id: string;
   };
   cognitoUser?: CognitoUser;
   userIsLoaded?: boolean;
