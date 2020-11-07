@@ -51,6 +51,7 @@ export const joinCircle = (): JSX.Element => {
   const routeToCircle = () =>
     router.push({
       pathname: `/circles/${circleId}`,
+      query: { welcome: true },
     });
 
   const handleFetchCirclePreview = async () => {

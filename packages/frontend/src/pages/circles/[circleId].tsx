@@ -1,5 +1,5 @@
 import { PureComponent, Fragment } from 'react';
-import { Divider } from 'antd';
+import { Divider, notification } from 'antd';
 import { withRouter, NextRouter } from 'next/router';
 import axios from 'axios';
 import { Circle, Content } from '@circulate/types';
@@ -54,6 +54,7 @@ interface State {
   events: Record<string, Content[]>;
   getCircleNotAuthorized: boolean;
   isFetchingCircle: boolean;
+  isWelcomingUser: boolean;
 }
 
 class CirclePage extends PureComponent<Props, State> {
@@ -67,9 +68,24 @@ class CirclePage extends PureComponent<Props, State> {
     posts: [],
     getCircleNotAuthorized: false,
     isFetchingCircle: true,
+    isWelcomingUser: true,
   };
 
   async componentDidMount(): Promise<void> {
+    if (this.props.router.query.welcome) {
+      this.setState({ isWelcomingUser: true });
+      notification.success({
+        message: <h3>🎉 Welcome to to the party!</h3>,
+        duration: 10,
+        description: (
+          <div>
+            <h4>You are now an essential part of this tribe.</h4>
+            <p>Sharing content is the lifeblood of all Circles.</p>
+            <p>You have been invited for a reason, share something!</p>
+          </div>
+        ),
+      });
+    }
     if (this.props.router.query.circleId) {
       await this.fetchCircleData();
     }
