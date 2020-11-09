@@ -27,7 +27,7 @@
   "dependencies": {
     "@circulate/types": "1.0.0",
     "@js-joda/core": "^3.1.0",
-    "@js-joda/timezone": "^2.3.0",
+    "@js-joda/timezone": "^2.4.0",
     "aws-lambda": "^1.0.6",
     "aws-sdk": "^2.771.0",
     "dynamoose": "^2.3.0",
