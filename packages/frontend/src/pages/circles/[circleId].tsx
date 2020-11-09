@@ -72,6 +72,7 @@ class CirclePage extends PureComponent<Props, State> {
   };
 
   async componentDidMount(): Promise<void> {
+    // @TODO make share something a link to submit content
     if (this.props.router.query.welcome) {
       this.setState({ isWelcomingUser: true });
       notification.success({
