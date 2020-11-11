@@ -41,7 +41,7 @@ const CircleInfoHeader = (props: Props): JSX.Element => {
           </h4>
         }
       />
-      <h4>Sends: {frequency}</h4>
+      <h4>{frequency}</h4>
       {description && <p>{description}</p>}
       {circle && <CircleActionsContainer circle={circle} jwtToken={jwtToken} />}
     </div>
