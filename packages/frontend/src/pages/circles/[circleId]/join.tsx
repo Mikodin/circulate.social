@@ -100,7 +100,7 @@ export const joinCircle = (): JSX.Element => {
   return (
     <Layout>
       <div>
-        <h1>🎉 Welcome to to the party!</h1>
+        <h1>🎉 Welcome to the party!</h1>
         <h2>This is a collaborative newsletter platform.</h2>
         <h3>
           Designed to empower communities of all sizes to quickly collect and
