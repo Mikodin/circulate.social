@@ -3,7 +3,7 @@ import { withRouter, Router } from 'next/router';
 import Link from 'next/link';
 import axios from 'axios';
 import { Circle } from '@circulate/types';
-import { Skeleton } from 'antd';
+import { Skeleton, Button } from 'antd';
 
 import UserContext from '../../state-management/UserContext';
 
@@ -81,6 +81,12 @@ class CircleHome extends PureComponent<Props, State> {
     const { circles, isFetchingCircles, isFetchCircleError } = this.state;
     const { jwtToken, user } = this.context;
 
+    const circlesTheUserIsNotAlreadyIn = circles.filter((circle) => {
+      const isUserInCircle =
+        user && circle.members && circle.members.includes(user.id);
+      return !isUserInCircle;
+    });
+
     return (
       <Layout>
         <div className={styles.container}>
@@ -97,20 +103,30 @@ class CircleHome extends PureComponent<Props, State> {
 
           {!isFetchingCircles && (
             <>
-              {!circles.length && <h3>You do not belong to any Circles</h3>}
-              {circles.length && (
+              {!circlesTheUserIsNotAlreadyIn.length && (
+                <>
+                  <h1>🤯</h1>
+                  <h3>
+                    It appears that you are already a member of every public
+                    circle!
+                  </h3>
+                  <p>Well done.</p>
+                  <Button type="primary">
+                    <Link href="/circles/home">
+                      <a>Now go view them!</a>
+                    </Link>
+                  </Button>
+                </>
+              )}
+              {Boolean(circlesTheUserIsNotAlreadyIn.length) && (
                 <div className={styles.circlesContainer}>
-                  {circles.map((circle) => {
-                    const isUserInCircle =
-                      user &&
-                      circle.members &&
-                      circle.members.includes(user.id);
+                  {circlesTheUserIsNotAlreadyIn.map((circle) => {
                     return (
                       <CirclePreview
                         key={circle.id}
                         circle={circle}
                         jwtToken={jwtToken}
-                        isUserInCircle={isUserInCircle}
+                        isUserInCircle={false}
                       />
                     );
                   })}
