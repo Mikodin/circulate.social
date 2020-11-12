@@ -280,8 +280,8 @@ describe('SubmitContentForm', () => {
 
         const expectedDateTime =
           userTimezone === 'America/Los_Angeles'
-            ? `2020-${thisMonth}-0${thisDay}T17:00-08:00[America/Los_Angeles]`
-            : `2020-${thisMonth}-0${thisDay}T17:00Z[UTC]`;
+            ? `2020-${thisMonth}-${thisDay}T17:00-08:00[America/Los_Angeles]`
+            : `2020-${thisMonth}-${thisDay}T17:00Z[UTC]`;
         const expectedSubmittedContent = {
           circleIds: [defaultProps.seedCircleId],
           title: inputtedTitleValue,
