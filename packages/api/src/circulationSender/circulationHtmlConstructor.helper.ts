@@ -1,3 +1,4 @@
+import log from 'lambda-log';
 import {
   ZoneId,
   ZonedDateTime,
@@ -73,6 +74,7 @@ export function createCirculationHtmlForUser(
   user: User,
   circulation: Circulation
 ): string {
+  log.info('Creating Circulation HTML', { user, circulation });
   // TODO This should be moved elsewhere.  It's too hidden and happens in one place.
   // Code is hard to understand
   // Should events be seperate from posts?
