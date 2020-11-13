@@ -76,7 +76,7 @@ export function createCirculationHtmlForUser(
   // TODO This should be moved elsewhere.  It's too hidden and happens in one place.
   // Code is hard to understand
   // Should events be seperate from posts?
-  const usersTimezone = user.timezone;
+  const usersTimezone = user && user.timezone ? user.timezone : 'UTC';
   const upcomingEventsFromAllCircles = Array.from(
     circulation.circleDetails
   ).flatMap(
