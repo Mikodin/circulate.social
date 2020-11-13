@@ -37,7 +37,7 @@ jobs:
 
       - name: Yarn install
         if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: NOYARNPOSTINSTALL=1 yarn install
+        run: yarn install
 
       - name: Lint
         run: yarn workspace api lint
@@ -73,7 +73,7 @@ jobs:
 
       - name: Yarn install
         if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: NOYARNPOSTINSTALL=1 yarn install
+        run: yarn install
 
       - name: Build
         run: yarn workspace api build
@@ -106,7 +106,7 @@ jobs:
 
       - name: Yarn install
         if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: NOYARNPOSTINSTALL=1 yarn install
+        run: yarn install
 
       - name: deploy:dev
         run: yarn workspace api deploy:dev
