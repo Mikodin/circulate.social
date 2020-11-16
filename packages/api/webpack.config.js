@@ -26,6 +26,7 @@ module.exports = {
       modulesDir: path.resolve(__dirname, '../../node_modules'),
     }),
   ],
+  optimization: { concatenateModules: false },
   module: {
     rules: [
       // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`

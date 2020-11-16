@@ -13902,7 +13902,7 @@ serverless-plugin-monorepo@^0.9.0:
   dependencies:
     fs-extra "^7.0.0"
 
-serverless-webpack@^5.3.4:
+serverless-webpack@^5.3.5:
   version "5.3.5"
   resolved "https://registry.yarnpkg.com/serverless-webpack/-/serverless-webpack-5.3.5.tgz#3148433752893e9a91c6101dda78718a414e182e"
   integrity sha512-px1ISPVAVTxCl1sSbkLBcD7rx5kAPC2hKOI6fzXRHi1e6o7EDha9jUahjztmW6zMYDz0Uesau+uo7ZqdbrtdQg==
