@@ -1,0 +1,21 @@
+.container {
+  width: 100%;
+  padding: 5px 5px;
+  h2 {
+    line-height: 1;
+    padding: 0;
+    margin: 0;
+  }
+  h5 {
+    margin: 0;
+  }
+
+  .infoContainer {
+    margin-left: 5px;
+    text-transform: capitalize;
+    p {
+      padding: 0;
+      margin: 0;
+    }
+  }
+}

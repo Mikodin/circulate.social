@@ -53,9 +53,15 @@ export const handler: ScheduledHandler = async () => {
     usersMap
   );
 
-  const fullEmailsToSend = Array.from(filledOutCirculationsMap).map(
-    ([_, circulation]) => {
+  const fullEmailsToSend = Array.from(filledOutCirculationsMap)
+    .map(([_, circulation]) => {
       const user = usersMap.get(circulation.userId);
+      if (!user) {
+        return undefined;
+      }
+
+      log.info('Constructing Circulation for user', { user, circulation });
+
       const circulationToSend = createCirculationHtmlForUser(user, circulation);
       const usersFirstName = user.firstName;
 
@@ -68,8 +74,8 @@ export const handler: ScheduledHandler = async () => {
       };
 
       return emailParams;
-    }
-  );
+    })
+    .filter((circulation) => Boolean(circulation));
 
   try {
     log.info(`Sending [${fullEmailsToSend.length}] Circulations`, {

@@ -137,6 +137,14 @@ functions:
           cors: true
           authorizer:
             arn: ${self:custom.cognitoArn}
+  getPublicCircles:
+    name: 'getPublicCircles-${self:provider.stage}'
+    handler: src/endpoints/getPublicCircles/getPublicCircles.handler
+    events:
+      - http:
+          method: get
+          path: circles/public
+          cors: true
   getCircleById:
     name: 'getCircleById-${self:provider.stage}'
     handler: src/endpoints/getCircleById/getCircleById.handler

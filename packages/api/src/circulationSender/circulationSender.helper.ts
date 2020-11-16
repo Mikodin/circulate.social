@@ -206,6 +206,9 @@ export function constructFilledOutCirculations(
     const circulationData = currentCirculation.circles.reduce(
       (circleDetailsAcc, circleId) => {
         const circle = circlesMap.get(circleId);
+        if (!circle) {
+          return circleDetailsAcc;
+        }
 
         circle.contentDetails = circle.content.reduce(
           (contentDetailsAcc, contentId) => {

@@ -1,12 +1,10 @@
 import { PureComponent, Fragment } from 'react';
-import { Divider } from 'antd';
-import Link from 'next/link';
+import { Divider, notification } from 'antd';
 import { withRouter, NextRouter } from 'next/router';
 import axios from 'axios';
 import { Circle, Content } from '@circulate/types';
 import { ZoneId, ZonedDateTime } from '@js-joda/core';
 
-import AuthContainer from '../../components/authorization/AuthContainer';
 import Layout from '../../components/layout/Layout';
 import styles from './[circleId].module.scss';
 
@@ -55,9 +53,8 @@ interface State {
   posts: Content[];
   events: Record<string, Content[]>;
   getCircleNotAuthorized: boolean;
-  showRegisterFlow: boolean;
   isFetchingCircle: boolean;
-  isFetchingJoinCircle: boolean;
+  isWelcomingUser: boolean;
 }
 
 class CirclePage extends PureComponent<Props, State> {
@@ -70,12 +67,26 @@ class CirclePage extends PureComponent<Props, State> {
     events: {},
     posts: [],
     getCircleNotAuthorized: false,
-    showRegisterFlow: false,
     isFetchingCircle: true,
-    isFetchingJoinCircle: false,
+    isWelcomingUser: true,
   };
 
   async componentDidMount(): Promise<void> {
+    // @TODO make share something a link to submit content
+    if (this.props.router.query.welcome) {
+      this.setState({ isWelcomingUser: true });
+      notification.success({
+        message: <h3>🎉 Welcome to to the party!</h3>,
+        duration: 10,
+        description: (
+          <div>
+            <h4>You are now an essential part of this tribe.</h4>
+            <p>Sharing content is the lifeblood of all Circles.</p>
+            <p>You have been invited for a reason, share something!</p>
+          </div>
+        ),
+      });
+    }
     if (this.props.router.query.circleId) {
       await this.fetchCircleData();
     }
@@ -88,54 +99,13 @@ class CirclePage extends PureComponent<Props, State> {
   }
 
   async fetchCircleData(): Promise<void> {
-    const { join } = this.props.router.query;
     const { jwtToken } = this.context;
 
-    const isLoggedInButNotJoining = jwtToken && !join;
-    const isLoggedInAndJoining = join && jwtToken;
-    const isNotLoggedInAndJoining = join && !jwtToken;
-    const isNotLoggedInOrJoining = !join && !jwtToken;
-
-    if (isLoggedInButNotJoining) {
+    const isLoggedIn = Boolean(jwtToken);
+    if (isLoggedIn) {
       await this.getCircle(jwtToken);
-    } else if (isLoggedInAndJoining) {
-      await this.joinCircle(jwtToken);
-      await this.getCircle(jwtToken);
-    } else if (isNotLoggedInAndJoining) {
-      this.setState({ showRegisterFlow: true });
-    } else if (isNotLoggedInOrJoining) {
+    } else {
       this.setState({ getCircleNotAuthorized: true });
-    }
-  }
-
-  async joinCircle(idToken: string): Promise<boolean> {
-    const { circleId } = this.props.router.query;
-
-    this.setState({ isFetchingJoinCircle: true });
-    try {
-      const createResponse = await axios.post(
-        `${GET_CIRCLE_BY_ID_ENDPOINT}/${circleId}/join`,
-        null,
-        {
-          headers: { Authorization: idToken },
-        }
-      );
-      const { joined } = createResponse.data;
-
-      this.setState({ isFetchingJoinCircle: false });
-      return Boolean(joined);
-    } catch (error) {
-      console.error('joinCircle', error);
-      const { response } = error;
-
-      // TODO: Deal with general error state
-      if (response && response.status === 401) {
-        this.setState({
-          getCircleNotAuthorized: true,
-        });
-      }
-      this.setState({ isFetchingJoinCircle: false });
-      return error;
     }
   }
 
@@ -168,7 +138,6 @@ class CirclePage extends PureComponent<Props, State> {
         events,
         posts,
         getCircleNotAuthorized: false,
-        showRegisterFlow: false,
         isFetchingCircle: false,
       });
       return circle as Circle;
@@ -188,13 +157,7 @@ class CirclePage extends PureComponent<Props, State> {
   }
 
   render(): JSX.Element {
-    const {
-      circle,
-      getCircleNotAuthorized,
-      showRegisterFlow,
-      isFetchingCircle,
-      isFetchingJoinCircle,
-    } = this.state;
+    const { circle, getCircleNotAuthorized, isFetchingCircle } = this.state;
     if (getCircleNotAuthorized) {
       this.props.router.push('/');
       return <Fragment></Fragment>;
@@ -202,50 +165,21 @@ class CirclePage extends PureComponent<Props, State> {
 
     return (
       <Layout>
-        {showRegisterFlow ? (
+        <div>
           <Fragment>
-            <h2>Please sign in or register to join this Circle</h2>
-            <AuthContainer
-              onLoginSuccess={async (): Promise<void> => {
-                await this.fetchCircleData();
-              }}
-              onRegisterSuccess={async (): Promise<void> => {
-                await this.fetchCircleData();
-              }}
-            />
+            <div className={styles.circleInfoSection}>
+              <CircleInfoHeader
+                circle={circle}
+                isLoading={isFetchingCircle}
+                jwtToken={this.context.jwtToken}
+              />
+            </div>
+            <Divider className={styles.divider} orientation="left">
+              <h3>Circulation for this week</h3>
+            </Divider>
+            <CircleContent circle={circle} isLoading={isFetchingCircle} />
           </Fragment>
-        ) : (
-          <div>
-            {getCircleNotAuthorized && (
-              <Fragment>
-                <p>You are not permitted to view this Circle</p>
-                <Link href="/">
-                  <a>Return Home</a>
-                </Link>
-              </Fragment>
-            )}
-
-            {isFetchingJoinCircle && (
-              <Fragment>
-                <h2>Joining Circle</h2>
-              </Fragment>
-            )}
-
-            <Fragment>
-              <div className={styles.circleInfoSection}>
-                <CircleInfoHeader
-                  circle={circle}
-                  isLoading={isFetchingCircle}
-                  jwtToken={this.context.jwtToken}
-                />
-              </div>
-              <Divider className={styles.divider} orientation="left">
-                <h3>Circulation for this week</h3>
-              </Divider>
-              <CircleContent circle={circle} isLoading={isFetchingCircle} />
-            </Fragment>
-          </div>
-        )}
+        </div>
       </Layout>
     );
   }

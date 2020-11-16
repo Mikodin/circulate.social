@@ -3,7 +3,7 @@ import { withRouter, Router } from 'next/router';
 import Link from 'next/link';
 import axios from 'axios';
 import { Circle } from '@circulate/types';
-import { Skeleton } from 'antd';
+import { Skeleton, Button } from 'antd';
 
 import UserContext from '../../state-management/UserContext';
 
@@ -12,32 +12,17 @@ import CirclePreview from '../../components/circlePreview/CirclePreview';
 
 import { API_ENDPOINT } from '../../util/constants';
 
-import styles from './home.module.scss';
+import styles from './discover.module.scss';
 
 export type AvailableCirclesToFetch = 'public' | 'private';
 
-const GET_MY_CIRCLES_ENDPOINT = `${API_ENDPOINT}/circles/me`;
 const GET_PUBLIC_CIRCLES_ENDPOINT = `${API_ENDPOINT}/circles/public`;
 
-async function getCircles(
-  circlesToFetch: AvailableCirclesToFetch,
-  jwtToken?: string
-) {
-  const endpoint =
-    circlesToFetch === 'public'
-      ? GET_PUBLIC_CIRCLES_ENDPOINT
-      : GET_MY_CIRCLES_ENDPOINT;
-
-  const headers =
-    jwtToken && circlesToFetch === 'private'
-      ? {
-          headers: { Authorization: jwtToken },
-        }
-      : undefined;
+async function getCircles() {
+  const endpoint = GET_PUBLIC_CIRCLES_ENDPOINT;
 
   try {
-    const circles = (await axios.get(endpoint, headers)).data
-      .circles as Circle[];
+    const circles = (await axios.get(endpoint)).data.circles as Circle[];
     return circles;
   } catch (error) {
     console.error(error);
@@ -65,17 +50,16 @@ class CircleHome extends PureComponent<Props, State> {
   };
 
   async componentDidMount(): Promise<void> {
-    this.handleFetchingCircles('private');
+    this.handleFetchingCircles();
   }
 
-  async handleFetchingCircles(circlesToFetch: 'public' | 'private') {
-    const { jwtToken } = this.context;
+  async handleFetchingCircles() {
     this.setState({
       isFetchingCircles: true,
     });
 
     try {
-      const circles = await getCircles(circlesToFetch, jwtToken);
+      const circles = await getCircles();
       this.setState({
         isFetchingCircles: false,
         isFetchCircleError: false,
@@ -90,41 +74,59 @@ class CircleHome extends PureComponent<Props, State> {
     }
   }
 
+  // @TODO: Move to own component
+  // eslint-disable-next-line
+
   render(): JSX.Element {
     const { circles, isFetchingCircles, isFetchCircleError } = this.state;
     const { jwtToken, user } = this.context;
 
+    const circlesTheUserIsNotAlreadyIn = circles.filter((circle) => {
+      const isUserInCircle =
+        user && circle.members && circle.members.includes(user.id);
+      return !isUserInCircle;
+    });
+
     return (
       <Layout>
         <div className={styles.container}>
-          <h1>Your Circles</h1>
+          <h1>Public Circles</h1>
           <Link href="/start-a-circle">
-            <a>Want to start a Circle? </a>
+            <a>Want to start a Circle?</a>
           </Link>
-          <Link href="/circles/discover">
-            <a>Discover public Circles</a>
-          </Link>
+
           {isFetchingCircles && <Skeleton />}
+
           {isFetchCircleError && (
             <h3>Whoops - something went wrong, please refresh the page</h3>
           )}
+
           {!isFetchingCircles && (
             <>
-              {!circles.length && <h3>You do not belong to any Circles</h3>}
-
-              {circles.length && (
+              {!circlesTheUserIsNotAlreadyIn.length && (
+                <>
+                  <h1>🤯</h1>
+                  <h3>
+                    It appears that you are already a member of every public
+                    circle!
+                  </h3>
+                  <p>Well done.</p>
+                  <Button type="primary">
+                    <Link href="/circles/home">
+                      <a>Now go view them!</a>
+                    </Link>
+                  </Button>
+                </>
+              )}
+              {Boolean(circlesTheUserIsNotAlreadyIn.length) && (
                 <div className={styles.circlesContainer}>
-                  {circles.map((circle) => {
-                    const isUserInCircle =
-                      user &&
-                      circle.members &&
-                      circle.members.includes(user.id);
+                  {circlesTheUserIsNotAlreadyIn.map((circle) => {
                     return (
                       <CirclePreview
                         key={circle.id}
                         circle={circle}
-                        isUserInCircle={isUserInCircle}
                         jwtToken={jwtToken}
+                        isUserInCircle={false}
                       />
                     );
                   })}
