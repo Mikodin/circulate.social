@@ -42,7 +42,6 @@ exports[`ConfirmEmail should render 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class=""
                     data-icon="mail"
                     fill="currentColor"
                     focusable="false"
@@ -105,7 +104,6 @@ exports[`ConfirmEmail should render 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class=""
                     data-icon="user"
                     fill="currentColor"
                     focusable="false"
@@ -168,7 +166,6 @@ exports[`ConfirmEmail should render 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class=""
                     data-icon="user"
                     fill="currentColor"
                     focusable="false"
@@ -231,7 +228,6 @@ exports[`ConfirmEmail should render 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class=""
                     data-icon="lock"
                     fill="currentColor"
                     focusable="false"

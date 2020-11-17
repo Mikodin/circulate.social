@@ -42,7 +42,6 @@ exports[`Login should render 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class=""
                     data-icon="mail"
                     fill="currentColor"
                     focusable="false"
@@ -105,7 +104,6 @@ exports[`Login should render 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class=""
                     data-icon="lock"
                     fill="currentColor"
                     focusable="false"
@@ -139,7 +137,6 @@ exports[`Login should render 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class=""
                     data-icon="eye-invisible"
                     fill="currentColor"
                     focusable="false"

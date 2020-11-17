@@ -42,7 +42,6 @@ exports[`Register should render 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class=""
                     data-icon="mail"
                     fill="currentColor"
                     focusable="false"
@@ -105,7 +104,6 @@ exports[`Register should render 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class=""
                     data-icon="lock"
                     fill="currentColor"
                     focusable="false"
@@ -139,7 +137,6 @@ exports[`Register should render 1`] = `
                 >
                   <svg
                     aria-hidden="true"
-                    class=""
                     data-icon="eye-invisible"
                     fill="currentColor"
                     focusable="false"
@@ -174,7 +171,6 @@ exports[`Register should render 1`] = `
       >
         <svg
           aria-hidden="true"
-          class=""
           data-icon="info-circle"
           fill="currentColor"
           focusable="false"
@@ -207,7 +203,6 @@ exports[`Register should render 1`] = `
         >
           <svg
             aria-hidden="true"
-            class=""
             data-icon="close"
             fill="currentColor"
             focusable="false"

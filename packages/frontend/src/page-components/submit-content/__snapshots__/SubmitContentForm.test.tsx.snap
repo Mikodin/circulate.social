@@ -109,7 +109,7 @@ Object {
                 class="ant-form-item-control-input-content"
               >
                 <textarea
-                  class="ant-input"
+                  class="ant-input ant-input-lg"
                   id="horizontal_login_whyShare"
                   placeholder="Why are you sharing this?"
                   rows="3"
@@ -169,7 +169,6 @@ Object {
                         >
                           <svg
                             aria-hidden="true"
-                            class=""
                             data-icon="close"
                             fill="currentColor"
                             focusable="false"
@@ -226,7 +225,6 @@ Object {
                     >
                       <svg
                         aria-hidden="true"
-                        class=""
                         data-icon="down"
                         fill="currentColor"
                         focusable="false"
@@ -379,7 +377,7 @@ Object {
               class="ant-form-item-control-input-content"
             >
               <textarea
-                class="ant-input"
+                class="ant-input ant-input-lg"
                 id="horizontal_login_whyShare"
                 placeholder="Why are you sharing this?"
                 rows="3"
@@ -439,7 +437,6 @@ Object {
                       >
                         <svg
                           aria-hidden="true"
-                          class=""
                           data-icon="close"
                           fill="currentColor"
                           focusable="false"
@@ -496,7 +493,6 @@ Object {
                   >
                     <svg
                       aria-hidden="true"
-                      class=""
                       data-icon="down"
                       fill="currentColor"
                       focusable="false"

@@ -43,7 +43,6 @@ Object {
             >
               <svg
                 aria-hidden="true"
-                class=""
                 data-icon="file-add"
                 fill="currentColor"
                 focusable="false"
@@ -72,7 +71,6 @@ Object {
               >
                 <svg
                   aria-hidden="true"
-                  class=""
                   data-icon="user-add"
                   fill="currentColor"
                   focusable="false"
@@ -101,7 +99,6 @@ Object {
             >
               <svg
                 aria-hidden="true"
-                class=""
                 data-icon="ellipsis"
                 fill="currentColor"
                 focusable="false"
@@ -158,7 +155,6 @@ Object {
           >
             <svg
               aria-hidden="true"
-              class=""
               data-icon="file-add"
               fill="currentColor"
               focusable="false"
@@ -187,7 +183,6 @@ Object {
             >
               <svg
                 aria-hidden="true"
-                class=""
                 data-icon="user-add"
                 fill="currentColor"
                 focusable="false"
@@ -216,7 +211,6 @@ Object {
           >
             <svg
               aria-hidden="true"
-              class=""
               data-icon="ellipsis"
               fill="currentColor"
               focusable="false"
