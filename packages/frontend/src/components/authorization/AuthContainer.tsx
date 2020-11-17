@@ -2,6 +2,7 @@ import { Fragment, PureComponent } from 'react';
 import { withRouter } from 'next/router';
 import type { NextRouter } from 'next/router';
 import { ZonedDateTime } from '@js-joda/core';
+import { Button, Divider } from 'antd';
 import '@js-joda/timezone';
 
 import Register, {
@@ -205,91 +206,107 @@ class AuthContainer extends PureComponent<Props, State> {
 
   render(): JSX.Element {
     const { seedEmail, seedPassword, formToShow } = this.state;
+    const shouldShowLoginOption =
+      formToShow === AUTH_FORMS.register ||
+      formToShow === AUTH_FORMS.confirmEmail;
+
+    // const shouldShowRegisterOption =
+    //   formToShow === AUTH_FORMS.login ||
+    //   formToShow === AUTH_FORMS.forgotPassword;
 
     return (
-      <div className={css.container}>
-        {formToShow === AUTH_FORMS.register && (
-          <Fragment>
-            <div className={css.formTagline}>
-              <h2>Sign up</h2>
-              <span>Be in Circulation</span>
-              <hr />
-            </div>
-            <Register
-              seedEmail={seedEmail}
-              seedPassword={seedPassword}
-              updateSeedValues={this.updateSeedValues}
-              fetchRegister={this.context.register}
-              onFormCompletionCallback={this.onRegisterFormCompletion}
-            />
-            <p onClick={(): void => this.showForm(AUTH_FORMS.login)}>
-              Already a member? Sign in!
-            </p>
-          </Fragment>
+      <>
+        {shouldShowLoginOption && (
+          <>
+            <Button
+              className={css.switchToSignInFormButton}
+              size="large"
+              type="default"
+              onClick={(): void => this.showForm(AUTH_FORMS.login)}
+            >
+              👋 Already registered? Sign in!
+            </Button>
+          </>
         )}
-        {formToShow === AUTH_FORMS.confirmEmail && (
-          <Fragment>
-            <div className={css.formTagline}>
-              <h2>✉️ Confirm your email</h2>
-              <hr />
-            </div>
-            <ConfirmEmail
-              seedEmail={seedEmail}
-              fetchConfirmEmail={this.context.confirmEmail}
-              fetchResendConfirmEmail={this.context.resendRegisterCode}
-              onFormCompletionCallback={this.onConfirmEmailFormCompletion}
-              updateSeedValues={this.updateSeedValues}
-            />
-            <p onClick={(): void => this.showForm(AUTH_FORMS.login)}>
-              Already a member? Sign in
-            </p>
-          </Fragment>
-        )}
-        {formToShow === AUTH_FORMS.login && (
-          <Fragment>
-            <div className={css.formTagline}>
-              <h2>Sign in</h2>
-              <span>Welcome back</span>
-              <hr />
-            </div>
-            <Login
-              seedEmail={seedEmail}
-              seedPassword={seedPassword}
-              fetchSignIn={this.context.signIn}
-              onFormCompletionCallback={this.onLoginFormCompletion}
-              updateSeedValues={this.updateSeedValues}
-              showForm={this.showForm}
-            />
-            <p onClick={(): void => this.showForm(AUTH_FORMS.forgotPassword)}>
-              Forgot password?
-            </p>
-            <p onClick={(): void => this.showForm(AUTH_FORMS.register)}>
-              Not a member? Sign up!
-            </p>
-          </Fragment>
-        )}
-        {formToShow === AUTH_FORMS.forgotPassword && (
-          <Fragment>
-            <div className={css.formTagline}>
-              <h2>Forgot password</h2>
-              <hr />
-            </div>
-            <ForgotPassword
-              fetchInitForgotPassword={this.context.forgotPasswordInit}
-              fetchFinalizeForgotPassword={this.context.forgotPasswordSubmit}
-              seedEmail={seedEmail}
-              updateSeedValues={this.updateSeedValues}
-              onFormCompletionCallback={this.onForgotPasswordCompletion}
-            />
-            <p onClick={(): void => this.showForm(AUTH_FORMS.register)}>
-              Not a member? Sign up!
-            </p>
-          </Fragment>
-        )}
-        {/* <p onClick={() => this.showForm(AUTH_FORMS.confirmEmail)}>
+
+        <div className={css.container}>
+          {formToShow === AUTH_FORMS.register && (
+            <Fragment>
+              <div className={css.formTagline}>
+                <h2>Sign up</h2>
+                <span>Be in Circulation</span>
+                <hr />
+              </div>
+              <Register
+                seedEmail={seedEmail}
+                seedPassword={seedPassword}
+                updateSeedValues={this.updateSeedValues}
+                fetchRegister={this.context.register}
+                onFormCompletionCallback={this.onRegisterFormCompletion}
+              />
+            </Fragment>
+          )}
+          {formToShow === AUTH_FORMS.confirmEmail && (
+            <Fragment>
+              <div className={css.formTagline}>
+                <h2>✉️ Confirm your email</h2>
+                <hr />
+              </div>
+              <ConfirmEmail
+                seedEmail={seedEmail}
+                fetchConfirmEmail={this.context.confirmEmail}
+                fetchResendConfirmEmail={this.context.resendRegisterCode}
+                onFormCompletionCallback={this.onConfirmEmailFormCompletion}
+                updateSeedValues={this.updateSeedValues}
+              />
+            </Fragment>
+          )}
+          {formToShow === AUTH_FORMS.login && (
+            <Fragment>
+              <div className={css.formTagline}>
+                <h2>Sign in</h2>
+                <span>Welcome back</span>
+                <hr />
+              </div>
+              <Login
+                seedEmail={seedEmail}
+                seedPassword={seedPassword}
+                fetchSignIn={this.context.signIn}
+                onFormCompletionCallback={this.onLoginFormCompletion}
+                updateSeedValues={this.updateSeedValues}
+                showForm={this.showForm}
+              />
+              <p onClick={(): void => this.showForm(AUTH_FORMS.forgotPassword)}>
+                Forgot password?
+              </p>
+              <p onClick={(): void => this.showForm(AUTH_FORMS.register)}>
+                Not a member? Sign up!
+              </p>
+            </Fragment>
+          )}
+          {formToShow === AUTH_FORMS.forgotPassword && (
+            <Fragment>
+              <div className={css.formTagline}>
+                <h2>Forgot password</h2>
+                <hr />
+              </div>
+              <ForgotPassword
+                fetchInitForgotPassword={this.context.forgotPasswordInit}
+                fetchFinalizeForgotPassword={this.context.forgotPasswordSubmit}
+                seedEmail={seedEmail}
+                updateSeedValues={this.updateSeedValues}
+                onFormCompletionCallback={this.onForgotPasswordCompletion}
+              />
+              <p onClick={(): void => this.showForm(AUTH_FORMS.register)}>
+                Not a member? Sign up!
+              </p>
+            </Fragment>
+          )}
+          {/* <p onClick={() => this.showForm(AUTH_FORMS.confirmEmail)}>
           Confirming Email?
         </p> */}
-      </div>
+        </div>
+      </>
     );
   }
 }
