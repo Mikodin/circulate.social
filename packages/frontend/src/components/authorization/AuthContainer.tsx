@@ -2,7 +2,7 @@ import { Fragment, PureComponent } from 'react';
 import { withRouter } from 'next/router';
 import type { NextRouter } from 'next/router';
 import { ZonedDateTime } from '@js-joda/core';
-import { Button, Divider } from 'antd';
+import { Button } from 'antd';
 import '@js-joda/timezone';
 
 import Register, {

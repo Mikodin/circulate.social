@@ -105,7 +105,7 @@ export const joinCircle = (): JSX.Element => {
   const welcomeText = fromDiscover ? (
     <>
       <h1>💎 Ah, welcome.</h1>
-      <h2>It appears that you have stumbled upon a gem.</h2>
+      <h2>It appears that you have discovered a gem.</h2>
       <p>
         If you made it this far, this Circle is likely for you!
         <br />
