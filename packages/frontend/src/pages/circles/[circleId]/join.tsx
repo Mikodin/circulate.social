@@ -44,6 +44,7 @@ export const joinCircle = (): JSX.Element => {
   const [isJoinCircleInFlight, setIsJoinCircleInFlight] = useState(false);
 
   const [circleId, setCircleId] = useState<string | undefined>(undefined);
+  const [fromDiscover, setFromDiscover] = useState(false);
   const [circlePreview, setCirclePreview] = useState<CirclePreview | undefined>(
     undefined
   );
@@ -78,9 +79,13 @@ export const joinCircle = (): JSX.Element => {
   };
 
   useEffect(() => {
-    const { circleId: circleIdFromRoute } = router.query;
+    const {
+      circleId: circleIdFromRoute,
+      fromDiscover: fromDiscoverQuery,
+    } = router.query;
     if (circleIdFromRoute) {
       setCircleId(`${circleIdFromRoute}`);
+      setFromDiscover(Boolean(fromDiscoverQuery));
     }
   }, [router]);
 
@@ -97,19 +102,35 @@ export const joinCircle = (): JSX.Element => {
   }, [circlePreview, user]);
 
   const isUserLoggedIn = getIsUserLoggedIn();
+  const welcomeText = fromDiscover ? (
+    <>
+      <h1>💎 Ah, welcome.</h1>
+      <h2>It appears that you have stumbled upon a gem.</h2>
+      <p>
+        If you made it this far, this Circle is likely for you!
+        <br />
+        <small>(And would likely benefit from your energy.)</small>
+      </p>
+      <p>Join in and find out!</p>
+    </>
+  ) : (
+    <>
+      <h1>🎉 Welcome to the party!</h1>
+      <h2>This is a collaborative newsletter platform.</h2>
+      <h3>
+        Designed to empower communities of all sizes to quickly collect and
+        share curated content.
+      </h3>
+      <h3>All delivered as one relevant email digest.</h3>
+      <Divider />
+
+      <h2>Congrats - You&lsquo;ve been invited to join a Circle!</h2>
+    </>
+  );
   return (
     <Layout>
+      {welcomeText}
       <div>
-        <h1>🎉 Welcome to the party!</h1>
-        <h2>This is a collaborative newsletter platform.</h2>
-        <h3>
-          Designed to empower communities of all sizes to quickly collect and
-          share curated content.
-        </h3>
-        <h3>All delivered as one relevant email digest.</h3>
-        <Divider />
-
-        <h2>Congrats - You&lsquo;ve been invited to join a Circle!</h2>
         <CircleInfoHeader
           circlePreview={circlePreview}
           isLoading={isGetCirclePreviewInFlight}
@@ -126,7 +147,12 @@ export const joinCircle = (): JSX.Element => {
             Join Circle
           </Button>
         ) : (
-          <AuthContainer />
+          <>
+            <Divider />
+            <h2>✋ Circulate is for members only.</h2>
+            <h3>But you are welcome, join us and get in Circulation!</h3>
+            <AuthContainer />
+          </>
         )}
       </div>
     </Layout>

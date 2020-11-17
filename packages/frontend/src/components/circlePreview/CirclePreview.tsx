@@ -22,7 +22,10 @@ const CirclePreview = (props: Props): React.ReactElement => {
             <a>{circle.name}</a>
           </Link>
         ) : (
-          <Link href="[circleId]/join" as={`${circle.id}/join`}>
+          <Link
+            href="[circleId]/join?fromDiscover=true"
+            as={`${circle.id}/join?fromDiscover=true`}
+          >
             <a>{circle.name}</a>
           </Link>
         )}
@@ -44,7 +47,10 @@ const CirclePreview = (props: Props): React.ReactElement => {
           <>
             <h3>You are not a member of this Circle.</h3>
             <Button type="primary">
-              <Link href="[circleId]/join" as={`${circle.id}/join`}>
+              <Link
+                href="[circleId]/join?fromDiscover=true"
+                as={`${circle.id}/join?fromDiscover=true`}
+              >
                 <a>Would you like to join?</a>
               </Link>
             </Button>
