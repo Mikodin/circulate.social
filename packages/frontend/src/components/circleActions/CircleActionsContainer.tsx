@@ -37,7 +37,7 @@ const CircleActions = ({ circle, jwtToken }: Props): JSX.Element => (
         <div>
           <LeaveCircle circle={circle} jwtToken={jwtToken} />
           <Divider type="vertical" />
-          <Link href={`${circle.id}`}>
+          <Link href="[circleId]" as={`${circle.id}`}>
             <Button
               size="middle"
               type="default"

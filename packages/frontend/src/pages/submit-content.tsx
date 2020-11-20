@@ -64,7 +64,6 @@ class SubmitContent extends PureComponent<Props, State> {
   onSubmitContentFormCompletion = (content: Partial<Content>): void => {
     const { title } = content;
     this.setState({ showSuccessAlert: true, submittedContentTitle: title });
-    // @TODO Always enable the user to easily navigate back to the circle
     setTimeout(() => {
       this.setState({
         showSuccessAlert: false,

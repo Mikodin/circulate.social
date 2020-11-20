@@ -19,7 +19,7 @@ const fetchCirclePreview = async (circleId: string) => {
   return circlePreviewResp.data.circlePreview as CirclePreview;
 };
 
-const fetchJoinCircle = async (
+export const fetchJoinCircle = async (
   circleId: string,
   jwtToken: string
 ): Promise<boolean> => {
@@ -115,7 +115,7 @@ export const joinCircle = (): JSX.Element => {
     </>
   ) : (
     <>
-      <h1>🎉 Welcome to the party!</h1>
+      <h1>🎉 Come, join the party!</h1>
       <h2>This is a collaborative newsletter platform.</h2>
       <h3>
         Designed to empower communities of all sizes to quickly collect and
