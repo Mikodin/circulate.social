@@ -171,6 +171,69 @@ const CircleContent = (props: Props): JSX.Element => {
       </>
     );
   }
+  const pastEventsPanel = (
+    <Panel header={<a>Looking for past events?</a>} showArrow={false} key="3">
+      <div className={`${styles.pastEventsCollapse} ${styles.eventsPanel}`}>
+        {Object.keys(pastEvents || {})
+          .sort()
+          .reverse()
+          .map((dateTime) => {
+            return (
+              <div key={dateTime} className={styles.eventsDayContainer}>
+                <h3 className={styles.eventDayHeader}>
+                  {LocalDate.parse(dateTime).format(
+                    DateTimeFormatter.ofPattern('E, MMM d yyyy').withLocale(
+                      Locale.US
+                    )
+                  )}
+                </h3>
+                <div className={styles.eventContainer}>
+                  {pastEvents[dateTime].map((event) => renderEvent(event))}
+                </div>
+              </div>
+            );
+          })}
+      </div>
+    </Panel>
+  );
+
+  const allEventsPanel = (
+    <Panel
+      header={<h4 className={styles.panelHeader}>Upcoming events</h4>}
+      key="1"
+    >
+      <div className={styles.eventsPanel}>
+        {Object.keys(upcomingEvents || {})
+          .sort()
+          .reverse()
+          .map((dateTime) => {
+            return (
+              <div key={dateTime} className={styles.eventsDayContainer}>
+                <h3 className={styles.eventDayHeader}>
+                  {LocalDate.parse(dateTime).format(
+                    DateTimeFormatter.ofPattern('E, MMM d yyyy').withLocale(
+                      Locale.US
+                    )
+                  )}
+                </h3>
+                <div className={styles.eventContainer}>
+                  {upcomingEvents[dateTime].map((event) => renderEvent(event))}
+                </div>
+              </div>
+            );
+          })}
+      </div>
+      <Collapse bordered={false}>{pastEventsPanel}</Collapse>
+    </Panel>
+  );
+
+  const postsPanel = (
+    <Panel header={<h4 className={styles.panelHeader}>Posts</h4>} key="2">
+      <div className={styles.contentPanel}>
+        <List dataSource={posts} renderItem={renderContent}></List>
+      </div>
+    </Panel>
+  );
 
   return (
     <Collapse
@@ -178,82 +241,11 @@ const CircleContent = (props: Props): JSX.Element => {
       bordered={false}
       className={styles.contentCollapse}
     >
-      {Object.keys(upcomingEvents).length && (
-        <Panel
-          header={<h4 className={styles.panelHeader}>Upcoming events</h4>}
-          key="1"
-        >
-          <div className={styles.eventsPanel}>
-            {Object.keys(upcomingEvents)
-              .sort()
-              .reverse()
-              .map((dateTime) => {
-                return (
-                  <div key={dateTime} className={styles.eventsDayContainer}>
-                    <h3 className={styles.eventDayHeader}>
-                      {LocalDate.parse(dateTime).format(
-                        DateTimeFormatter.ofPattern('E, MMM d yyyy').withLocale(
-                          Locale.US
-                        )
-                      )}
-                    </h3>
-                    <div className={styles.eventContainer}>
-                      {upcomingEvents[dateTime].map((event) =>
-                        renderEvent(event)
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-          </div>
-          {Object.keys(pastEvents).length && (
-            <Collapse bordered={false}>
-              <Panel
-                header={<a>Looking for past events?</a>}
-                showArrow={false}
-                key="3"
-              >
-                <div
-                  className={`${styles.pastEventsCollapse} ${styles.eventsPanel}`}
-                >
-                  {Object.keys(pastEvents)
-                    .sort()
-                    .reverse()
-                    .map((dateTime) => {
-                      return (
-                        <div
-                          key={dateTime}
-                          className={styles.eventsDayContainer}
-                        >
-                          <h3 className={styles.eventDayHeader}>
-                            {LocalDate.parse(dateTime).format(
-                              DateTimeFormatter.ofPattern(
-                                'E, MMM d yyyy'
-                              ).withLocale(Locale.US)
-                            )}
-                          </h3>
-                          <div className={styles.eventContainer}>
-                            {pastEvents[dateTime].map((event) =>
-                              renderEvent(event)
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
-                </div>
-              </Panel>
-            </Collapse>
-          )}
-        </Panel>
-      )}
-
-      {posts.length && (
-        <Panel header={<h4 className={styles.panelHeader}>Posts</h4>} key="2">
-          <div className={styles.contentPanel}>
-            <List dataSource={posts} renderItem={renderContent}></List>
-          </div>
-        </Panel>
-      )}
+      {Object.keys(upcomingEvents).length && allEventsPanel}
+      {posts.length && postsPanel}
+      {!Object.keys(upcomingEvents).length &&
+        Object.keys(pastEvents) &&
+        pastEventsPanel}
     </Collapse>
   );
 };
