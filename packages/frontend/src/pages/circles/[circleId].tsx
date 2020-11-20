@@ -2,8 +2,7 @@ import { PureComponent, Fragment } from 'react';
 import { Divider, notification } from 'antd';
 import { withRouter, NextRouter } from 'next/router';
 import axios from 'axios';
-import { Circle, Content } from '@circulate/types';
-import { ZoneId, ZonedDateTime } from '@js-joda/core';
+import { Circle } from '@circulate/types';
 
 import Layout from '../../components/layout/Layout';
 import styles from './[circleId].module.scss';
@@ -16,42 +15,12 @@ import { API_ENDPOINT } from '../../util/constants';
 import UserContext from '../../state-management/UserContext';
 
 const GET_CIRCLE_BY_ID_ENDPOINT = `${API_ENDPOINT}/circles`;
-
-const convertDateTimeToSystemZone = (dateTime: string) => {
-  return ZonedDateTime.parse(dateTime)
-    .withZoneSameInstant(ZoneId.of('SYSTEM'))
-    .toString();
-};
-
-const groupEventsByDate = (events: Content[]): Record<string, Content[]> => {
-  const eventsByDate = {};
-  events.forEach((event) => {
-    if (!event.dateTime) {
-      return;
-    }
-
-    const date = ZonedDateTime.parse(event.dateTime)
-      .withZoneSameInstant(ZoneId.of('SYSTEM'))
-      .toLocalDate()
-      .toString();
-
-    if (eventsByDate[date]) {
-      eventsByDate[date].push(event);
-    } else {
-      eventsByDate[date] = [event];
-    }
-  });
-  return eventsByDate;
-};
-
 interface Props {
   router: NextRouter;
 }
 
 interface State {
   circle: Circle | undefined;
-  posts: Content[];
-  events: Record<string, Content[]>;
   getCircleNotAuthorized: boolean;
   isFetchingCircle: boolean;
   isWelcomingUser: boolean;
@@ -64,8 +33,6 @@ class CirclePage extends PureComponent<Props, State> {
 
   state: State = {
     circle: undefined,
-    events: {},
-    posts: [],
     getCircleNotAuthorized: false,
     isFetchingCircle: true,
     isWelcomingUser: true,
@@ -121,22 +88,8 @@ class CirclePage extends PureComponent<Props, State> {
       );
       const { circle }: { circle: Circle } = createResponse.data;
 
-      const events = groupEventsByDate(
-        (circle.contentDetails || [])
-          .filter((content) => Boolean(content.dateTime))
-          .map((event) => ({
-            ...event,
-            dateTime: convertDateTimeToSystemZone(event.dateTime),
-          }))
-      );
-      const posts = (circle.contentDetails || []).filter(
-        (content) => !content.dateTime
-      );
-
       this.setState({
         circle,
-        events,
-        posts,
         getCircleNotAuthorized: false,
         isFetchingCircle: false,
       });

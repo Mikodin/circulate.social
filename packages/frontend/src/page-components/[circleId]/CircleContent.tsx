@@ -113,7 +113,12 @@ interface EventsByDate {
 }
 const CircleContent = (props: Props): JSX.Element => {
   const { circle, isLoading } = props;
-  const [events, setEvents] = useState<EventsByDate | undefined>(undefined);
+  const [upcomingEvents, setUpcomingEvents] = useState<
+    EventsByDate | undefined
+  >(undefined);
+  // const [pastEvents, setPastEvents] = useState<EventsByDate | undefined>(
+  //   undefined
+  // );
   const [posts, setPosts] = useState<Content[] | undefined>(undefined);
 
   useEffect(() => {
@@ -124,7 +129,13 @@ const CircleContent = (props: Props): JSX.Element => {
           ...event,
           dateTime: convertDateTimeToSystemZone(event.dateTime),
         }));
-      setEvents(groupEventsByDate(eventsWithDateConvertedToUsersTime));
+
+      const upcomingEventsFiltered = eventsWithDateConvertedToUsersTime.filter(
+        (event) =>
+          ZonedDateTime.parse(event.dateTime).isAfter(ZonedDateTime.now())
+      );
+
+      setUpcomingEvents(groupEventsByDate(upcomingEventsFiltered));
 
       setPosts(
         (circle.contentDetails || [])
@@ -138,7 +149,7 @@ const CircleContent = (props: Props): JSX.Element => {
     }
   }, [circle]);
 
-  const hasContentToDisplay = Boolean(events && posts);
+  const hasContentToDisplay = Boolean(upcomingEvents && posts);
 
   if (isLoading) {
     return <Skeleton active={isLoading} />;
@@ -160,10 +171,13 @@ const CircleContent = (props: Props): JSX.Element => {
       bordered={false}
       className={styles.contentCollapse}
     >
-      {Object.keys(events).length && (
-        <Panel header={<h4 className={styles.panelHeader}>Events</h4>} key="1">
+      {Object.keys(upcomingEvents).length && (
+        <Panel
+          header={<h4 className={styles.panelHeader}>Upcoming events</h4>}
+          key="1"
+        >
           <div className={styles.eventsPanel}>
-            {Object.keys(events)
+            {Object.keys(upcomingEvents)
               .sort()
               .reverse()
               .map((dateTime) => {
@@ -177,7 +191,9 @@ const CircleContent = (props: Props): JSX.Element => {
                       )}
                     </h3>
                     <div className={styles.eventContainer}>
-                      {events[dateTime].map((event) => renderEvent(event))}
+                      {upcomingEvents[dateTime].map((event) =>
+                        renderEvent(event)
+                      )}
                     </div>
                   </div>
                 );
