@@ -111,14 +111,15 @@ interface Props {
 interface EventsByDate {
   [dateTime: string]: Content[];
 }
+
 const CircleContent = (props: Props): JSX.Element => {
   const { circle, isLoading } = props;
   const [upcomingEvents, setUpcomingEvents] = useState<
     EventsByDate | undefined
   >(undefined);
-  // const [pastEvents, setPastEvents] = useState<EventsByDate | undefined>(
-  //   undefined
-  // );
+  const [pastEvents, setPastEvents] = useState<EventsByDate | undefined>(
+    undefined
+  );
   const [posts, setPosts] = useState<Content[] | undefined>(undefined);
 
   useEffect(() => {
@@ -135,7 +136,13 @@ const CircleContent = (props: Props): JSX.Element => {
           ZonedDateTime.parse(event.dateTime).isAfter(ZonedDateTime.now())
       );
 
+      const pastEventsFiltered = eventsWithDateConvertedToUsersTime.filter(
+        (event) =>
+          ZonedDateTime.parse(event.dateTime).isBefore(ZonedDateTime.now())
+      );
+
       setUpcomingEvents(groupEventsByDate(upcomingEventsFiltered));
+      setPastEvents(groupEventsByDate(pastEventsFiltered));
 
       setPosts(
         (circle.contentDetails || [])
@@ -199,6 +206,44 @@ const CircleContent = (props: Props): JSX.Element => {
                 );
               })}
           </div>
+          {Object.keys(pastEvents).length && (
+            <Collapse bordered={false}>
+              <Panel
+                header={<a>Looking for past events?</a>}
+                showArrow={false}
+                key="3"
+              >
+                <div
+                  className={`${styles.pastEventsCollapse} ${styles.eventsPanel}`}
+                >
+                  {Object.keys(pastEvents)
+                    .sort()
+                    .reverse()
+                    .map((dateTime) => {
+                      return (
+                        <div
+                          key={dateTime}
+                          className={styles.eventsDayContainer}
+                        >
+                          <h3 className={styles.eventDayHeader}>
+                            {LocalDate.parse(dateTime).format(
+                              DateTimeFormatter.ofPattern(
+                                'E, MMM d yyyy'
+                              ).withLocale(Locale.US)
+                            )}
+                          </h3>
+                          <div className={styles.eventContainer}>
+                            {pastEvents[dateTime].map((event) =>
+                              renderEvent(event)
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+              </Panel>
+            </Collapse>
+          )}
         </Panel>
       )}
 
