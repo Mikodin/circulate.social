@@ -27,7 +27,7 @@
     "antd": "^4.6.6",
     "api": "1.0.0",
     "aws-amplify": "^3.3.3",
-    "axios": "^0.20.0",
+    "axios": "^0.21.0",
     "copy-to-clipboard": "^3.3.1",
     "next": "^10.0.1",
     "react": "17.0.1",
