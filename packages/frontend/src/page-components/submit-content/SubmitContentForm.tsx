@@ -65,6 +65,7 @@ const SubmitContentForm = (props: Props): JSX.Element => {
 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [isEventForm, setIsEventForm] = useState(false);
+  const [isChangingTimeZone, setIsChangingTimeZone] = useState(false);
   const [
     isFetchCreateContentInFlight,
     setIsFetchCreateContentInFlight,
@@ -141,6 +142,81 @@ const SubmitContentForm = (props: Props): JSX.Element => {
   //   hour12: true,
   //   hour: 'numeric',
   // });
+
+  const eventForm = (
+    <>
+      <Form.Item
+        name="date"
+        label="Event date"
+        className={styles.eventDateLabel}
+      >
+        <DatePicker
+          disabledDate={(dateToCheckAgainstTodayMoment: moment.Moment) => {
+            const dateToCheckAgainstToday = LocalDate.parse(
+              dateToCheckAgainstTodayMoment.format('YYYY-MM-DD')
+            );
+            const today = LocalDate.now();
+
+            const disableDateBecauseItIsBeforeToday = dateToCheckAgainstToday.isBefore(
+              today
+            );
+
+            return disableDateBecauseItIsBeforeToday;
+          }}
+          format={'MMMM D'}
+          use12Hours={true}
+          open={isDatePickerOpen}
+          onOpenChange={(isOpen): void => {
+            setIsDatePickerOpen(isOpen);
+            if (!isOpen && !form.getFieldValue('date')) {
+              setIsEventForm(false);
+            } else if (form.getFieldValue('date')) {
+              setIsEventForm(true);
+            }
+          }}
+          renderExtraFooter={(): JSX.Element => (
+            <Button
+              onClick={(): void => {
+                setIsDatePickerOpen(false);
+                setIsEventForm(false);
+              }}
+            >
+              Clear
+            </Button>
+          )}
+          allowClear={false}
+        />
+      </Form.Item>
+
+      <Form.Item
+        name="time"
+        label="Event time"
+        rules={[
+          {
+            required: true,
+            message: 'Since you have a date - there must be a time.',
+          },
+        ]}
+        extra={
+          <Button
+            type="link"
+            onClick={() => setIsChangingTimeZone(!isChangingTimeZone)}
+          >
+            <small>Looking for a different timezone?</small>
+          </Button>
+        }
+      >
+        {GenerateTimeSelect()}
+      </Form.Item>
+
+      <Form.Item name="timezone" label="Timezone" hidden={!isChangingTimeZone}>
+        <Select showSearch style={{ width: 200 }} placeholder="Timezone">
+          {TimezoneSelects}
+        </Select>
+      </Form.Item>
+    </>
+  );
+
   return (
     <Fragment>
       <Form
@@ -180,73 +256,7 @@ const SubmitContentForm = (props: Props): JSX.Element => {
         <Button type="link" onClick={() => setIsEventForm(!isEventForm)}>
           {isEventForm ? 'Not creating an event?' : 'Creating an event?'}
         </Button>
-        {isEventForm && (
-          <>
-            <Form.Item
-              name="date"
-              label="Event date"
-              className={styles.eventDateLabel}
-            >
-              <DatePicker
-                disabledDate={(
-                  dateToCheckAgainstTodayMoment: moment.Moment
-                ) => {
-                  const dateToCheckAgainstToday = LocalDate.parse(
-                    dateToCheckAgainstTodayMoment.format('YYYY-MM-DD')
-                  );
-                  const today = LocalDate.now();
-
-                  const disableDateBecauseItIsBeforeToday = dateToCheckAgainstToday.isBefore(
-                    today
-                  );
-
-                  return disableDateBecauseItIsBeforeToday;
-                }}
-                format={'MMMM D'}
-                use12Hours={true}
-                open={isDatePickerOpen}
-                onOpenChange={(isOpen): void => {
-                  setIsDatePickerOpen(isOpen);
-                  if (!isOpen && !form.getFieldValue('date')) {
-                    setIsEventForm(false);
-                  } else if (form.getFieldValue('date')) {
-                    setIsEventForm(true);
-                  }
-                }}
-                renderExtraFooter={(): JSX.Element => (
-                  <Button
-                    onClick={(): void => {
-                      setIsDatePickerOpen(false);
-                      setIsEventForm(false);
-                    }}
-                  >
-                    Clear
-                  </Button>
-                )}
-                allowClear={false}
-              />
-            </Form.Item>
-
-            <Form.Item
-              name="time"
-              label="Event time"
-              rules={[
-                {
-                  required: true,
-                  message: 'Since you have a date - there must be a time.',
-                },
-              ]}
-            >
-              {GenerateTimeSelect()}
-            </Form.Item>
-
-            <Form.Item name="timezone" label="Timezone">
-              <Select showSearch style={{ width: 200 }} placeholder="Timezone">
-                {TimezoneSelects}
-              </Select>
-            </Form.Item>
-          </>
-        )}
+        {isEventForm && eventForm}
         <Form.Item name="whyShare" label="Why are you sharing this?">
           <Input.TextArea
             rows={3}
