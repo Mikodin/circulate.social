@@ -13,6 +13,7 @@ import '@js-joda/timezone';
 import { AntdMoment, Circle, Content } from '@circulate/types';
 
 import { Form, Input, Button, Alert, DatePicker, Select } from 'antd';
+import { CalendarOutlined } from '@ant-design/icons';
 
 import { API_ENDPOINT } from '../../util/constants';
 import styles from './SubmitContentForm.module.scss';
@@ -253,7 +254,11 @@ const SubmitContentForm = (props: Props): JSX.Element => {
           <Input placeholder="Link" type="text" />
         </Form.Item>
 
-        <Button type="link" onClick={() => setIsEventForm(!isEventForm)}>
+        <Button
+          type="link"
+          onClick={() => setIsEventForm(!isEventForm)}
+          icon={<CalendarOutlined />}
+        >
           {isEventForm ? 'Not creating an event?' : 'Creating an event?'}
         </Button>
         {isEventForm && eventForm}
