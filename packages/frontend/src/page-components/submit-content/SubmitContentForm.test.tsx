@@ -56,6 +56,9 @@ function getAllFields(container: RenderResult) {
   const inputLink = queryByPlaceholderText(/Link/i);
   const buttonCreatingAnEvent = queryByText(/Creating an event?/i);
   const buttonNotCreatingAnEvent = queryByText(/Not creating an event?/i);
+  const buttonChangeTimezone = queryByText(
+    /Looking for a different timezone?/i
+  );
   const selectDate = queryByPlaceholderText(/Select date/i);
   const selectTime = queryByTestId('time-select');
   const selectTimezone = queryByText(userTimezone);
@@ -70,6 +73,7 @@ function getAllFields(container: RenderResult) {
     buttonNotCreatingAnEvent,
     selectDate,
     selectTime,
+    buttonChangeTimezone,
     selectTimezone,
     inputWhyShare,
     buttonSubmit,
@@ -121,7 +125,10 @@ async function selectTimezoneFromTimezonePicker(
   container: RenderResult
 ): Promise<RenderResult> {
   const { queryAllByText } = container;
-  const { selectTimezone } = getAllFields(container);
+  const { selectTimezone, buttonChangeTimezone } = getAllFields(container);
+  await act(async () => {
+    await fireEvent.click(buttonChangeTimezone);
+  });
   await act(async () => {
     await fireEvent.mouseDown(selectTimezone);
   });
