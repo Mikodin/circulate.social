@@ -145,9 +145,9 @@ describe('ConfirmEmail', () => {
   });
 
   describe('On an incomplete form', () => {
-    const fetchConfirmEmailPromise = Promise.resolve('SUCCESS') as Promise<
-      ConfirmSignUp
-    >;
+    const fetchConfirmEmailPromise = Promise.resolve(
+      'SUCCESS'
+    ) as Promise<ConfirmSignUp>;
     const fetchConfirmEmailSpy = jest.fn(() => fetchConfirmEmailPromise);
     const fetchResendConfirmEmailPromise = Promise.resolve(true);
     const fetchResendConfirmEmailSpy = jest.fn(
@@ -215,9 +215,9 @@ describe('ConfirmEmail', () => {
 
   describe('When "fetchConfirmEmail" returns an error', () => {
     describe('Returning any error', () => {
-      const fetchConfirmEmailPromise = Promise.resolve('SUCCESS') as Promise<
-        ConfirmSignUp
-      >;
+      const fetchConfirmEmailPromise = Promise.resolve(
+        'SUCCESS'
+      ) as Promise<ConfirmSignUp>;
       const fetchConfirmEmailSpy = jest.fn(() => fetchConfirmEmailPromise);
       const fetchResendConfirmEmailPromise = Promise.resolve(true);
       const fetchResendConfirmEmailSpy = jest.fn(
