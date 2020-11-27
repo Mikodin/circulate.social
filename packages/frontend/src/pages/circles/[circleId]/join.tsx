@@ -38,16 +38,17 @@ export const fetchJoinCircle = async (
 export const joinCircle = (): JSX.Element => {
   const { getIsUserLoggedIn, jwtToken, user } = useContext(UserContext);
   const router = useRouter();
+
   const [isGetCirclePreviewInFlight, setIsGetCirclePreviewInFlight] = useState(
     false
   );
   const [isJoinCircleInFlight, setIsJoinCircleInFlight] = useState(false);
-
   const [circleId, setCircleId] = useState<string | undefined>(undefined);
   const [fromDiscover, setFromDiscover] = useState(false);
   const [circlePreview, setCirclePreview] = useState<CirclePreview | undefined>(
     undefined
   );
+  // const [isLearnMoreExpanded, setIsLearnMoreExpanded] = useState(false);
 
   const routeToCircle = () =>
     router.push({
@@ -149,8 +150,7 @@ export const joinCircle = (): JSX.Element => {
         ) : (
           <>
             <Divider />
-            <h2>✋ Circulate is for members only.</h2>
-            <h3>But you are welcome, join us and get in Circulation!</h3>
+            <h2>Come, get in Circulation!</h2>
             <AuthContainer />
           </>
         )}
