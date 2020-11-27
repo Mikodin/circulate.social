@@ -75,6 +75,7 @@ const ConfirmEmail = (props: Props): JSX.Element => {
       ),
       description: <p>We&apos;ve sent you a confirmation code!</p>,
       placement: 'topLeft',
+      duration: 0,
     });
   };
 
