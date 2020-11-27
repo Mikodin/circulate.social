@@ -2,8 +2,10 @@ import { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { Button, Divider } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import { CirclePreview } from '@circulate/types';
 
+import styles from './join.module.scss';
 import UserContext from '../../../state-management/UserContext';
 import AuthContainer from '../../../components/authorization/AuthContainer';
 import Layout from '../../../components/layout/Layout';
@@ -48,7 +50,7 @@ export const joinCircle = (): JSX.Element => {
   const [circlePreview, setCirclePreview] = useState<CirclePreview | undefined>(
     undefined
   );
-  // const [isLearnMoreExpanded, setIsLearnMoreExpanded] = useState(false);
+  const [isLearnMoreExpanded, setIsLearnMoreExpanded] = useState(false);
 
   const routeToCircle = () =>
     router.push({
@@ -116,13 +118,25 @@ export const joinCircle = (): JSX.Element => {
     </>
   ) : (
     <>
-      <h1>🎉 Come, join the party!</h1>
-      <h2>This is a collaborative newsletter platform.</h2>
-      <h3>
-        Designed to empower communities of all sizes to quickly collect and
-        share curated content.
-      </h3>
-      <h3>All delivered as one relevant email digest.</h3>
+      <header>
+        <h1 className={styles.welcomeHeader}>🎉 Come, join the party! </h1>
+        <small>
+          <a onClick={() => setIsLearnMoreExpanded(!isLearnMoreExpanded)}>
+            <InfoCircleOutlined /> Learn more
+          </a>
+        </small>
+      </header>
+      {isLearnMoreExpanded && (
+        <>
+          <h2>This is a collaborative newsletter platform.</h2>
+          <h3>
+            Designed to empower communities of all sizes to quickly collect and
+            share curated content.
+          </h3>
+          <h3>All delivered as one relevant email digest.</h3>
+        </>
+      )}
+
       <Divider />
 
       <h2>Congrats - You&lsquo;ve been invited to join a Circle!</h2>
