@@ -9,7 +9,7 @@ exports[`Header When user is signed in Should match the snapshot 1`] = `
       class="logoContainer"
     >
       <img
-        src="/newLogo.png"
+        src="/logo.png"
       />
       <h2>
         <a
@@ -44,7 +44,7 @@ exports[`Header When user is signed out Should match the snapshot 1`] = `
       class="logoContainer"
     >
       <img
-        src="/newLogo.png"
+        src="/logo.png"
       />
       <h2>
         <a

@@ -18,7 +18,7 @@ const Header = (): JSX.Element => {
     <Fragment>
       <div className={css.container}>
         <div className={css.logoContainer}>
-          <img src="/newLogo.png"></img>
+          <img src="/logo.png"></img>
           <h2>
             <Link href="/">
               <a>Circulate</a>

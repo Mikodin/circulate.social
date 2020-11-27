@@ -12,7 +12,7 @@ Object {
           class="logoContainer"
         >
           <img
-            src="/newLogo.png"
+            src="/logo.png"
           />
           <h2>
             <a
@@ -391,7 +391,7 @@ Object {
         class="logoContainer"
       >
         <img
-          src="/newLogo.png"
+          src="/logo.png"
         />
         <h2>
           <a
@@ -827,7 +827,7 @@ Object {
           class="logoContainer"
         >
           <img
-            src="/newLogo.png"
+            src="/logo.png"
           />
           <h2>
             <a
@@ -1104,7 +1104,7 @@ Object {
         class="logoContainer"
       >
         <img
-          src="/newLogo.png"
+          src="/logo.png"
         />
         <h2>
           <a
