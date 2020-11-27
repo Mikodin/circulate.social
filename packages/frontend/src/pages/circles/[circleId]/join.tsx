@@ -122,7 +122,7 @@ export const joinCircle = (): JSX.Element => {
         <h1 className={styles.welcomeHeader}>🎉 Come, join the party! </h1>
         <small>
           <a onClick={() => setIsLearnMoreExpanded(!isLearnMoreExpanded)}>
-            <InfoCircleOutlined /> Learn more
+            <InfoCircleOutlined /> Learn more - what is Circulate?
           </a>
         </small>
       </header>
@@ -136,10 +136,12 @@ export const joinCircle = (): JSX.Element => {
           <h3>All delivered as one relevant email digest.</h3>
         </>
       )}
+      <h2>
+        You&lsquo;ve been invited to join{' '}
+        {circlePreview ? circlePreview.name : 'a Circle'}.
+      </h2>
 
       <Divider />
-
-      <h2>Congrats - You&lsquo;ve been invited to join a Circle!</h2>
     </>
   );
   return (
