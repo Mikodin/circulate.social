@@ -105,16 +105,19 @@ export const joinCircle = (): JSX.Element => {
   }, [circlePreview, user]);
 
   const isUserLoggedIn = getIsUserLoggedIn();
+
   const welcomeText = fromDiscover ? (
     <>
-      <h1>💎 Ah, welcome.</h1>
-      <h2>It appears that you have discovered a gem.</h2>
-      <p>
-        If you made it this far, this Circle is likely for you!
-        <br />
-        <small>(And would likely benefit from your energy.)</small>
-      </p>
-      <p>Join in and find out!</p>
+      <header>
+        <h1 className={styles.welcomeHeader}>💎 Ah, welcome.</h1>
+        <h3>It appears that you have discovered a gem.</h3>
+      </header>
+      {circlePreview && (
+        <p>
+          This will add to your <strong>{circlePreview.frequency}</strong>{' '}
+          Circulation
+        </p>
+      )}
     </>
   ) : (
     <>
@@ -140,6 +143,12 @@ export const joinCircle = (): JSX.Element => {
         You&lsquo;ve been invited to join{' '}
         {circlePreview ? circlePreview.name : 'a Circle'}.
       </h2>
+      {circlePreview && (
+        <p>
+          This will add to your <strong>{circlePreview.frequency}</strong>{' '}
+          Circulation
+        </p>
+      )}
 
       <Divider />
     </>
