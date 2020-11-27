@@ -50,7 +50,13 @@ const CirclePreview = (props: Props): React.ReactElement => {
         )}
       </h2>
       <div className={styles.infoContainer}>
-        {circle.description && <h5>{circle.description.slice(0, 120)}...</h5>}
+        {circle.description && (
+          <h5>
+            {circle.description.length > 120
+              ? `${circle.description.slice(0, 120)}...`
+              : circle.description}
+          </h5>
+        )}
         <small>
           <p>
             Posts: {(circle.content || []).length} | {circle.frequency}
