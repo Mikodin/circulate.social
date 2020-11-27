@@ -244,5 +244,14 @@ exports[`Register should render 1`] = `
       </div>
     </div>
   </form>
+  <small>
+    By clicking "Sign Up", you agree to Circulate's
+     
+    <a
+      href="/terms"
+    >
+      Terms of Service.
+    </a>
+  </small>
 </div>
 `;

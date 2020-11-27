@@ -1,6 +1,7 @@
 import { useState, Fragment } from 'react';
 import { Form, Input, Button, Alert } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
+import Link from 'next/link';
 
 import type { UserContextType } from '../../../state-management/UserContext';
 import css from './Register.module.scss';
@@ -161,6 +162,10 @@ const Register = (props: Props): JSX.Element => {
           }}
         </Form.Item>
       </Form>
+      <small>
+        By clicking &quot;Sign Up&quot;, you agree to Circulate&apos;s{' '}
+        <Link href={`terms`}>Terms of Service.</Link>
+      </small>
     </Fragment>
   );
 };
