@@ -106,7 +106,7 @@ export const joinCircle = (): JSX.Element => {
 
   const isUserLoggedIn = getIsUserLoggedIn();
 
-  const welcomeText = fromDiscover ? (
+  const fromDiscoverWelcomeText = (
     <>
       <header>
         <h1 className={styles.welcomeHeader}>💎 Ah, welcome.</h1>
@@ -119,7 +119,8 @@ export const joinCircle = (): JSX.Element => {
         </p>
       )}
     </>
-  ) : (
+  );
+  const fromInviteLinkWelcomeText = (
     <>
       <header>
         <h1 className={styles.welcomeHeader}>🎉 Come, join the party! </h1>
@@ -155,7 +156,7 @@ export const joinCircle = (): JSX.Element => {
   );
   return (
     <Layout>
-      {welcomeText}
+      {fromDiscover ? fromDiscoverWelcomeText : fromInviteLinkWelcomeText}
       <div>
         <CircleInfoHeader
           circlePreview={circlePreview}
