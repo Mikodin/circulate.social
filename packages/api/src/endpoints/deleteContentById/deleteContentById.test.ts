@@ -58,7 +58,17 @@ describe('deleteContentById', () => {
     it('Should fetch the Content by the pathParameter id', async () => {
       const contentModelGetSpy = jest.spyOn(ContentModel, 'get');
       await handler(MOCK_EVENT, MOCK_CONTEXT, null);
-      expect(contentModelGetSpy).toHaveBeenCalled();
+      expect(contentModelGetSpy).toHaveBeenCalledWith(
+        mockContentIdPathParameter
+      );
+    });
+
+    it('Should delete the content', async () => {
+      const contentModelDeleteSpy = jest.spyOn(ContentModel, 'delete');
+      await handler(MOCK_EVENT, MOCK_CONTEXT, null);
+      expect(contentModelDeleteSpy).toHaveBeenCalledWith(
+        mockContentIdPathParameter
+      );
     });
 
     describe('If the Content does not exist', () => {
