@@ -127,6 +127,16 @@ functions:
           cors: true
           authorizer:
             arn: ${self:custom.cognitoArn}
+  deleteContentById:
+    name: 'deleteContentById-${self:provider.stage}'
+    handler: src/endpoints/deleteContentById/deleteContentById.handler
+    events:
+      - http:
+          method: delete
+          path: content/{contentId}/
+          cors: true
+          authorizer:
+            arn: ${self:custom.cognitoArn}
   getMyCircles:
     name: 'getMyCircles-${self:provider.stage}'
     handler: src/endpoints/getMyCircles/getMyCircles.handler
