@@ -53,12 +53,12 @@ function genMockEvent(
 const MOCK_EVENT = genMockEvent();
 const MOCK_CONTEXT = CreateMockContext({});
 
-describe('leaveCircle', () => {
+describe('deleteContentById', () => {
   describe('Happy path', () => {
     it('Should fetch the Content by the pathParameter id', async () => {
-      const circleModelGetSpy = jest.spyOn(ContentModel, 'get');
+      const contentModelGetSpy = jest.spyOn(ContentModel, 'get');
       await handler(MOCK_EVENT, MOCK_CONTEXT, null);
-      expect(circleModelGetSpy).toHaveBeenCalled();
+      expect(contentModelGetSpy).toHaveBeenCalled();
     });
 
     describe('If the Content does not exist', () => {
