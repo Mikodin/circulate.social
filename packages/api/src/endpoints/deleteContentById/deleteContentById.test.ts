@@ -71,6 +71,10 @@ describe('deleteContentById', () => {
       );
     });
 
+    describe('If the content has already been sent by the Circle', () => {
+      it.todo('should do nothing, is this really a requirement?');
+    });
+
     describe('If the Content does not exist', () => {
       const contentModelGetSpy = jest.spyOn(ContentModel, 'get');
       beforeEach(() => {
