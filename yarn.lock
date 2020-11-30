@@ -13925,12 +13925,12 @@ serverless-plugin-aws-alerts@^1.6.1:
   dependencies:
     lodash "^4.17.10"
 
-serverless-plugin-monorepo@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/serverless-plugin-monorepo/-/serverless-plugin-monorepo-0.9.0.tgz#c65c66fc9fc4b8ba168a6dd430355f64b55ac918"
-  integrity sha512-hYq6ochM0jXVsNIxOhKDwdMcXBsgwZq9JmfUXhdUDVWwxTAkQQRXpfJGcSo0hvvMh9P43jRifgi+dcsQ4N0QZA==
+serverless-plugin-monorepo@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/serverless-plugin-monorepo/-/serverless-plugin-monorepo-0.10.0.tgz#33532e1c6d803fe416942ca6f3c489678d386b54"
+  integrity sha512-YWmyb+DmtiefsjZTaYc1InAjRQuyPItn+QEqdsfgSXY+0fVEUSy+I2Q8kUiSR7O97ym6hhN/42UKuUZG+jMtrw==
   dependencies:
-    fs-extra "^7.0.0"
+    fs-extra "^9.0.1"
 
 serverless-webpack@^5.3.5:
   version "5.3.5"
