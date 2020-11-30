@@ -127,7 +127,7 @@ describe('getCircleById', () => {
           expect.objectContaining({
             statusCode: 200,
             body:
-              '{"circle":{"content":["425293dd-ac0e-49b3-931b-8293c82c5502"],"privacy":"public","updatedAt":1592688117024,"members":["Mike A"],"createdAt":1592687256669,"description":"Test desc","id":"8c03b5c6-829a-4d91-80d9-e3c386af6839","createdBy":"dev-id","name":"Test","contentDetails":[{"dateTime":"2020-05-23T23:00Z[UTC]","circleIds":["8c03b5c6-829a-4d91-80d9-e3c386af6839"],"privacy":"private","categories":{},"updatedAt":"2020-06-20T21:21:56.880Z","createdAt":"2020-06-20T21:21:56.880Z","link":"Test.com","description":"Test desc","id":"425293dd-ac0e-49b3-931b-8293c82c5502","createdBy":"","tags":{},"title":"Test Content11"}]}}',
+              '{"circle":{"content":["425293dd-ac0e-49b3-931b-8293c82c5502"],"privacy":"public","updatedAt":1592688117024,"members":["Mike A"],"createdAt":1592687256669,"description":"Test desc","id":"8c03b5c6-829a-4d91-80d9-e3c386af6839","createdBy":"dev-id","name":"Test","contentDetails":[{"dateTime":"2020-05-23T23:00Z[UTC]","circleIds":["8c03b5c6-829a-4d91-80d9-e3c386af6839"],"privacy":"private","categories":{},"updatedAt":"2020-06-20T21:21:56.880Z","createdAt":"2020-06-20T21:21:56.880Z","link":"Test.com","description":"Test desc","id":"425293dd-ac0e-49b3-931b-8293c82c5502","createdBy":"","tags":{},"title":"Test Content11","isOwnedByUser":true}]}}',
           })
         );
       });

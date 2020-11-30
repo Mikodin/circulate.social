@@ -61,6 +61,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
         return {
           ...content,
           createdBy: createdByName,
+          isOwnedByUser: content.createdBy === memberId,
         };
       }) as Content[];
 
