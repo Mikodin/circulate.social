@@ -9,6 +9,7 @@ export interface Content {
   link?: string;
   categories?: string[];
   tags?: string[];
+  isOwnedByUser?: boolean;
   createdAt: string;
   updatedAt: string;
 }

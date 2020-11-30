@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from 'react';
 import { Circle, Content } from '@circulate/types';
-import { Collapse, List, Skeleton } from 'antd';
+import { Collapse, Divider, List, Skeleton } from 'antd';
 import { StarOutlined } from '@ant-design/icons';
 import {
   ZoneId,
@@ -11,6 +11,7 @@ import {
 import { Locale } from '@js-joda/locale_en-us';
 import '@js-joda/timezone';
 
+import ContentActions from './ContentActions';
 import styles from './circleContent.module.scss';
 
 const { Panel } = Collapse;
@@ -43,68 +44,8 @@ const groupEventsByDate = (events: Content[]): Record<string, Content[]> => {
   return eventsByDate;
 };
 
-const renderContent = (content: Content) => {
-  const header = content.link ? (
-    <h4>
-      <StarOutlined /> {''}
-      <a href={content.link} target="_blank" rel="noreferrer">
-        {content.title}
-      </a>{' '}
-      | {content.createdBy}
-    </h4>
-  ) : (
-    <h4>
-      <StarOutlined /> {''}
-      {content.title} | {content.createdBy}
-    </h4>
-  );
-  return (
-    <Fragment key={content.id}>
-      {header}
-      <small>
-        {ZonedDateTime.parse(content.createdAt)
-          .withZoneSameInstant(ZoneId.of('SYSTEM'))
-          .toLocalDate()
-          .toString()}
-      </small>
-      <p>{content.description}</p>
-    </Fragment>
-  );
-};
-const renderEvent = (event: Content) => {
-  const dtf = DateTimeFormatter.ofPattern('h:mm a').withLocale(Locale.US);
-  const timeString = ZonedDateTime.parse(event.dateTime).format(dtf);
-
-  const header = event.link ? (
-    <h4>
-      <StarOutlined /> {''}
-      {timeString.toString()}{' '}
-      <a href={event.link} target="_blank" rel="noreferrer">
-        {event.title}
-      </a>{' '}
-      | {event.createdBy}
-    </h4>
-  ) : (
-    <h4>
-      <StarOutlined /> {''}
-      {timeString.toString()} {event.title} | {event.createdBy}
-    </h4>
-  );
-
-  return (
-    <Fragment key={event.id}>
-      {header}
-      <small>
-        {ZonedDateTime.parse(event.createdAt)
-          .withZoneSameInstant(ZoneId.of('SYSTEM'))
-          .toLocalDate()
-          .toString()}
-      </small>
-      {event.description && <p>{event.description}</p>}
-    </Fragment>
-  );
-};
 interface Props {
+  jwtToken: string;
   circle: Circle;
   isLoading: boolean;
 }
@@ -113,7 +54,8 @@ interface EventsByDate {
 }
 
 const CircleContent = (props: Props): JSX.Element => {
-  const { circle, isLoading } = props;
+  const { circle, isLoading, jwtToken } = props;
+  const [malleableCircle, setMalleableCircle] = useState(circle);
   const [upcomingEvents, setUpcomingEvents] = useState<
     EventsByDate | undefined
   >(undefined);
@@ -123,8 +65,14 @@ const CircleContent = (props: Props): JSX.Element => {
   const [posts, setPosts] = useState<Content[] | undefined>(undefined);
 
   useEffect(() => {
-    if (circle && circle.contentDetails) {
-      const eventsWithDateConvertedToUsersTime = (circle.contentDetails || [])
+    if (!malleableCircle && circle) {
+      setMalleableCircle(circle);
+    }
+
+    if (malleableCircle && malleableCircle.contentDetails) {
+      const eventsWithDateConvertedToUsersTime = (
+        malleableCircle.contentDetails || []
+      )
         .filter((content) => Boolean(content.dateTime))
         .map((event) => ({
           ...event,
@@ -145,7 +93,7 @@ const CircleContent = (props: Props): JSX.Element => {
       setPastEvents(groupEventsByDate(pastEventsFiltered));
 
       setPosts(
-        (circle.contentDetails || [])
+        (malleableCircle.contentDetails || [])
           .filter((content) => !content.dateTime)
           .sort((postA, postB) => {
             const epochA = ZonedDateTime.parse(postA.createdAt).toEpochSecond();
@@ -154,7 +102,22 @@ const CircleContent = (props: Props): JSX.Element => {
           })
       );
     }
-  }, [circle]);
+  }, [malleableCircle, circle]);
+
+  const handleContentDeletion = (contentId: string) => {
+    const updatedContentDetails = malleableCircle.contentDetails.filter(
+      (content) => content.id !== contentId
+    );
+    const updatedContentIds = malleableCircle.content.filter(
+      (existingContentId) => existingContentId !== contentId
+    );
+    const updatedCircle = {
+      ...malleableCircle,
+      contentDetails: updatedContentDetails,
+      content: updatedContentIds,
+    };
+    setMalleableCircle(updatedCircle);
+  };
 
   const hasContentToDisplay = Boolean(upcomingEvents && posts);
 
@@ -171,6 +134,96 @@ const CircleContent = (props: Props): JSX.Element => {
       </>
     );
   }
+
+  const renderContent = (content: Content) => {
+    const userHasPermissionsToEdit = Boolean(content.isOwnedByUser);
+    const header = content.link ? (
+      <h4>
+        <StarOutlined /> {''}
+        <a href={content.link} target="_blank" rel="noreferrer">
+          {content.title}
+        </a>{' '}
+        | {content.createdBy}
+      </h4>
+    ) : (
+      <h4>
+        <StarOutlined /> {''}
+        {content.title} | {content.createdBy}
+      </h4>
+    );
+    return (
+      <Fragment key={content.id}>
+        {header}
+        <small>
+          {ZonedDateTime.parse(content.createdAt)
+            .withZoneSameInstant(ZoneId.of('SYSTEM'))
+            .toLocalDate()
+            .toString()}
+        </small>
+        {userHasPermissionsToEdit && (
+          <>
+            <Divider type="vertical" />
+            <ContentActions
+              content={content}
+              jwtToken={jwtToken}
+              onDeletionCompletion={(contentId) =>
+                handleContentDeletion(contentId)
+              }
+            />
+          </>
+        )}
+        <p>{content.description}</p>
+      </Fragment>
+    );
+  };
+
+  const renderEvent = (event: Content) => {
+    const userHasPermissionsToEdit = event.isOwnedByUser;
+    const dtf = DateTimeFormatter.ofPattern('h:mm a').withLocale(Locale.US);
+    const timeString = ZonedDateTime.parse(event.dateTime).format(dtf);
+
+    const header = event.link ? (
+      <h4>
+        <StarOutlined /> {''}
+        {timeString.toString()}{' '}
+        <a href={event.link} target="_blank" rel="noreferrer">
+          {event.title}
+        </a>{' '}
+        | {event.createdBy}
+      </h4>
+    ) : (
+      <h4>
+        <StarOutlined /> {''}
+        {timeString.toString()} {event.title} | {event.createdBy}
+      </h4>
+    );
+
+    return (
+      <Fragment key={event.id}>
+        {header}
+        <small>
+          {ZonedDateTime.parse(event.createdAt)
+            .withZoneSameInstant(ZoneId.of('SYSTEM'))
+            .toLocalDate()
+            .toString()}
+        </small>
+        {userHasPermissionsToEdit && (
+          <>
+            <Divider type="vertical" />
+            <ContentActions
+              content={event}
+              jwtToken={jwtToken}
+              onDeletionCompletion={(contentId) => {
+                handleContentDeletion(contentId);
+              }}
+            />
+          </>
+        )}
+        {event.description && <p>{event.description}</p>}
+      </Fragment>
+    );
+  };
+
   const pastEventsPanel = (
     <Panel header={<a>Looking for past events?</a>} showArrow={false} key="3">
       <div className={`${styles.pastEventsCollapse} ${styles.eventsPanel}`}>
@@ -230,7 +283,10 @@ const CircleContent = (props: Props): JSX.Element => {
   const postsPanel = (
     <Panel header={<h4 className={styles.panelHeader}>Posts</h4>} key="2">
       <div className={styles.contentPanel}>
-        <List dataSource={posts} renderItem={renderContent}></List>
+        <List
+          dataSource={posts}
+          renderItem={(item) => renderContent(item)}
+        ></List>
       </div>
     </Panel>
   );

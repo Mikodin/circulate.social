@@ -130,7 +130,11 @@ class CirclePage extends PureComponent<Props, State> {
             <Divider className={styles.divider} orientation="left">
               <h3>Circulation for this week</h3>
             </Divider>
-            <CircleContent circle={circle} isLoading={isFetchingCircle} />
+            <CircleContent
+              circle={circle}
+              isLoading={isFetchingCircle}
+              jwtToken={this.context.jwtToken}
+            />
           </Fragment>
         </div>
       </Layout>
