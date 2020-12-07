@@ -15,7 +15,7 @@ jest.mock('../../interfaces/dynamo/userModel', () => ({
   create: jest.fn(() => mockUser),
 }));
 
-describe('cognitoDynamoUserSyncTrigger', async () => {
+describe('cognitoDynamoUserSyncTrigger', () => {
   describe('Happy path', () => {
     it('Should call "UserModel.save" with the User data coming from Event', async () => {
       const userModelSaveSpy = jest.spyOn(UserModel, 'create');
