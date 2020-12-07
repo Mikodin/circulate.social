@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Axios from 'axios';
 import { Button, Modal } from 'antd';
 import { ExportOutlined, LoadingOutlined } from '@ant-design/icons';
@@ -11,14 +11,21 @@ import { API_ENDPOINT } from '../../../util/constants';
 export interface Props {
   circle: Circle;
   jwtToken: string;
+  onModalOpen: () => void;
 }
 
-const LeaveCircle = ({ circle, jwtToken }: Props): JSX.Element => {
+const LeaveCircle = ({ circle, jwtToken, onModalOpen }: Props): JSX.Element => {
   const LEAVE_CIRCLE_ENDPOINT = `${API_ENDPOINT}/circles/${circle.id}/leave`;
 
   const router = useRouter();
   const [isLeaveCircleInFlight, setIsLeaveCircleInFlight] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+  useEffect(() => {
+    if (showConfirmModal && onModalOpen) {
+      onModalOpen();
+    }
+  }, [showConfirmModal]);
 
   const fetchLeaveCircle = async () => {
     setIsLeaveCircleInFlight(true);

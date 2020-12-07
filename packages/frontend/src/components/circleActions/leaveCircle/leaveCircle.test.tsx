@@ -60,6 +60,22 @@ describe('LeaveCircle', () => {
           expect(queryByTestId('delete-text')).toBeTruthy();
           expect(queryByTestId('leave-text')).toBeFalsy();
         });
+
+        describe('When there the onModalOpen prop is present', () => {
+          const onModalOpenSpy = jest.fn();
+          beforeEach(() => {
+            onModalOpenSpy.mockClear();
+          });
+
+          it('Should fire off onModalOpen', async () => {
+            await renderLeaveCircleModalOpen({
+              ...mockCircleWithOneMemberProps,
+              onModalOpen: onModalOpenSpy,
+            });
+
+            expect(onModalOpenSpy).toHaveBeenCalledTimes(1);
+          });
+        });
       });
     });
 
