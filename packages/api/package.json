@@ -30,7 +30,7 @@
     "@js-joda/timezone": "^2.5.0",
     "aws-lambda": "^1.0.6",
     "aws-sdk": "^2.804.0",
-    "dynamoose": "^2.3.0",
+    "dynamoose": "^2.4.1",
     "handlebars": "^4.7.6",
     "lambda-log": "^2.4.0",
     "mailgun-js": "^0.22.0",
