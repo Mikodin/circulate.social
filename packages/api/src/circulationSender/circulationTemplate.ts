@@ -39,7 +39,7 @@ function generatePost(isEvent: boolean) {
 
 function generateUpcomingEvents() {
   return `
-  <h3>Upcoming events</h3>
+  <h3>Upcoming events  <small>| {{usersTimezone}}</small></h3>
     {{#each upcomingEvents}}
         <div style="margin-bottom: 10px;">
             <h4 style="margin:0; margin-bottom: 5px;">{{dateTimeString}}</h4>

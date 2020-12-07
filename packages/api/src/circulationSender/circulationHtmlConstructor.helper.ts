@@ -23,7 +23,7 @@ function convertDateToUserTimezone(dateTime: string, timezone: string) {
 function convertTimeToUserTimezone(dateTime: string, timezone: string) {
   return ZonedDateTime.parse(dateTime)
     .withZoneSameInstant(ZoneId.of(timezone))
-    .format(DateTimeFormatter.ofPattern('hh:mm a z x').withLocale(Locale.US))
+    .format(DateTimeFormatter.ofPattern('hh:mm a').withLocale(Locale.US))
     .toString();
 }
 
@@ -117,9 +117,16 @@ export function createCirculationHtmlForUser(
 
   const hasEventsToSend = Boolean(eventsByDateArray.length);
 
+  const usersTimezoneFormatted = ZonedDateTime.now()
+    .withZoneSameInstant(ZoneId.of(usersTimezone))
+    .format(DateTimeFormatter.ofPattern('z x').withLocale(Locale.US))
+    .toString();
+
   return template({
     usersFirstName: user.firstName,
+    usersTimezone: usersTimezoneFormatted,
     circulation: {
+      usersTimezone: usersTimezoneFormatted,
       ...circulation,
       circleDetails: circleDetailsArray,
       upcomingEvents: eventsByDateArray,
