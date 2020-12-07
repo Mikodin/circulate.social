@@ -282,8 +282,10 @@ describe('SubmitContentForm', () => {
 
         const today = LocalDate.now();
         const thisMonth = today.monthValue();
-        const thisDay = today.dayOfMonth();
-        // const today = LocalDate.now().dayOfMonth();
+        const thisDay =
+          today.dayOfMonth() > 9
+            ? today.dayOfMonth()
+            : `0${today.dayOfMonth()}`;
 
         const expectedDateTime =
           userTimezone === 'America/Los_Angeles'
