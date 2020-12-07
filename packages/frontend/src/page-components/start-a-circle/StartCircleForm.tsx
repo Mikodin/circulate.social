@@ -63,6 +63,7 @@ const StartCircleForm = (props: Props): JSX.Element => {
     }
   };
 
+  const { TabPane } = Tabs;
   const renderDescriptionPiece = () => {
     return (
       <Card
@@ -189,7 +190,7 @@ const StartCircleForm = (props: Props): JSX.Element => {
       />
     </Popover>
   );
-  const { TabPane } = Tabs;
+
   return (
     <Fragment>
       <Form
