@@ -25,7 +25,7 @@ const CirclePreview = (props: Props): React.ReactElement => {
       await fetchJoinCircle(circle.id, jwtToken);
       router.push({
         pathname: `/circles/${circle.id}`,
-        query: { welcome: true },
+        query: { isWelcomingUser: true },
       });
     } catch (error) {
       console.error(error);

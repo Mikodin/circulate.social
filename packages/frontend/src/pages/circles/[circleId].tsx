@@ -1,6 +1,7 @@
 import { PureComponent, Fragment } from 'react';
-import { Divider, notification } from 'antd';
+import { Divider, Alert } from 'antd';
 import { withRouter, NextRouter } from 'next/router';
+import Link from 'next/link';
 import axios from 'axios';
 import { Circle } from '@circulate/types';
 
@@ -35,24 +36,12 @@ class CirclePage extends PureComponent<Props, State> {
     circle: undefined,
     getCircleNotAuthorized: false,
     isFetchingCircle: true,
-    isWelcomingUser: true,
+    isWelcomingUser: false,
   };
 
   async componentDidMount(): Promise<void> {
-    // @TODO make share something a link to submit content
-    if (this.props.router.query.welcome) {
-      this.setState({ isWelcomingUser: true });
-      notification.success({
-        message: <h3>🎉 Welcome to to the party!</h3>,
-        duration: 10,
-        description: (
-          <div>
-            <h4>You are now an essential part of this tribe.</h4>
-            <p>Sharing content is the lifeblood of all Circles.</p>
-            <p>You have been invited for a reason, share something!</p>
-          </div>
-        ),
-      });
+    if (this.props.router.query.isWelcomingUser) {
+      this.welcomeUser();
     }
     if (this.props.router.query.circleId) {
       await this.fetchCircleData();
@@ -63,6 +52,20 @@ class CirclePage extends PureComponent<Props, State> {
     if (!prevProps.router.query.circleId && this.props.router.query.circleId) {
       await this.fetchCircleData();
     }
+
+    if (
+      !prevProps.router.query.isWelcomingUser &&
+      this.props.router.query.isWelcomingUser
+    ) {
+      this.welcomeUser();
+    }
+  }
+
+  welcomeUser() {
+    this.setState({ isWelcomingUser: true });
+    setTimeout(() => {
+      this.setState({ isWelcomingUser: false });
+    }, 7000);
   }
 
   async fetchCircleData(): Promise<void> {
@@ -110,7 +113,12 @@ class CirclePage extends PureComponent<Props, State> {
   }
 
   render(): JSX.Element {
-    const { circle, getCircleNotAuthorized, isFetchingCircle } = this.state;
+    const {
+      circle,
+      getCircleNotAuthorized,
+      isFetchingCircle,
+      isWelcomingUser,
+    } = this.state;
     if (getCircleNotAuthorized) {
       this.props.router.push('/');
       return <Fragment></Fragment>;
@@ -120,6 +128,33 @@ class CirclePage extends PureComponent<Props, State> {
       <Layout>
         <div>
           <Fragment>
+            {isWelcomingUser && (
+              <>
+                <Alert
+                  closable
+                  message={<h3>🎉 Welcome to to the party!</h3>}
+                  description={
+                    <div>
+                      <h4>You are now an essential part of this tribe.</h4>
+                      <p>Sharing content is the lifeblood of all Circles.</p>
+                      <p>
+                        You have been invited for a reason,{' '}
+                        {!circle || isFetchingCircle ? (
+                          'share something!'
+                        ) : (
+                          <Link href={`/submit-content?circleId=${circle.id}`}>
+                            <a>share something!</a>
+                          </Link>
+                        )}
+                      </p>
+                    </div>
+                  }
+                  type="success"
+                />
+                <Divider />
+              </>
+            )}
+
             <div className={styles.circleInfoSection}>
               <CircleInfoHeader
                 circle={circle}
