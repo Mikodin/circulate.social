@@ -27,12 +27,10 @@ export const ContentSchema = new dynamoose.Schema(
       default: 'private',
     },
     categories: {
-      // @ts-expect-error
       type: Set,
       schema: [String],
     },
     tags: {
-      // @ts-expect-error
       type: Set,
       schema: [String],
     },

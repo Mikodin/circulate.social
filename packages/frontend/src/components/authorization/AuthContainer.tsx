@@ -18,6 +18,7 @@ import ForgotPassword, {
 import css from './AuthContainer.module.scss';
 import UserContext from '../../state-management/UserContext';
 
+// eslint-disable-next-line
 export enum AUTH_FORMS {
   login = 'login',
   register = 'register',
