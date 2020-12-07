@@ -126,7 +126,6 @@ export function createCirculationHtmlForUser(
     usersFirstName: user.firstName,
     usersTimezone: usersTimezoneFormatted,
     circulation: {
-      usersTimezone: usersTimezoneFormatted,
       ...circulation,
       circleDetails: circleDetailsArray,
       upcomingEvents: eventsByDateArray,
