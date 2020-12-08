@@ -198,11 +198,9 @@ class UserContextProvider extends Component<Props, State> {
       return user;
     } catch (error) {
       console.error('restoreUser', error);
-      if (error === 'not authenticated') {
-        this.setState({
-          userIsLoaded: true,
-        });
-      }
+      this.setState({
+        userIsLoaded: true,
+      });
       return error;
     }
   };
