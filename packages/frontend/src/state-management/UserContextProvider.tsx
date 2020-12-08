@@ -21,6 +21,7 @@ type State = {
     email: string;
     firstName: string;
     lastName: string;
+    timezone: string;
     id: string;
   };
   cognitoUser?: CognitoUser;
@@ -83,6 +84,7 @@ class UserContextProvider extends Component<Props, State> {
             ...this.state.user,
             firstName,
             lastName,
+            timezone,
           },
         });
       }
@@ -133,8 +135,9 @@ class UserContextProvider extends Component<Props, State> {
       });
       const { attributes } = cognitoUser;
       const userInfo = attributes && {
-        firstName: attributes.given_name,
-        lastName: attributes.family_name,
+        firstName: attributes['custom:first_name'],
+        lastName: attributes['custom:last_name'],
+        timezone: attributes['custom:time_zone'],
         email: attributes.email,
         id: attributes.sub,
       };
@@ -185,9 +188,10 @@ class UserContextProvider extends Component<Props, State> {
       const currentAuthenticatedUser: CurrentAuthenticatedUser = await Auth.currentAuthenticatedUser();
       const { attributes } = currentAuthenticatedUser;
       const user = {
-        firstName: attributes.given_name,
-        lastName: attributes.family_name,
+        firstName: attributes['custom:first_name'],
+        lastName: attributes['custom:last_name'],
         email: attributes.email,
+        timezone: attributes['custom:time_zone'],
         id: attributes.sub,
       };
       this.setState({
