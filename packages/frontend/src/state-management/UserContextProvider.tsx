@@ -70,14 +70,22 @@ class UserContextProvider extends Component<Props, State> {
     timezone: string
   ): Promise<string> => {
     const { cognitoUser } = this.state;
+    let freshCognitoUser;
     try {
       let resp = '';
-      if (cognitoUser) {
-        resp = await Auth.updateUserAttributes(cognitoUser, {
-          'custom:first_name': firstName,
-          'custom:last_name': lastName,
-          'custom:time_zone': timezone,
-        });
+      if (!cognitoUser) {
+        freshCognitoUser = await Auth.currentUserPoolUser();
+      }
+
+      if (cognitoUser || freshCognitoUser) {
+        resp = await Auth.updateUserAttributes(
+          cognitoUser || freshCognitoUser,
+          {
+            'custom:first_name': firstName,
+            'custom:last_name': lastName,
+            'custom:time_zone': timezone,
+          }
+        );
 
         this.setState({
           user: {
@@ -185,7 +193,7 @@ class UserContextProvider extends Component<Props, State> {
 
   restoreUser = async (): Promise<UserContextType['user']> => {
     try {
-      const currentAuthenticatedUser: CurrentAuthenticatedUser = await Auth.currentAuthenticatedUser();
+      const currentAuthenticatedUser: CurrentAuthenticatedUser = await Auth.currentUserPoolUser();
       const { attributes } = currentAuthenticatedUser;
       const user = {
         firstName: attributes['custom:first_name'],

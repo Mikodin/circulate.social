@@ -1,8 +1,11 @@
-import { Form, Input, Select } from 'antd';
+import { useState } from 'react';
+import { Form, Input, Select, Button } from 'antd';
 import { ZoneId } from '@js-joda/core';
+import Axios from 'axios';
 import '@js-joda/timezone';
 
 import { UserContextType } from '../../state-management/UserContext';
+import { API_ENDPOINT } from '../../util/constants';
 
 export const AVAILABLE_TIMEZONES = ZoneId.getAvailableZoneIds().sort();
 const TimezoneSelects = AVAILABLE_TIMEZONES.map((timeZone) => (
@@ -11,8 +14,11 @@ const TimezoneSelects = AVAILABLE_TIMEZONES.map((timeZone) => (
   </Select.Option>
 ));
 
+const UPDATE_ACCOUNT_ENDPOINT = `${API_ENDPOINT}/user/edit`;
+
 type Props = {
   user: UserContextType['user'];
+  jwtToken: string;
 };
 
 interface FormValues {
@@ -21,11 +27,27 @@ interface FormValues {
   timezone: string;
 }
 
-const UpdateAccountForm = ({ user }: Props): JSX.Element => {
+const UpdateAccountForm = ({ user, jwtToken }: Props): JSX.Element => {
   const { firstName, lastName, timezone } = user;
   const [form] = Form.useForm();
+  const [isUpdateAccountInFlight, setIsUpdateAccountInFlight] = useState(false);
 
-  const onFormFinish = (values: FormValues) => {
+  const onFormFinish = async (values: FormValues) => {
+    const userValues = {
+      firstName: values.firstName,
+      lastName: values.lastName,
+      timezone: values.timezone,
+    };
+    setIsUpdateAccountInFlight(true);
+    await Axios.patch(
+      UPDATE_ACCOUNT_ENDPOINT,
+      { ...userValues },
+      {
+        headers: { Authorization: jwtToken },
+      }
+    );
+    setIsUpdateAccountInFlight(false);
+
     return values;
   };
 
@@ -48,9 +70,9 @@ const UpdateAccountForm = ({ user }: Props): JSX.Element => {
       >
         <Form.Item
           name="firstName"
-          rules={[
-            { required: true, message: 'Sorry, you must have your first name' },
-          ]}
+          // rules={[
+          //   { required: true, message: 'Sorry, you must have your first name' },
+          // ]}
           label="First Name"
         >
           <Input placeholder="First name" type="text" />
@@ -68,6 +90,24 @@ const UpdateAccountForm = ({ user }: Props): JSX.Element => {
           <Select showSearch style={{ width: 200 }} placeholder="Timezone">
             {TimezoneSelects}
           </Select>
+        </Form.Item>
+        <Form.Item shouldUpdate={true}>
+          {(): JSX.Element => (
+            <Button
+              data-testid="submitButton"
+              loading={isUpdateAccountInFlight}
+              type="primary"
+              htmlType="submit"
+              size="large"
+              block
+              disabled={Boolean(
+                form.getFieldsError().filter(({ errors }) => errors.length)
+                  .length
+              )}
+            >
+              Update
+            </Button>
+          )}
         </Form.Item>
       </Form>
     </div>
