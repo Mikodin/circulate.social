@@ -183,6 +183,16 @@ functions:
           cors: true
           authorizer:
             arn: ${self:custom.cognitoArn}
+  updateUser:
+    name: 'updateUser-${self:provider.stage}'
+    handler: src/endpoints/updateUser/updateUser.handler
+    events:
+      - http:
+          method: patch
+          path: user/edit
+          cors: true
+          authorizer:
+            arn: ${self:custom.cognitoArn}
   cognitoDynamoUserSyncTrigger:
     handler: src/triggers/postCognitoAuthentication/cognitoDynamoUserSyncTrigger.handler
     events:
