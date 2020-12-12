@@ -75,7 +75,12 @@ provider:
         - Fn::GetAtt: [contentTable, Arn]
         - Fn::GetAtt: [usersTable, Arn]
         - Fn::GetAtt: [upcomingCirculationTable, Arn]
-
+    - Effect: Allow
+      Action:
+        - cognito-idp:*
+        - cognito:*
+      Resource:
+        - arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_80QcO55dx
 functions:
   createCircle:
     name: 'createCircle-${self:provider.stage}'
@@ -186,6 +191,8 @@ functions:
   updateUser:
     name: 'updateUser-${self:provider.stage}'
     handler: src/endpoints/updateUser/updateUser.handler
+    iamRoleStatements:
+
     events:
       - http:
           method: patch

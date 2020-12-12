@@ -1,4 +1,5 @@
 import { DynamoDBStreamHandler, DynamoDBStreamEvent } from 'aws-lambda';
+// eslint-disable-next-line
 import { DynamoDB } from 'aws-sdk';
 import log from 'lambda-log';
 

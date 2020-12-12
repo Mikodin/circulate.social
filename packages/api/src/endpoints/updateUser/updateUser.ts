@@ -1,5 +1,6 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import log from 'lambda-log';
+// eslint-disable-next-line
 import AWS from 'aws-sdk';
 import { User } from '@circulate/types';
 

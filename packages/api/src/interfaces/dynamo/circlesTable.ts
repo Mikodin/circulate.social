@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 import { DynamoDB } from 'aws-sdk';
 import log from 'lambda-log';
 import { v4 as uuidv4 } from 'uuid';
