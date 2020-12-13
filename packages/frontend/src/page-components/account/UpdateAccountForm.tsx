@@ -19,6 +19,7 @@ const UPDATE_ACCOUNT_ENDPOINT = `${API_ENDPOINT}/user/edit`;
 type Props = {
   user: UserContextType['user'];
   jwtToken: string;
+  refreshUser: (bypassCache: boolean) => Promise<UserContextType['user']>;
 };
 
 interface FormValues {
@@ -27,7 +28,11 @@ interface FormValues {
   timezone: string;
 }
 
-const UpdateAccountForm = ({ user, jwtToken }: Props): JSX.Element => {
+const UpdateAccountForm = ({
+  user,
+  jwtToken,
+  refreshUser,
+}: Props): JSX.Element => {
   const { firstName, lastName, timezone } = user;
   const [form] = Form.useForm();
   const [isUpdateAccountInFlight, setIsUpdateAccountInFlight] = useState(false);
@@ -46,6 +51,8 @@ const UpdateAccountForm = ({ user, jwtToken }: Props): JSX.Element => {
         headers: { Authorization: jwtToken },
       }
     );
+
+    await refreshUser(true);
     setIsUpdateAccountInFlight(false);
 
     return values;
@@ -70,9 +77,9 @@ const UpdateAccountForm = ({ user, jwtToken }: Props): JSX.Element => {
       >
         <Form.Item
           name="firstName"
-          // rules={[
-          //   { required: true, message: 'Sorry, you must have your first name' },
-          // ]}
+          rules={[
+            { required: true, message: 'Sorry, you must have your first name' },
+          ]}
           label="First Name"
         >
           <Input placeholder="First name" type="text" />

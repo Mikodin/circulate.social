@@ -6,7 +6,9 @@ import Layout from '../components/layout/Layout';
 import UpdateAccountForm from '../page-components/account/UpdateAccountForm';
 
 const Account = (): JSX.Element => {
-  const { user, getIsUserLoggedIn, jwtToken } = useContext(UserContext);
+  const { user, getIsUserLoggedIn, jwtToken, restoreUser } = useContext(
+    UserContext
+  );
   const router = useRouter();
 
   if (!getIsUserLoggedIn()) {
@@ -17,7 +19,11 @@ const Account = (): JSX.Element => {
     <Layout>
       {user ? (
         <>
-          <UpdateAccountForm user={user} jwtToken={jwtToken} />
+          <UpdateAccountForm
+            user={user}
+            jwtToken={jwtToken}
+            refreshUser={restoreUser}
+          />
         </>
       ) : (
         <>

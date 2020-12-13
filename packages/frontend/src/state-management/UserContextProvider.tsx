@@ -191,9 +191,13 @@ class UserContextProvider extends Component<Props, State> {
     }
   };
 
-  restoreUser = async (): Promise<UserContextType['user']> => {
+  restoreUser = async (
+    bypassCache?: boolean
+  ): Promise<UserContextType['user']> => {
     try {
-      const currentAuthenticatedUser: CurrentAuthenticatedUser = await Auth.currentUserPoolUser();
+      const currentAuthenticatedUser: CurrentAuthenticatedUser = await Auth.currentUserPoolUser(
+        { bypassCache }
+      );
       const { attributes } = currentAuthenticatedUser;
       const user = {
         firstName: attributes['custom:first_name'],
@@ -263,6 +267,7 @@ class UserContextProvider extends Component<Props, State> {
             forgotPasswordSubmit: this.forgotPasswordSubmit,
             getIsUserLoggedIn: this.getIsUserLoggedIn,
             updateUserAttributes: this.updateUserAttributes,
+            restoreUser: this.restoreUser,
           }}
         >
           {this.props.children}

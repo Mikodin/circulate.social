@@ -14,6 +14,8 @@ export type UserContextType = {
   jwtToken?: string;
   register: (username: string, password: string) => Promise<CognitoUser>;
 
+  restoreUser: (bypassCache: boolean) => Promise<UserContextType['user']>;
+
   confirmEmail: (
     username: string,
     code: string,
