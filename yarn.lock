@@ -6103,10 +6103,10 @@ duration@^0.2.2:
     d "1"
     es5-ext "~0.10.46"
 
-dynamoose@^2.4.1:
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/dynamoose/-/dynamoose-2.4.1.tgz#087511feadf3574b9d771f2222f2147468f3e390"
-  integrity sha512-3gUn6aPX6l9RU6pVEzmp3JOn9tPDxQkjqgJDw0POp73eXXBiHSNNCwbUK3P8qvc0T3aKBvcsM3BjikxCOdaQdw==
+dynamoose@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/dynamoose/-/dynamoose-2.5.0.tgz#d7cc1ba4a97a83d2e04f4c8a1088848cc2f2998a"
+  integrity sha512-kqUpFqRM3oVjEYb5vY1c3fP2C2YemjgPSzI92oaRhSkg+yEQw5Gzbsage+75xuC7QAP2bLyoHczszYWn3TDubw==
   dependencies:
     aws-sdk "^2.792.0"
     source-map-support "^0.5.19"
