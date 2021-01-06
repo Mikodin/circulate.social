@@ -22,7 +22,6 @@ export const handler: CognitoUserPoolTriggerHandler = async (
   try {
     log.info('Attempting to create user', { user });
 
-    // @ts-expect-error
     await UserModel.create(user, {
       overwrite: true,
     });

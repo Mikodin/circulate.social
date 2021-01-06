@@ -164,7 +164,9 @@ const Register = (props: Props): JSX.Element => {
       </Form>
       <small>
         By clicking &quot;Sign Up&quot;, you agree to Circulate&apos;s{' '}
-        <Link href={`terms`}>Terms of Service.</Link>
+        <Link href="terms" prefetch={false}>
+          Terms of Service.
+        </Link>
       </small>
     </Fragment>
   );
