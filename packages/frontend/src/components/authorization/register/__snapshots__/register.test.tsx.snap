@@ -159,7 +159,7 @@ exports[`Register should render 1`] = `
       </div>
     </div>
     <div
-      class="ant-alert ant-alert-info ant-alert-banner ant-alert-closable"
+      class="ant-alert ant-alert-info ant-alert-banner"
       data-show="true"
       role="alert"
       style="margin-bottom: 10px; margin-top: -10px;"
@@ -183,14 +183,18 @@ exports[`Register should render 1`] = `
           />
         </svg>
       </span>
-      <span
-        class="ant-alert-message"
+      <div
+        class="ant-alert-content"
       >
-        Use 8 or more characters containing a mix of casing, letters, and numbers.
-      </span>
-      <span
-        class="ant-alert-description"
-      />
+        <div
+          class="ant-alert-message"
+        >
+          Use 8 or more characters containing a mix of casing, letters, and numbers.
+        </div>
+        <div
+          class="ant-alert-description"
+        />
+      </div>
       <button
         class="ant-alert-close-icon"
         tabindex="0"
