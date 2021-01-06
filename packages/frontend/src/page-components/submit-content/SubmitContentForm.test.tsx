@@ -281,16 +281,22 @@ describe('SubmitContentForm', () => {
         });
 
         const today = LocalDate.now();
-        const thisMonth = today.monthValue();
+        const thisMonth =
+          today.monthValue() > 9
+            ? today.monthValue()
+            : `0${today.monthValue()}`;
+
         const thisDay =
           today.dayOfMonth() > 9
             ? today.dayOfMonth()
             : `0${today.dayOfMonth()}`;
 
+        const timezoneStr = ZonedDateTime.now().toString().split('-')[3];
+
         const expectedDateTime =
-          userTimezone === 'America/Los_Angeles'
-            ? `2020-${thisMonth}-${thisDay}T17:00-08:00[America/Los_Angeles]`
-            : `2020-${thisMonth}-${thisDay}T17:00Z[UTC]`;
+          userTimezone === 'UTC'
+            ? `${today.year()}-${thisMonth}-${thisDay}T17:00Z[UTC]`
+            : `${today.year()}-${thisMonth}-${thisDay}T17:00-${timezoneStr}`;
         const expectedSubmittedContent = {
           circleIds: [defaultProps.seedCircleId],
           title: inputtedTitleValue,
