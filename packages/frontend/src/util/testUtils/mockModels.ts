@@ -1,4 +1,4 @@
-import { Circle } from '@circulate/types';
+import { Circle, User } from '@circulate/types';
 
 export const mockCircle = {
   id: 'asdf-someCircle-id',
@@ -11,3 +11,13 @@ export const mockCircle = {
   frequency: 'daily',
   privacy: 'private',
 } as Circle;
+
+export const mockUser = {
+  id: 'some_user',
+  email: 'billNye@circulate.social',
+  firstName: 'Bill',
+  lastName: 'Nye',
+  timezone: 'UTC',
+  createdAt: '123',
+  updatedAt: '13',
+} as User;

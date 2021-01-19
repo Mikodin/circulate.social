@@ -16,7 +16,7 @@ const TimezoneSelects = AVAILABLE_TIMEZONES.map((timeZone) => (
 
 const UPDATE_ACCOUNT_ENDPOINT = `${API_ENDPOINT}/user/edit`;
 
-type Props = {
+export type Props = {
   user: UserContextType['user'];
   jwtToken: string;
   refreshUser: (bypassCache: boolean) => Promise<UserContextType['user']>;
