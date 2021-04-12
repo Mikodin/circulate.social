@@ -6255,12 +6255,13 @@ duration@^0.2.2:
     d "1"
     es5-ext "~0.10.46"
 
-dynamoose@^2.7.0:
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/dynamoose/-/dynamoose-2.7.0.tgz#59ec9468d619156b837effa7db3589419acb64b5"
-  integrity sha512-3KLmrDtS8ZB7BfXmDBjQbcWOGHW9uL1kanvD18wG7r2q5WJTfX8VqPPBlWDqjtXl0SrvakzGuWOBgSvtLVBXew==
+dynamoose@^2.7.3:
+  version "2.7.3"
+  resolved "https://registry.yarnpkg.com/dynamoose/-/dynamoose-2.7.3.tgz#1242fddb683c17f83411578c3c0c7d10c2f0c60d"
+  integrity sha512-Hnfp3Sh3p+YwpPFtxTGDAuliESSbaFcaPE4FYVGekWA+oOXjGj6F/0QCrZCsLnBsd1p7rCDDRnublfGHH7NDXA==
   dependencies:
     aws-sdk "^2.792.0"
+    js-object-utilities "^2.0.0"
     source-map-support "^0.5.19"
     uuid "^8.3.1"
 
@@ -8998,6 +8999,11 @@ js-cookie@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/js-cookie/-/js-cookie-2.2.1.tgz#69e106dc5d5806894562902aa5baec3744e9b2b8"
   integrity sha512-HvdH2LzI/EAZcUwA8+0nKNtWHqS+ZmijLA30RwZA0bo7ToCckjK5MkGhjED9KoRcXO6BaGI3I9UIzSA1FKFPOQ==
+
+js-object-utilities@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/js-object-utilities/-/js-object-utilities-2.0.0.tgz#79629a32bdcc7a60dced03f669cabc78b35f637c"
+  integrity sha512-d0o5Hnd+9q9mswk8VhU9Fzl+QLce3FvtNlLKV7UTUYjAZuChAKeS/DnuameOpiJAXquqrXLJYUcABxhIWogwpA==
 
 js-string-escape@^1.0.1:
   version "1.0.1"
