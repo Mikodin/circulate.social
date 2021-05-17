@@ -9363,10 +9363,10 @@ kuler@1.0.x:
   dependencies:
     colornames "^1.1.1"
 
-lambda-log@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/lambda-log/-/lambda-log-2.4.0.tgz#2965c0329abcce6768f76ae3220468bbd42d4107"
-  integrity sha512-py9aD8eHM4gx20t8LQ1UZfWSuixtpjFB/SzGwUoeKoELkekR6SzTIokS6vqlT8OmRBVuZFLiZbj+JQ8YCnKATg==
+lambda-log@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/lambda-log/-/lambda-log-3.0.0.tgz#178d0997afcbd50f5127c882c6d0aed3c75dc58e"
+  integrity sha512-xn6qbqJ/Jv5aybdACuXHPZVKg/bCfloFzfH18iZ8YJ1K29HaSLD+hGaF33NUudwD1opMTzXCrKoJIlgsJNdLpQ==
   dependencies:
     fast-safe-stringify "^2.0.6"
 
