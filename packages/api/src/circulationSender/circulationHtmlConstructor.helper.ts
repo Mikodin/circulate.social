@@ -52,6 +52,7 @@ function groupEventsByDate(
       eventsByDate[date] = [event];
     }
   });
+
   return Object.keys(eventsByDate)
     .map((dateKey) => {
       return {
