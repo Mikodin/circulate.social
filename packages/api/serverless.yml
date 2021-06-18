@@ -5,37 +5,37 @@ package:
   individually: true
 custom:
   cognitoArn: 'arn:aws:cognito-idp:us-east-1:441799942923:userpool/us-east-1_80QcO55dx'
-  alerts:
-    stages:
-      - prod
-    dashboards: true
+  # alerts:
+  #   stages:
+  #     - prod
+  #   dashboards: true
 
-    topics:
-      ok:
-        topic: ${self:service}-${opt:stage}-alerts-ok
-      alarm:
-        topic: ${self:service}-${opt:stage}-alerts-alarm
-        notifications:
-          - protocol: email
-            endpoint: mfalicea58@gmail.com
-    definitions: # these defaults are merged with your definitions
-      functionErrors:
-        period: 300 # override period
-      lambdaLogErrors: # When an explicit log.error() happens
-        metric: GenericErrors
-        threshold: 1
-        statistic: Sum
-        period: 60
-        evaluationPeriods: 1
-        comparisonOperator: GreaterThanOrEqualToThreshold
-        pattern: '{$._logLevel = error}'
-        treatMissingData: notBreaching
-    alarms:
-      - lambdaLogErrors
-      - functionThrottles
-      - functionErrors
-      - functionInvocations
-      - functionDuration
+  #   topics:
+  #     ok:
+  #       topic: ${self:service}-${opt:stage}-alerts-ok
+  #     alarm:
+  #       topic: ${self:service}-${opt:stage}-alerts-alarm
+  #       notifications:
+  #         - protocol: email
+  #           endpoint: mfalicea58@gmail.com
+  #   definitions: # these defaults are merged with your definitions
+  #     functionErrors:
+  #       period: 300 # override period
+  #     lambdaLogErrors: # When an explicit log.error() happens
+  #       metric: GenericErrors
+  #       threshold: 1
+  #       statistic: Sum
+  #       period: 60
+  #       evaluationPeriods: 1
+  #       comparisonOperator: GreaterThanOrEqualToThreshold
+  #       pattern: '{$._logLevel = error}'
+  #       treatMissingData: notBreaching
+  #   alarms:
+  #     - lambdaLogErrors
+  #     - functionThrottles
+  #     - functionErrors
+  #     - functionInvocations
+  #     - functionDuration
 
   webpack:
     keepOutputDirectory: true
@@ -192,7 +192,6 @@ functions:
     name: 'updateUser-${self:provider.stage}'
     handler: src/endpoints/updateUser/updateUser.handler
     iamRoleStatements:
-
     events:
       - http:
           method: patch
