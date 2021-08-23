@@ -43,7 +43,7 @@
     "@types/jest": "^26.0.23",
     "@types/node": "^14.14.34",
     "@typescript-eslint/eslint-plugin": "^4.24.0",
-    "@typescript-eslint/parser": "^4.14.0",
+    "@typescript-eslint/parser": "^4.29.2",
     "eslint": "^7.24.0",
     "eslint-config-airbnb-base": "latest",
     "eslint-config-prettier": "^7.2.0",
