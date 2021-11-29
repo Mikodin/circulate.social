@@ -54,7 +54,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.6.3",
     "prettier": "^2.2.1",
-    "sass": "^1.32.6",
+    "sass": "^1.43.5",
     "serverless": "^2.41.2",
     "serverless-next.js": "^1.15.0-alpha.2",
     "typed-css-modules-webpack-plugin": "^0.2.0",
